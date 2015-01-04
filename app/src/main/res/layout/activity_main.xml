@@ -24,7 +24,8 @@
             android:layout_height="wrap_content"
             android:text="Power"
             android:id="@+id/powerButton"
-            android:checked="false" />
+            android:checked="false"
+            android:onClick="togglePower"/>
     </LinearLayout>
 
     <LinearLayout
@@ -77,35 +78,40 @@
                         android:text="Servo 1"
                         android:id="@+id/radio_servo1"
                         android:layout_gravity="center_horizontal"
-                        android:checked="true" />
+                        android:checked="true"
+                        android:onClick="onRadioButtonServoClicked"/>
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Servo 2"
                         android:id="@+id/radio_servo2"
                         android:layout_gravity="center_horizontal"
-                        android:checked="false" />
+                        android:checked="false"
+                        android:onClick="onRadioButtonServoClicked"/>
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Servo 3"
                         android:id="@+id/radio_servo3"
                         android:layout_gravity="center_horizontal"
-                        android:checked="false" />
+                        android:checked="false"
+                        android:onClick="onRadioButtonServoClicked"/>
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Servo 4"
                         android:id="@+id/radio_servo4"
                         android:layout_gravity="center_horizontal"
-                        android:checked="false" />
+                        android:checked="false"
+                        android:onClick="onRadioButtonServoClicked"/>
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Servo 5"
                         android:id="@+id/radio_servo5"
                         android:layout_gravity="center_horizontal"
-                        android:checked="false" />
+                        android:checked="false"
+                        android:onClick="onRadioButtonServoClicked"/>
                 </RadioGroup>
 
 
@@ -123,7 +129,8 @@
                         android:layout_gravity="right"
                         android:layout_marginLeft="20dp"
                         android:layout_marginTop="8dp"
-                        android:layout_marginBottom="7dp" />
+                        android:layout_marginBottom="7dp"
+                        android:onClick="onRadioButtonServoClicked"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -202,14 +209,16 @@
                 android:layout_height="wrap_content"
                 android:text="1/2 R"
                 android:id="@+id/radioButton_1_2r"
-                android:checked="true" />
+                android:checked="true"
+                android:onClick="onRadioButtonRotationClicked"/>
 
             <RadioButton
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="1 R"
                 android:id="@+id/radioButton_1R"
-                android:checked="true" />
+                android:checked="true"
+                android:onClick="onRadioButtonRotationClicked"/>
         </RadioGroup>
 
         <Button
@@ -217,14 +226,16 @@
             android:layout_height="wrap_content"
             android:text="up"
             android:id="@+id/button_up"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"
+            android:onClick="controlUPDOWN"/>
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="down"
             android:id="@+id/button_down"
-            android:layout_marginTop="8dp" />
+            android:layout_marginTop="8dp"
+            android:onClick="controlUPDOWN"/>
     </LinearLayout>
 
 </LinearLayout>
