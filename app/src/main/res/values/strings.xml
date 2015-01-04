@@ -4,5 +4,8 @@
     <string name="app_name">PanelinLamp</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="arduino_bt_module_name">HC-06</string>
+    <string name="arduino_bt_encoding">UTF-8</string>
+    <string name="arduino_bt_module_adress">0C:8B:FD:E8:9B:3E</string>
 
 </resources>
