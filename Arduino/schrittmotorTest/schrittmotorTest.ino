@@ -12,8 +12,7 @@ int runMode = 0;
 void setup()
 {  
   stepper.setMaxSpeed(60000000);
-  stepper.setAcceleration(120000000);
-  stepper.setSpeed(60000000);
+  stepper.setAcceleration(1000);
 
   
   Serial.begin(9600);
@@ -51,7 +50,7 @@ void loop()
     {
       Serial.print("current pos ");
       Serial.println(stepper.currentPosition());
-      stepper.moveTo(pos);
+      stepper.move(pos);
     }
     stepper.run();
   }

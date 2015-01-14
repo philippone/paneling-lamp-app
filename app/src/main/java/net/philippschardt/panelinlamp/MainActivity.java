@@ -58,6 +58,8 @@ public class MainActivity extends ActionBarActivity {
     private BroadcastReceiver devicePairedReceiver;
 
 
+    private int dimmerProgress = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,6 +73,8 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
+
+                dimmerProgress = progress;
             }
 
             @Override
@@ -80,6 +84,8 @@ public class MainActivity extends ActionBarActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+
+                sendMsg("a");//dimmerProgress + "");
 
             }
         });
@@ -224,6 +230,36 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
+
+    public void sendMsg(String msg) {
+
+        Log.d("BluetoothTest", "send Msg " + msg);
+
+        if (bluetoothSocket != null && bluetoothSocket.isConnected()) {
+
+            if (!msg.endsWith("\n")) {
+                msg += "\n";
+            }
+
+
+            try {
+                /*OutputStreamWriter osw = new OutputStreamWriter(bluetoothSocket.getOutputStream(), getString(R.string.arduino_bt_encoding));
+                osw.write("testtextwithaverylonglength\n");
+                osw.flush();
+                */
+
+                //bluetoothSocket.getOutputStream().write(new byte[]{(byte) 0xFF,(byte) 0xFF, (byte) 0x0a, (byte) 0x0b, 0x00 , 0x00, 0x13, 0x7a});
+                bluetoothSocket.getOutputStream().write(msg.getBytes());
+                bluetoothSocket.getOutputStream().flush();
+                Log.d("BluetoothTest", "Msg " + msg +  " was sent");
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
 
 
    /*
