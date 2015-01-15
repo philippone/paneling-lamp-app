@@ -1,5 +1,5 @@
 
-int ledPin = 3;
+int ledPin = 13;
 
 void setup() {
   // put your setup code here, to run once:
@@ -13,12 +13,22 @@ char msg;
 String message;
 
 void loop() {
+  /*
+  for (i = 0; i < 255; i++) {
+    analogWrite(ledPin, i);  // analogRead values go from 0 to 1023, analogWrite values from 0 to 255
+    Serial.println(i);
+    
+    //delay(500);  
+  }
+  */
   while (Serial.available() > 0) {
-      char msg = Serial.read();
+      int msg = Serial.parseInt();
+      
+      analogWrite(ledPin, msg);
       
       //Serial.print("all: ");
       //Serial.println(msg);
-      
+      /*
       if (msg == '\n') {
         message += "\n";
         handle(message);
@@ -29,9 +39,10 @@ void loop() {
         Serial.print("r: ");
         Serial.println(msg);
       } 
-      
+      */
       
   }
+}
   
   
   /*
@@ -49,7 +60,7 @@ void loop() {
   
   */
   
-  analogWrite(ledPin, 1);
+  //analogWrite(ledPin, 1);
   
   // put your main code here, to run repeatedly: 
   //val = analogRead(analogPin);   // read the input pin
@@ -62,40 +73,5 @@ void loop() {
     //delay(500);  
   }
 */
-}
 
 
-
-void handle(String msg) {
-  msg.trim();
-
-  //String splitted = split(msg);
-
-  
-  if (msg.charAt(i) == 'd') {
-  }
-  
-  
-}
-
-String[] test() {
-
-}
-
-/*
-String[] split(String msg) {
-
-  String splitted[msg.length()];
-  int j = 0;
-  String value = "";
-  for(int i = 0; i <= msg.length(); i++) {
-    if (msg.charAt(i) == delimiter) {
-      splitted[j++] = value;
-    } else {
-      value += msg.charAt(i);
-    }
-  }
-  
-  return splitted;
-}
-*/

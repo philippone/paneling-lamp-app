@@ -34,6 +34,8 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import Util.MsgCreator;
+
 
 public class MainActivity extends ActionBarActivity {
 
@@ -41,7 +43,7 @@ public class MainActivity extends ActionBarActivity {
     /*Bluetooth stuff*/
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private static final String TAG = "MainActivity";
-    short currentServo = 1;
+    short currentMotor = 1;
     float currRotation = 1;
     ExecutorService es = Executors.newFixedThreadPool(1);
     private BluetoothManager bluetoothManager = null;
@@ -72,21 +74,19 @@ public class MainActivity extends ActionBarActivity {
         dimmer.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-
+                // set new dimmer value
                 dimmerProgress = progress;
             }
 
             @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
+            public void onStartTrackingTouch(SeekBar seekBar) { /* nothing*/}
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
+                // if more than 1 LED dimmer use seekBar.getID() to get LED ID;
 
-                sendMsg("a");//dimmerProgress + "");
-
+                // send dimmer value to lamp
+                sendMsg(MsgCreator.setLED(0, dimmerProgress));
             }
         });
 
@@ -96,8 +96,9 @@ public class MainActivity extends ActionBarActivity {
     protected void onStart() {
         super.onStart();
 
+        // register Reciever and open connection
         setBTConnection();
-        // register Reciever
+
         //TODO aus der anderen methode nehmen
     }
 
@@ -143,23 +144,23 @@ public class MainActivity extends ActionBarActivity {
         switch(view.getId()) {
             case R.id.radio_servo1:
                 if (checked)
-                    currentServo = 1;
+                    currentMotor = 1;
                     break;
             case R.id.radio_servo2:
                 if (checked)
-                    currentServo = 2;
+                    currentMotor = 2;
                 break;
             case R.id.radio_servo3:
                 if (checked)
-                    currentServo = 3;
+                    currentMotor = 3;
                 break;
             case R.id.radio_servo4:
                 if (checked)
-                    currentServo = 4;
+                    currentMotor = 4;
                 break;
             case R.id.radio_servo5:
                 if (checked)
-                    currentServo = 5;
+                    currentMotor = 5;
                 break;
 
         }
@@ -508,8 +509,8 @@ public class MainActivity extends ActionBarActivity {
             btConsleView = (TextView) findViewById(R.id.BTConsole);
         }
 
-        btConsleView.append(text + "\n");
-
+        //btConsleView.append(text + "\n");
+        btConsleView.setText("\" " + text + "\" \n" +  btConsleView.getText().toString() );
 
     }
 
