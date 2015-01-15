@@ -40,7 +40,7 @@ void loop() {
       //Serial.print("all: ");
       //Serial.println(msg);
 
-      if (msg == '*') {
+      if (msg == '*' || msg == '\n') {
         message += "\n";
         handle(message);
         // reset Message
@@ -172,7 +172,7 @@ void initStepper() {
   // init all steppers
   for (int i=0; i < sizeof(motors); i++) {
       motors[i]->setMaxSpeed(2000);
-      motors[i]->setAcceleration(1000);
+      motors[i]->setAcceleration(800);
   } 
   
   
