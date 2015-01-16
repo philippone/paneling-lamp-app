@@ -65,6 +65,7 @@ public class MainActivity extends ActionBarActivity implements Motor.MotorInterf
     private BroadcastReceiver devicePairingReceiver;
     private BroadcastReceiver devicePairedReceiver;
 
+    ArduinoReceiverThread art = null;
 
     // View stuff
     private EditText rotationEdit;
@@ -139,7 +140,12 @@ public class MainActivity extends ActionBarActivity implements Motor.MotorInterf
         setBTConnection();
 
         //TODO aus der anderen methode nehmen
+
+        // send startMessage
+        sendMsg(MsgCreator.initConnection());
     }
+
+
 
     @Override
     protected void onStop() {
@@ -149,6 +155,12 @@ public class MainActivity extends ActionBarActivity implements Motor.MotorInterf
         unregisterReceiver(devicePairingReceiver);
         unregisterReceiver(deviceFoundReceiver);
         unregisterReceiver(devicePairedReceiver);
+
+        try {
+            art.socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -519,7 +531,7 @@ public class MainActivity extends ActionBarActivity implements Motor.MotorInterf
             Log.e(TAG, "Not ready to connect");
         }
 
-        ArduinoReceiverThread art = null;
+        art = null;
         try {
             art = new ArduinoReceiverThread(bluetoothSocket, this);
             es.execute(art);
@@ -569,19 +581,43 @@ public class MainActivity extends ActionBarActivity implements Motor.MotorInterf
     }
 
 
+    /**
+     * handle inputs from arduino/lamp
+     * */
     public void handleInput(String message) {
 
+        Log.d("test", message);
         if (message.startsWith("ms;")) {
             handleMotorUpdate(message);
+        } else if (message.startsWith("r;"))
+            handleConnectionReply(message);
+    }
+
+    /**
+     * handle Connection Reply message
+     * "r;motor1 position; motor 2 position; ...; motor n position"
+     * */
+    private void handleConnectionReply(String message) {
+        String[] splitted = message.substring(2).split(";");
+
+        for(int i = 0; i < motor.length; i++) {
+            // update motor (and gui)
+            motor[i].setPosition(Float.parseFloat(splitted[i]));
         }
     }
 
+    /*
+    * handle motor update message
+    * receive: "ms;motor index; motor position"
+    *
+    * */
     private void handleMotorUpdate(String message) {
         String[] splitted = message.split(";");
 
         int motorNr = Integer.parseInt(splitted[1]);
         float motorPos = Float.parseFloat(splitted[2]);
 
+        // update motor (and gui)
         motor[motorNr].setPosition(motorPos);
     }
 
@@ -636,7 +672,6 @@ public class MainActivity extends ActionBarActivity implements Motor.MotorInterf
 
                                 handleInput(message);
                                 logBTInput(message);
-
                             }
                         });
 

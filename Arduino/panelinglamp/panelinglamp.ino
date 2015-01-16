@@ -130,20 +130,34 @@ void loop() {
  */
 void handle(String message) {
 
-  if (message.startsWith("sa;"))
-    handleStepperPos(message.substring(3), true);
-  else if (message.startsWith("sr;"))
-    handleStepperPos(message.substring(3), false);
-  else if (message.startsWith("fs;"))
-    handleStepperForceStop(message.substring(3));
-  else if (message.startsWith("fr;"))
-    handleStepperForceReset(message.substring(3));
-  else if (message.startsWith("op;"))
-	  handleStepperOverridePos(message.substring(3));
-  else if (message.startsWith("l;")) 
-    handleLEDMsg(message.substring(2));
+	if (message.startsWith("c;")) 
+		handleConnectedPhone(message.substring(2));
+  	else if (message.startsWith("sa;"))
+    	handleStepperPos(message.substring(3), true);
+  	else if (message.startsWith("sr;"))
+    	handleStepperPos(message.substring(3), false);
+  	else if (message.startsWith("fs;"))
+    	handleStepperForceStop(message.substring(3));
+  	else if (message.startsWith("fr;"))
+    	handleStepperForceReset(message.substring(3));
+  	else if (message.startsWith("op;"))
+	  	handleStepperOverridePos(message.substring(3));
+  	else if (message.startsWith("l;")) 
+    	handleLEDMsg(message.substring(2));
 }
 
+/*
+* When phone connects, send all motor positions as reply
+*/
+void handleConnectedPhone(String message) {
+	Serial1.print("r;");
+	for (int i = 0; i < motorCount; i++) {
+		float position = motors[i]->currentPosition() / oneRotation;
+		Serial1.print(position);
+		Serial1.print(";");
+	}
+	Serial1.print("\n");
+}
 
 /**
  *  move stepper # to absolute position x

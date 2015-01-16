@@ -27,6 +27,10 @@ public class MsgCreator {
     * */
 
 
+    public static String initConnection() {
+        return "c;\n";
+    }
+
     /**
      * move stepper to relvative positon (1rotation * position)
      * */
