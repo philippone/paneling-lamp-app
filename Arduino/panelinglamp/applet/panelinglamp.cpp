@@ -1,3 +1,5 @@
+#include "Arduino.h"
+
 #include <AccelStepper.h>
 #include <SoftwareSerial.h>
 
@@ -130,6 +132,9 @@ void loop() {
  */
 void handle(String message) {
 
+  //Serial.print("handle message: ");
+  //Serial.println(message);
+
   if (message.startsWith("sa;"))
     handleStepperPos(message.substring(3), true);
   else if (message.startsWith("sr;"))
@@ -138,26 +143,20 @@ void handle(String message) {
     handleStepperForceStop(message.substring(3));
   else if (message.startsWith("fr;"))
     handleStepperForceReset(message.substring(3));
-  else if (message.startsWith("op;"))
-	  handleStepperOverridePos(message.substring(3));
   else if (message.startsWith("l;")) 
     handleLEDMsg(message.substring(2));
-}
 
+}
 
 /**
  *  move stepper # to absolute position x
  **/
 void handleStepperPos(String message, boolean aboslutePosition) {
-  /*
-	Message: 
-		relative:		sr;  motor#;  +-Rotations
-		absolute		sa; ... 
-  	Types  : sr/sa;  int   ;  float
-  */
+  /*Message: s;  motor#;  +-Rotations*/
+  /*Types  : s;  int   ;  float*/
 
-  int stepper 	= -1;
-  float rotations = 0;
+  int stepper = -1;
+  float rotations = -1;
 
   boolean fail = false;
   int counter = 0;
@@ -274,67 +273,6 @@ void handleStepperForceReset(String message) {
 
 }
 
-void handleStepperOverridePos(String message) {
-	
-    int stepper 	= -1;
-    float newPosition = 0;
-
-    boolean fail = false;
-    int counter = 0;
-    String tmp = "";
-    for (int i = 0; i < message.length(); i++) {
-      if(message.charAt(i) != ';') {
-        tmp += message.charAt(i);
-      } 
-      else {
-        if (counter == 0) {
-          // parse stepper #
-          stepper = tmp.toInt();
-        } 
-        else if (counter == 1) {
-          // parse rotation
-          char buffer[10];
-          tmp.toCharArray(buffer, 10);
-          newPosition = atof(buffer);
-        }
-        tmp = "";
-        counter++;
-      }
-    }
-
-    // check stepper 
-    if (stepper >= 0) {
-
-      long r = newPosition * oneRotation;
-      // if motor is not running, and in range
-      long cPos = motors[stepper]->currentPosition();
-      if (motors[stepper]->distanceToGo() == 0) {
-		  motors[stepper]->setCurrentPosition(r);
-		  // send to phone
-	      // send msg to phone with current Position of motor
-	      	//float stopPosition = motors[stepper]->currentPosition() / oneRotation;
-	      Serial1.print("ms;");
-	      Serial1.print(stepper);
-	      Serial1.print(";");
-	      Serial1.print(newPosition);
-	      Serial1.println(";\n");
-      } 
-      else fail = true;
-    } 
-    else fail = true;
-
-    if (fail) {
-      // send msg to phone with current Position of motor
-      float stopPosition = motors[stepper]->currentPosition() / oneRotation;
-      Serial1.print("ms;");
-      Serial1.print(stepper);
-      Serial1.print(";");
-      Serial1.print(stopPosition);
-      Serial1.println(";\n");
-    } 
-	
-	
-}
 
 
 void handleLEDMsg(String message) {

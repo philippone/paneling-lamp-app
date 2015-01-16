@@ -259,6 +259,12 @@ public class MainActivity extends ActionBarActivity implements Motor.MotorInterf
         }
     }
 
+    public void setZero(View v) {
+        for(int i = 0; i < motor.length; i++) {
+            sendMsg(MsgCreator.overridePos(i, 0));
+        }
+    }
+
     /**
      * set Button:
      * sets the given position to selected motor

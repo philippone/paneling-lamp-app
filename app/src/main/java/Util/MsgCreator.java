@@ -53,6 +53,7 @@ public class MsgCreator {
         return "fr;" + stepper + ";\n";
     }
 
+    public static String overridePos(int stepper, float position) {return "op;" + stepper + ";" + position+ ";\n";}
 
     public static String setLED(int led, int value) {
         return "l;" + led + ";" + value + ";\n";

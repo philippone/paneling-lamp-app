@@ -43,6 +43,13 @@
             android:id="@+id/button_reset"
             android:onClick="resetMotors"/>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/set_zero"
+            android:id="@+id/button_set_zero"
+            android:onClick="setZero" />
+
     </LinearLayout>
 
     <LinearLayout
