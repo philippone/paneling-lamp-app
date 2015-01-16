@@ -122,7 +122,9 @@ void loop() {
   
 }
 
-
+/**
+* handle incomming messages
+*/
 void handle(String message) {
 
   //Serial.print("handle message: ");
@@ -134,6 +136,8 @@ void handle(String message) {
     handleStepperPos(message.substring(3), false);
   else if (message.startsWith("fs;"))
     handleStepperForceStop(message.substring(3));
+  else if (message.startsWith("fr;"))
+    handleStepperForceReset(message.substring(3));
   else if (message.startsWith("l;")) 
     handleLEDMsg(message.substring(2));
   
@@ -149,6 +153,7 @@ void handleStepperPos(String message, boolean aboslutePosition) {
   int stepper = -1;
   float rotations = -1;
   
+  boolean fail = false;
   int counter = 0;
   String tmp = "";
   for (int i = 0; i < message.length(); i++) {
@@ -186,14 +191,18 @@ void handleStepperPos(String message, boolean aboslutePosition) {
         motorRunning[stepper] = true;
         motors[stepper]->move(r);
       }
-    }
-  /*
-  Serial.print("converted ");
-  Serial.print(stepper);
-  Serial.print(" to ");
-  Serial.println(r);
-  */
-  }
+    } else fail = true;
+   } else fail = true;
+  
+  if (fail) {
+   // send msg to phone with current Position of motor
+   float stopPosition = motors[stepper]->currentPosition() / oneRotation;
+   Serial1.print("ms;");
+   Serial1.print(stepper);
+   Serial1.print(";");
+   Serial1.print(stopPosition);
+   Serial1.println(";\n");
+  } 
 }
 
 
@@ -213,7 +222,41 @@ void handleStepperForceStop(String message) {
        motors[stepper]->stop();
    } 
   }
+}
 
+/*
+* set stepper to position 0
+*/
+void handleStepperForceReset(String message) {
+  int stepper = -1;
+  
+  boolean fail = false;
+  String tmp;
+  for (int i = 0; i < message.length(); i++) {
+    if(message.charAt(i) != ';') {
+      tmp += message.charAt(i);
+    } else {
+      stepper = tmp.toInt();
+    }
+  }
+  
+  if (stepper >= 0) {
+     if (motors[stepper]->distanceToGo() == 0) {
+       motorRunning[stepper] = true;
+       motors[stepper]->moveTo(0); 
+     } else fail = true;
+  } else fail = true;
+ 
+ if (fail) {
+   // send msg to phone with current Position of motor
+   float stopPosition = motors[stepper]->currentPosition() / oneRotation;
+   Serial1.print("ms;");
+   Serial1.print(stepper);
+   Serial1.print(";");
+   Serial1.print(stopPosition);
+   Serial1.println(";\n");
+  } 
+  
 }
 
 

@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -30,22 +31,26 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import Util.Motor;
 import Util.MsgCreator;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements Motor.MotorInterface {
+
+
 
 
     /*Bluetooth stuff*/
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private static final String TAG = "MainActivity";
-    short currentMotor = 0;
-    float currRotation = 1;
+
     ExecutorService es = Executors.newFixedThreadPool(1);
     private BluetoothManager bluetoothManager = null;
     private BluetoothAdapter bluetoothAdapter = null;
@@ -59,9 +64,19 @@ public class MainActivity extends ActionBarActivity {
     private BroadcastReceiver deviceFoundReceiver;
     private BroadcastReceiver devicePairingReceiver;
     private BroadcastReceiver devicePairedReceiver;
+
+
+    // View stuff
     private EditText rotationEdit;
     private EditText absPosEdit;
 
+
+    // motor stuff
+    private Motor[] motor;
+    private ArrayList<TextView> motorPosView;
+    private ArrayList<ProgressBar> motorProgView;
+    short currentMotor = 0;
+    float currRotation = 1;
     private int dimmerProgress = 0;
 
     @Override
@@ -69,6 +84,27 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // init motors
+        motor = new Motor[] {new Motor(0, this), new Motor(1, this), new Motor(2, this), new Motor(3, this), new Motor(4, this)};
+        motorPosView = new ArrayList<TextView>(Arrays.asList(
+                (TextView) findViewById(R.id.textView_motor1_position),
+                (TextView) findViewById(R.id.textView_motor2_position),
+                (TextView) findViewById(R.id.textView_motor3_position),
+                (TextView) findViewById(R.id.textView_motor4_position),
+                (TextView) findViewById(R.id.textView_motor5_position)
+        ));
+
+        motorProgView = new ArrayList<ProgressBar>(Arrays.asList(
+                (ProgressBar) findViewById(R.id.progressBar_motor1),
+                (ProgressBar) findViewById(R.id.progressBar_motor2),
+                (ProgressBar) findViewById(R.id.progressBar_motor3),
+                (ProgressBar) findViewById(R.id.progressBar_motor4),
+                (ProgressBar) findViewById(R.id.progressBar_motor5)
+                ));
+
+        // todo get saved positions
+
+        // view
         rotationEdit = (EditText) findViewById(R.id.editText_rel_rot);
         absPosEdit = (EditText) findViewById(R.id.editText_rot_abs);
 
@@ -197,18 +233,36 @@ public class MainActivity extends ActionBarActivity {
 
         switch(view.getId()) {
             case R.id.button_down:
-                //TODO send command to arduino servo
-                sendMsg(MsgCreator.move(currentMotor, -currRotation));
-
+                //send position to arduino
+                boolean b = sendMsg(MsgCreator.move(currentMotor, -currRotation));
+                if (b) {
+                    motorPosView.get(currentMotor).setVisibility(View.GONE);
+                    motorProgView.get(currentMotor).setVisibility(View.VISIBLE);
+                }
                 break;
             case R.id.button_up:
-                //TODO send command to arduino servo
-                sendMsg(MsgCreator.move(currentMotor, currRotation));
+                //send position to arduino
+                boolean b1 = sendMsg(MsgCreator.move(currentMotor, currRotation));
+                if (b1) {
+                    motorPosView.get(currentMotor).setVisibility(View.GONE);
+                    motorProgView.get(currentMotor).setVisibility(View.VISIBLE);
+                }
                 break;
         }
 
     }
 
+    public void resetMotors(View v) {
+        // TODO test if motors are running
+        for(int i = 0; i < motor.length; i++) {
+            sendMsg(MsgCreator.forceReset(i));
+        }
+    }
+
+    /**
+     * set Button:
+     * sets the given position to selected motor
+     * */
     public void setPosition(View v) {
         float position = 0;
         String value = absPosEdit.getText().toString();
@@ -223,10 +277,11 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-
-    public void sendMsg(String msg) {
-
-        Log.d("BluetoothTest", "send Msg " + msg);
+    /*
+    * send Msg to Arduino
+    *
+    * **/
+    public boolean sendMsg(String msg) {
 
         if (bluetoothSocket != null && bluetoothSocket.isConnected()) {
 
@@ -244,14 +299,15 @@ public class MainActivity extends ActionBarActivity {
                 //bluetoothSocket.getOutputStream().write(new byte[]{(byte) 0xFF,(byte) 0xFF, (byte) 0x0a, (byte) 0x0b, 0x00 , 0x00, 0x13, 0x7a});
                 bluetoothSocket.getOutputStream().write(msg.getBytes());
                 bluetoothSocket.getOutputStream().flush();
-                Log.d("BluetoothTest", "Msg " + msg +  " was sent");
-
+                //Log.d("BluetoothTest", "Msg " + msg +  " was sent");
+                return true;
 
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
         }
+        return false;
     }
 
 
@@ -506,6 +562,30 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+
+    public void handleInput(String message) {
+
+        if (message.startsWith("ms;")) {
+            handleMotorUpdate(message);
+        }
+    }
+
+    private void handleMotorUpdate(String message) {
+        String[] splitted = message.split(";");
+
+        int motorNr = Integer.parseInt(splitted[1]);
+        float motorPos = Float.parseFloat(splitted[2]);
+
+        motor[motorNr].setPosition(motorPos);
+    }
+
+    @Override
+    public void updateMotorPosGUI(int motorNr, float position) {
+        motorPosView.get(motorNr).setText(position + " rotations ");
+        motorPosView.get(motorNr).setVisibility(View.VISIBLE);
+        motorProgView.get(motorNr).setVisibility(View.INVISIBLE);
+    }
+
     /**
      * Receiver Thread
      *
@@ -548,6 +628,7 @@ public class MainActivity extends ActionBarActivity {
                             @Override
                             public void run() {
 
+                                handleInput(message);
                                 logBTInput(message);
 
                             }
