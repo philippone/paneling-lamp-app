@@ -9,6 +9,7 @@ AccelStepper* stepper2 = new AccelStepper(1, 27, 26);
 AccelStepper* stepper3 = new AccelStepper(1, 29, 28);
 AccelStepper* stepper4 = new AccelStepper(1, 31, 30);
 AccelStepper* motors[5] = {stepper0, stepper1, stepper2, stepper3, stepper4};
+boolean motorRunning[5] = {false, false, false, false, false};
 int motorCount = 5;
 int oneRotation = 1600;
 
@@ -49,17 +50,17 @@ void loop() {
   while (Serial1.available() > 0) {
       char msg = Serial1.read();
       
-      // send back to phone
-      Serial1.print("all: ");
-      Serial1.println(msg);
-      
-      // send to usb 
-      Serial.print("inc");
-      Serial.println(msg);
-
-      if (msg == '*' || msg == '\n') {
+     if (msg == '*' || msg == '\n') {
         message += "\n";
         handle(message);
+        
+        // send back to phone (test only)
+        Serial1.print("all: ");
+        Serial1.println(message);
+        // send to usb 
+        Serial.print("inc ");
+        Serial.println(message);
+        
         // reset Message
         message = "";
       } else {

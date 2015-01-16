@@ -28,17 +28,17 @@ public class MsgCreator {
 
 
     /**
-     * move stepper to absolute positon (1rotation * position)
+     * move stepper to relvative positon (1rotation * position)
      * */
     public static String move(int stepper, float position) {
-        return "sa;" + stepper + ";" + position + ";\n";
+        return "sr;" + stepper + ";" + position + ";\n";
     }
 
     /**
-     * move stepper relative position (x * rotations)
+     * move stepper absolute position (x * rotations)
      * */
     public static String moveTo(int stepper, float rotations) {
-        return "sr;" + stepper + ";" + rotations + ";\n";
+        return "sa;" + stepper + ";" + rotations + ";\n";
     }
 
     public static String setCurrPos(int stepper, float rotations) {

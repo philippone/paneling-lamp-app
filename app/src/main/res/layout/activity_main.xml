@@ -5,7 +5,15 @@
     tools:context=".MainActivity"
     android:orientation="vertical"
     android:id="@+id/mainlayout">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scrollView" >
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
     <LinearLayout
         android:orientation="horizontal"
@@ -40,8 +48,8 @@
             android:id="@+id/dimmer"
             android:layout_weight="1"
             android:indeterminate="false"
-            android:max="100"
-            android:progress="50" />
+            android:max="255"
+            android:progress="100" />
     </LinearLayout>
 
     <LinearLayout
@@ -76,40 +84,40 @@
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Servo 1"
-                        android:id="@+id/radio_servo1"
+                        android:text="Motor 1"
+                        android:id="@+id/radio_motor1"
                         android:layout_gravity="center_horizontal"
                         android:checked="true"
                         android:onClick="onRadioButtonServoClicked"/>
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Servo 2"
-                        android:id="@+id/radio_servo2"
+                        android:text="Motor 2"
+                        android:id="@+id/radio_motor2"
                         android:layout_gravity="center_horizontal"
                         android:checked="false"
                         android:onClick="onRadioButtonServoClicked"/>
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Servo 3"
-                        android:id="@+id/radio_servo3"
+                        android:text="Motor 3"
+                        android:id="@+id/radio_motor3"
                         android:layout_gravity="center_horizontal"
                         android:checked="false"
                         android:onClick="onRadioButtonServoClicked"/>
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Servo 4"
-                        android:id="@+id/radio_servo4"
+                        android:text="Motor 4"
+                        android:id="@+id/radio_motor4"
                         android:layout_gravity="center_horizontal"
                         android:checked="false"
                         android:onClick="onRadioButtonServoClicked"/>
                     <RadioButton
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Servo 5"
-                        android:id="@+id/radio_servo5"
+                        android:text="Motor 5"
+                        android:id="@+id/radio_motor5"
                         android:layout_gravity="center_horizontal"
                         android:checked="false"
                         android:onClick="onRadioButtonServoClicked"/>
@@ -189,60 +197,63 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Position"
+            android:text="Position relativ"
             android:id="@+id/textView_position"
             android:layout_marginTop="10dp" />
-    </LinearLayout>
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <RadioGroup
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginRight="20dp">
+            android:id="@+id/kp">
 
-            <RadioButton
+            <RadioGroup
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1/2 R"
-                android:id="@+id/radioButton_1_2r"
-                android:checked="true"
-                android:onClick="onRadioButtonRotationClicked"/>
+                android:orientation="vertical"
+                android:layout_marginRight="20dp">
 
-            <RadioButton
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1/2 R"
+                    android:id="@+id/radioButton_1_2r"
+                    android:checked="true"
+                    android:onClick="onRadioButtonRotationClicked"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1 R"
+                    android:id="@+id/radioButton_1R"
+                    android:checked="true"
+                    android:onClick="onRadioButtonRotationClicked"/>
+            </RadioGroup>
+
+            <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1 R"
-                android:id="@+id/radioButton_1R"
-                android:checked="true"
-                android:onClick="onRadioButtonRotationClicked"/>
-        </RadioGroup>
+                android:text="up"
+                android:id="@+id/button_up"
+                android:layout_marginTop="8dp"
+                android:onClick="controlUPDOWN"/>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="up"
-            android:id="@+id/button_up"
-            android:layout_marginTop="8dp"
-            android:onClick="controlUPDOWN"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="down"
-            android:id="@+id/button_down"
-            android:layout_marginTop="8dp"
-            android:onClick="controlUPDOWN"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="down"
+                android:id="@+id/button_down"
+                android:layout_marginTop="8dp"
+                android:onClick="controlUPDOWN"/>
+        </LinearLayout>
     </LinearLayout>
 
-    <TextView
+        <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="communication log"
         android:id="@+id/BTConsole" />
 
+    </LinearLayout>
+    </ScrollView>
 </LinearLayout>

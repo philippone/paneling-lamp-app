@@ -142,25 +142,25 @@ public class MainActivity extends ActionBarActivity {
 
         // Check which radio button was clicked
         switch(view.getId()) {
-            case R.id.radio_servo1:
+            case R.id.radio_motor1:
+                if (checked)
+                    currentMotor = 0;
+                    break;
+            case R.id.radio_motor2:
                 if (checked)
                     currentMotor = 1;
-                    break;
-            case R.id.radio_servo2:
+                break;
+            case R.id.radio_motor3:
                 if (checked)
                     currentMotor = 2;
                 break;
-            case R.id.radio_servo3:
+            case R.id.radio_motor4:
                 if (checked)
                     currentMotor = 3;
                 break;
-            case R.id.radio_servo4:
+            case R.id.radio_motor5:
                 if (checked)
                     currentMotor = 4;
-                break;
-            case R.id.radio_servo5:
-                if (checked)
-                    currentMotor = 5;
                 break;
 
         }
@@ -201,9 +201,12 @@ public class MainActivity extends ActionBarActivity {
         switch(view.getId()) {
             case R.id.button_down:
                 //TODO send command to arduino servo
+                sendMsg(MsgCreator.move(currentMotor, -currRotation));
+
                 break;
             case R.id.button_up:
                 //TODO send command to arduino servo
+                sendMsg(MsgCreator.move(currentMotor, currRotation));
                 break;
         }
 
