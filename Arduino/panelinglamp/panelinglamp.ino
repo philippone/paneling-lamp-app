@@ -11,8 +11,10 @@ AccelStepper* stepper4 = new AccelStepper(1, 31, 30);
 AccelStepper* motors[5] = {stepper0, stepper1, stepper2, stepper3, stepper4};
 boolean motorRunning[5] = {false, false, false, false, false};
 int motorCount = 5;
-int oneRotation = 1600;
-
+float oneRotation = 1600;
+// min/max Position in Rotations (x * oneRotation)
+int motorMinPos = 0 * oneRotation;
+int motorMaxPos = 100 * oneRotation;
 
 //LED stuff
 int led[4] = {13, 14, 15, 16};
@@ -55,11 +57,11 @@ void loop() {
         handle(message);
         
         // send back to phone (test only)
-        Serial1.print("all: ");
-        Serial1.println(message);
+        //Serial1.print("all: ");
+        //Serial1.println(message);
         // send to usb 
-        Serial.print("inc ");
-        Serial.println(message);
+        Serial.print("inc: ");
+        Serial.print(message);
         
         // reset Message
         message = "";
@@ -96,7 +98,25 @@ void loop() {
     }
   }
   
-
+  for (int i = 0; i < motorCount; i++) {
+    if (motors[i]->distanceToGo() == 0) {
+      if(motorRunning[i]) {
+        float stopPosition = motors[i]->currentPosition() / oneRotation;
+        Serial.print("motor stopped at ");
+        Serial.println(stopPosition);
+        
+        // send msg to phone with current Position of motor
+        Serial1.print("ms;");
+        Serial1.print(i);
+        Serial1.print(";");
+        Serial1.print(stopPosition);
+        Serial1.println(";\n");
+        
+        motorRunning[i] = false;
+      }
+    }
+  }
+  
 
   
   
@@ -153,13 +173,17 @@ void handleStepperPos(String message, boolean aboslutePosition) {
   if (stepper >= 0) {
 
     long r = rotations * oneRotation;
-    // if motor is not running
-    if (motors[stepper]->distanceToGo() == 0) {
+    // if motor is not running, and in range
+    long cPos = motors[stepper]->currentPosition();
+    if (motors[stepper]->distanceToGo() == 0 &&  cPos + r >= motorMinPos /*&& cPos + r <= motorMaxPos*/) {
+      
       if (aboslutePosition) {
         // move to aboslute position
+        motorRunning[stepper] = true;
         motors[stepper]->moveTo(r);
       } else {
         // move to relative position
+        motorRunning[stepper] = true;
         motors[stepper]->move(r);
       }
     }

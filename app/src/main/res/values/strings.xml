@@ -7,5 +7,6 @@
     <string name="arduino_bt_module_name">HC-06</string>
     <string name="arduino_bt_encoding">UTF-8</string>
     <string name="arduino_bt_module_adress">0C:8B:FD:E8:9B:3E</string>
+    <string name="rotation_s">Rotation(s)</string>
 
 </resources>

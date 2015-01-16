@@ -207,35 +207,26 @@
             android:layout_height="wrap_content"
             android:id="@+id/kp">
 
-            <RadioGroup
-                android:layout_width="wrap_content"
+            <EditText
+                android:layout_width="79dp"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginRight="20dp">
+                android:inputType="numberDecimal"
+                android:ems="10"
+                android:id="@+id/editText_rel_rot"
+                android:text="1" />
 
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="1/2 R"
-                    android:id="@+id/radioButton_1_2r"
-                    android:checked="true"
-                    android:onClick="onRadioButtonRotationClicked"/>
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="1 R"
-                    android:id="@+id/radioButton_1R"
-                    android:checked="true"
-                    android:onClick="onRadioButtonRotationClicked"/>
-            </RadioGroup>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/rotation_s"
+                android:id="@+id/textView"
+                android:layout_weight="1" />
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="up"
                 android:id="@+id/button_up"
-                android:layout_marginTop="8dp"
                 android:onClick="controlUPDOWN"/>
 
             <Button
@@ -243,11 +234,56 @@
                 android:layout_height="wrap_content"
                 android:text="down"
                 android:id="@+id/button_down"
-                android:layout_marginTop="8dp"
                 android:onClick="controlUPDOWN"/>
         </LinearLayout>
     </LinearLayout>
 
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Position absolut"
+                android:id="@+id/textView_position_abs"
+                android:layout_marginTop="10dp" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <EditText
+                    android:layout_width="90dp"
+                    android:layout_height="wrap_content"
+                    android:inputType="numberDecimal"
+                    android:ems="10"
+                    android:id="@+id/editText_rot_abs"
+                    android:text="1" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="* 1 Rotation"
+                    android:id="@+id/Position"
+                    android:layout_weight="1" />
+
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="set"
+                    android:id="@+id/button_set_pos"
+                    android:onClick="setPosition"/>
+
+
+            </LinearLayout>
+        </LinearLayout>
         <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

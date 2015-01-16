@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -43,7 +44,7 @@ public class MainActivity extends ActionBarActivity {
     /*Bluetooth stuff*/
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private static final String TAG = "MainActivity";
-    short currentMotor = 1;
+    short currentMotor = 0;
     float currRotation = 1;
     ExecutorService es = Executors.newFixedThreadPool(1);
     private BluetoothManager bluetoothManager = null;
@@ -58,7 +59,8 @@ public class MainActivity extends ActionBarActivity {
     private BroadcastReceiver deviceFoundReceiver;
     private BroadcastReceiver devicePairingReceiver;
     private BroadcastReceiver devicePairedReceiver;
-
+    private EditText rotationEdit;
+    private EditText absPosEdit;
 
     private int dimmerProgress = 0;
 
@@ -67,7 +69,8 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        rotationEdit = (EditText) findViewById(R.id.editText_rel_rot);
+        absPosEdit = (EditText) findViewById(R.id.editText_rot_abs);
 
         SeekBar dimmer = (SeekBar) findViewById(R.id.dimmer);
 
@@ -167,21 +170,6 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
-    public void onRadioButtonRotationClicked(View view) {
-        boolean checked = ((RadioButton) view).isChecked();
-
-        // Check which radio button was clicked
-        switch(view.getId()) {
-            case R.id.radioButton_1R:
-                if (checked)
-                    currRotation = 1;
-                break;
-            case R.id.radioButton_1_2r:
-                if (checked)
-                    currRotation = 0.5f;
-                break;
-        }
-    }
 
     public void togglePower (View view) {
         // Is the toggle on?
@@ -198,6 +186,15 @@ public class MainActivity extends ActionBarActivity {
 
 
     public void controlUPDOWN(View view) {
+
+        String value = rotationEdit.getText().toString();
+        if (value != "") {
+            currRotation = Float.parseFloat(value);
+        } else {
+            // do nothing
+            return;
+        }
+
         switch(view.getId()) {
             case R.id.button_down:
                 //TODO send command to arduino servo
@@ -210,27 +207,19 @@ public class MainActivity extends ActionBarActivity {
                 break;
         }
 
+    }
 
-        // TODO only test
-        if (bluetoothSocket != null && bluetoothSocket.isConnected()) {
-
-            try {
-                /*OutputStreamWriter osw = new OutputStreamWriter(bluetoothSocket.getOutputStream(), getString(R.string.arduino_bt_encoding));
-                osw.write("testtextwithaverylonglength\n");
-                osw.flush();
-                */
-
-                String test = "check123\n";
-                //bluetoothSocket.getOutputStream().write(new byte[]{(byte) 0xFF,(byte) 0xFF, (byte) 0x0a, (byte) 0x0b, 0x00 , 0x00, 0x13, 0x7a});
-                bluetoothSocket.getOutputStream().write(test.getBytes());
-                bluetoothSocket.getOutputStream().flush();
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
+    public void setPosition(View v) {
+        float position = 0;
+        String value = absPosEdit.getText().toString();
+        if (value != "") {
+            position = Float.parseFloat(value);
+        } else {
+            // do nothing
+            return;
         }
+        sendMsg(MsgCreator.moveTo(currentMotor, position));
+
     }
 
 
