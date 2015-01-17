@@ -1,4 +1,4 @@
-package net.philippschardt.panelinlamp;
+package net.philippschardt.panelinglamp;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

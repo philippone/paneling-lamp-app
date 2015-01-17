@@ -10,5 +10,14 @@
     <string name="rotation_s">Rotation(s)</string>
     <string name="reset">reset</string>
     <string name="set_zero">set zero</string>
+    <string name="title_activity_paneling_lamp">PanelingLamp</string>
+    <string name="title_section1">Forms</string>
+    <string name="title_section2">Developer</string>
+    <string name="title_section3">Settings</string>
+    <string name="title_section4">About</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

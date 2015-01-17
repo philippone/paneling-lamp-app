@@ -1,31 +1,21 @@
 package Util;
 
-import net.philippschardt.panelinlamp.MainActivity;
-
 /**
  * Created by philipp on 16.01.15.
  */
 public class Motor {
 
-    public interface MotorInterface {
-
-        public void updateMotorPosGUI(int motorNr, float position);
-
-    }
-
     private int motorNr;
     private double position;
     private long minPosition;
     private long maxPosition;
-    private MainActivity observer;
 
     private double oneRotation = 1600;
 
 
 
-    public Motor(int motorNr, MainActivity observer) {
+    public Motor(int motorNr) {
         this.motorNr    = motorNr;
-        this.observer   = observer;
     }
 
 
@@ -41,7 +31,6 @@ public class Motor {
 
     public void setPosition(float position) {
         this.position = position * oneRotation;
-        this.observer.updateMotorPosGUI(motorNr, position);
     }
 
     public long getMinPosition() {
