@@ -215,7 +215,7 @@ public class PanelingLamp extends ActionBarActivity
 
 
 
- 
+
 
     /**
     * OnFragmentInterfaceListener
