@@ -42,7 +42,7 @@ import Util.Motor;
 import Util.MsgCreator;
 
 
-public class MainActivity extends ActionBarActivity implements Motor.OnMotorInterfaceListener {
+public class MainActivity extends ActionBarActivity  {
 
     private static final String TAG = "MainActivity";
 
@@ -83,7 +83,7 @@ public class MainActivity extends ActionBarActivity implements Motor.OnMotorInte
         setContentView(R.layout.activity_main);
 
         // init motors
-        motor = new Motor[] {new Motor(0, this), new Motor(1, this), new Motor(2, this), new Motor(3, this), new Motor(4, this)};
+        motor = new Motor[] {new Motor(0), new Motor(1), new Motor(2), new Motor(3), new Motor(4)};
         motorPosView = new ArrayList<TextView>(Arrays.asList(
                 (TextView) findViewById(R.id.textView_motor1_position),
                 (TextView) findViewById(R.id.textView_motor2_position),
@@ -626,7 +626,7 @@ public class MainActivity extends ActionBarActivity implements Motor.OnMotorInte
 
 
 
-    @Override
+
     public void notifyGuI(int motorNr, float position) {
         motorPosView.get(motorNr).setText(position + " rotations ");
         motorPosView.get(motorNr).setVisibility(View.VISIBLE);
