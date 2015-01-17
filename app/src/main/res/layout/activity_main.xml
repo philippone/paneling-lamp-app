@@ -142,9 +142,11 @@
 
                 <LinearLayout
                     android:orientation="vertical"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2">
+                    android:layout_weight="2"
+                    android:layout_gravity="center"
+                    android:minWidth="100dp">
 
                     <LinearLayout
                         android:orientation="horizontal"
@@ -152,14 +154,16 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"
                         android:layout_marginTop="6dp"
-                        android:layout_marginBottom="6dp">
+                        android:layout_marginBottom="6dp"
+                        android:layout_gravity="center">
 
                         <ProgressBar
                             style="?android:attr/progressBarStyleSmall"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:id="@+id/progressBar_motor1"
-                            android:visibility="invisible" />
+                            android:visibility="invisible"
+                             />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -167,7 +171,7 @@
                             android:text="0 rotations"
                             android:id="@+id/textView_motor1_position"
                             android:layout_gravity="right"
-                            android:onClick="onRadioButtonServoClicked"/>
+                            android:visibility="visible" />
 
                     </LinearLayout>
 
@@ -177,7 +181,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="6dp"
                         android:layout_marginTop="6dp"
-                        android:layout_marginBottom="6dp">
+                        android:layout_marginBottom="6dp"
+                        android:layout_gravity="center">
 
                         <ProgressBar
                             style="?android:attr/progressBarStyleSmall"
@@ -192,7 +197,7 @@
                             android:text="0 rotations"
                             android:id="@+id/textView_motor2_position"
                             android:layout_gravity="right"
-                            android:onClick="onRadioButtonServoClicked"/>
+                            />
 
                     </LinearLayout>
 
@@ -200,7 +205,8 @@
                         android:orientation="vertical"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_weight="2">
+                        android:layout_weight="2"
+                        android:layout_gravity="center">
 
                         <LinearLayout
                             android:orientation="horizontal"
@@ -223,7 +229,7 @@
                                 android:text="0 rotations"
                                 android:id="@+id/textView_motor3_position"
                                 android:layout_gravity="right"
-                                android:onClick="onRadioButtonServoClicked"/>
+                               />
 
                         </LinearLayout>
                     </LinearLayout>
@@ -232,7 +238,8 @@
                             android:orientation="vertical"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="2">
+                            android:layout_weight="2"
+                            android:layout_gravity="center">
 
                             <LinearLayout
                                 android:orientation="horizontal"
@@ -255,7 +262,7 @@
                                     android:text="0 rotations"
                                     android:id="@+id/textView_motor4_position"
                                     android:layout_gravity="right"
-                                    android:onClick="onRadioButtonServoClicked"/>
+                                    />
 
                             </LinearLayout>
                         </LinearLayout>
@@ -264,7 +271,8 @@
                                 android:orientation="vertical"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_weight="2">
+                                android:layout_weight="2"
+                                android:layout_gravity="center">
 
                                 <LinearLayout
                                     android:orientation="horizontal"
@@ -287,7 +295,7 @@
                                         android:text="0 rotations"
                                         android:id="@+id/textView_motor5_position"
                                         android:layout_gravity="right"
-                                        android:onClick="onRadioButtonServoClicked"/>
+                                        />
 
                                 </LinearLayout>
                             </LinearLayout>

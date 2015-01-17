@@ -268,6 +268,8 @@ public class MainActivity extends ActionBarActivity implements Motor.MotorInterf
         // TODO test if motors are running
         for(int i = 0; i < motor.length; i++) {
             sendMsg(MsgCreator.forceReset(i));
+            motorPosView.get(i).setVisibility(View.GONE);
+            motorProgView.get(i).setVisibility(View.VISIBLE);
         }
     }
 
@@ -291,6 +293,8 @@ public class MainActivity extends ActionBarActivity implements Motor.MotorInterf
             return;
         }
         sendMsg(MsgCreator.moveTo(currentMotor, position));
+        motorPosView.get(currentMotor).setVisibility(View.GONE);
+        motorProgView.get(currentMotor).setVisibility(View.VISIBLE);
 
     }
 
@@ -683,7 +687,12 @@ public class MainActivity extends ActionBarActivity implements Motor.MotorInterf
 
                     Log.e(TAG, "Bluetooth disconnect");
 
-                    //Restart Connection
+                    //close socket
+                    try {
+                        socket.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
 
                     break;
 
