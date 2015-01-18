@@ -1,43 +1,45 @@
-package fragments;
+package fragments.developer;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.astuetz.PagerSlidingTabStrip;
+
 import net.philippschardt.panelinglamp.PanelingLamp;
 import net.philippschardt.panelinglamp.R;
 
-import Util.SlidingTabLayout;
-
+import fragments.OnFragmentInteractionListener;
+import fragments.OnReceiverListener;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link OnFragmentInteractionListener} interface
+ * {@link fragments.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link FormsFragment#newInstance} factory method to
+ * Use the {@link DeveloperFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FormsFragment extends Fragment implements OnReceiverListener {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String FORMS_ARG_PARAM1 = "forms_section_number";
+public class DeveloperFragment extends Fragment implements OnReceiverListener {
 
-    // TODO: Rename and change types of parameters
+    private final String TAG = getClass().getName();
+
+    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
+    private static final String DEV_ARG_PARAM1 = "dev_section_number";
+
     private int mSectionNr;
 
     private OnFragmentInteractionListener mListener;
-
-    private ViewPagerAdapter pagerAdapter;
     private ViewPager mViewPager;
-    private SlidingTabLayout mSlidingTabLayout;
+    private ViewPagerAdapter pagerAdapter;
+    private DeveloperFragmentMotors motorFragment;
+    private DeveloperFragmentLEDs ledFragment;
 
     /**
      * Use this factory method to create a new instance of
@@ -47,15 +49,15 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
      * @return A new instance of fragment Forms.
      */
     // TODO: Rename and change types and number of parameters
-    public static FormsFragment newInstance(int sectionNr) {
-        FormsFragment fragment = new FormsFragment();
+    public static DeveloperFragment newInstance(int sectionNr) {
+        DeveloperFragment fragment = new DeveloperFragment();
         Bundle args = new Bundle();
-        args.putInt(FORMS_ARG_PARAM1, sectionNr);
+        args.putInt(DEV_ARG_PARAM1, sectionNr);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public FormsFragment() {
+    public DeveloperFragment() {
         // Required empty public constructor
     }
 
@@ -63,33 +65,45 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mSectionNr = getArguments().getInt(FORMS_ARG_PARAM1);
+            mSectionNr = getArguments().getInt(DEV_ARG_PARAM1);
         }
+
+        
+        motorFragment = DeveloperFragmentMotors.newInstance();
+        // todo set last value/ currentvalue
+        // TODO besser wert an lampe abfragen
+        ledFragment = DeveloperFragmentLEDs.newInstance(0);
+
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_forms, container, false);
-
-
-        // init view pager
-        pagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
-        //pager.setAdapter(pagerAdapter);
-
-
+        View v = inflater.inflate(R.layout.fragment_sliding_tabs, container, false);
+        
         mViewPager = (ViewPager) v.findViewById(R.id.frag_forms_viewPager);
+        pagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
         mViewPager.setAdapter(pagerAdapter);
-        mSlidingTabLayout = (SlidingTabLayout) v.findViewById(R.id.frag_forms_sliding_tabs);
-        mSlidingTabLayout.setViewPager(mViewPager);
 
+        // Bind the tabs to the ViewPager
+        PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) v.findViewById(R.id.frag_forms_tabs);
+        tabs.setViewPager(mViewPager);
+        
+        
         return v;
+    }
+
+    @Override
+    public void updateMotorPosinGUI(int motorNr, float motorPos) {
+        motorFragment.updateMotorPosinGUI(motorNr, motorPos);
     }
 
     class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
-        private int pages = 2;
+        private String[] titles = new String[] {getString(R.string.motorTab), getString(R.string.ledTab)};
 
         public ViewPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -99,46 +113,32 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
         public Fragment getItem(int num) {
             switch (num) {
                 case 0:
-                    break;
+                    return motorFragment;
+                case 1:
+                    return ledFragment;
             }
             return PanelingLamp.PlaceholderFragment.newInstance(num + 1);
         }
 
         @Override
         public int getCount() {
-            return pages;
+            return titles.length;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return "Sezione " + position;
-        }
-
-    }
-
-
-
-
-
-    public class MyFormsPagerAdapter extends FragmentPagerAdapter {
-
-        private int pages = 2;
-
-        public MyFormsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return PanelingLamp.PlaceholderFragment.newInstance(position + 1);
-        }
-
-        @Override
-        public int getCount() {
-            return pages;
+            return titles[position];
         }
     }
 
+   
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+       
+    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -152,7 +152,7 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
         }
 
         // set section title
-        mListener.onSectionAttached(getArguments().getInt(FORMS_ARG_PARAM1));
+        mListener.onSectionAttached(getArguments().getInt(DEV_ARG_PARAM1));
 
     }
 
@@ -163,8 +163,10 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
     }
 
 
-    @Override
-    public void updateMotorPosinGUI(int motorNr, float motorPos) {
-        // called if pos update is received
-    }
+
+
+
+
+
 }
+

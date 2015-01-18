@@ -1,9 +1,8 @@
-package fragments;
+package fragments.developer;
 
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,34 +10,20 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.RadioButton;
-import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 import net.philippschardt.panelinglamp.R;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import Util.Motor;
-import Util.MsgCreator;
+import fragments.OnFragmentInteractionListener;
+import fragments.OnReceiverListener;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link DeveloperFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
-public class DeveloperFragment extends Fragment implements OnReceiverListener{
 
+
+public class DeveloperFragmentMotors extends Fragment implements OnReceiverListener {
     private final String TAG = getClass().getName();
-
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String DEV_ARG_PARAM1 = "dev_section_number";
-
-    private int mSectionNr;
 
     private OnFragmentInteractionListener mListener;
 
@@ -46,68 +31,54 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener{
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param sectionNr Parameter 1.
-     * @return A new instance of fragment Forms.
+     * @return A new instance of fragment DeveloperFragmentMotors.
      */
-    // TODO: Rename and change types and number of parameters
-    public static DeveloperFragment newInstance(int sectionNr) {
-        DeveloperFragment fragment = new DeveloperFragment();
-        Bundle args = new Bundle();
-        args.putInt(DEV_ARG_PARAM1, sectionNr);
-        fragment.setArguments(args);
+    public static DeveloperFragmentMotors newInstance() {
+        DeveloperFragmentMotors fragment = new DeveloperFragmentMotors();
+        //Bundle args = new Bundle();
+        //args.putString(ARG_PARAM1, param1);
+        //args.putString(ARG_PARAM2, param2);
+        //fragment.setArguments(args);
         return fragment;
     }
 
-    public DeveloperFragment() {
+    public DeveloperFragmentMotors() {
         // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mSectionNr = getArguments().getInt(DEV_ARG_PARAM1);
-        }
-
-
+        //if (getArguments() != null) {
+          //  mParam1 = getArguments().getString(ARG_PARAM1);
+            //mParam2 = getArguments().getString(ARG_PARAM2);
+        //}
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        super.onCreateView(inflater, container, savedInstanceState);
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_developer, container, false);
+        View v =  inflater.inflate(R.layout.fragment_developer_fragment_motors, container, false);
 
         // init GUI
         initGUI(v);
-        
+
         return v;
+
     }
 
-   
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-       
-    }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-
         try {
             mListener = (OnFragmentInteractionListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-
-        // set section title
-        mListener.onSectionAttached(getArguments().getInt(DEV_ARG_PARAM1));
-
     }
 
     @Override
@@ -115,7 +86,6 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener{
         super.onDetach();
         mListener = null;
     }
-
 
 
 
@@ -133,12 +103,10 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener{
 
 
     // motor stuff
-    private Motor[] motor;
     private ArrayList<TextView> motorPosView;
     private ArrayList<ProgressBar> motorProgView;
     short currentMotor = 0;
     float currRotation = 1;
-    private int dimmerProgress = 0;
 
     private void initGUI(View v) {
 
@@ -164,9 +132,7 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener{
         rotationEdit = (EditText) v.findViewById(R.id.editText_rel_rot);
         absPosEdit = (EditText) v.findViewById(R.id.editText_rot_abs);
 
-        // dimmer
-        SeekBar dimmer = (SeekBar) v.findViewById(R.id.dimmer);
-        dimmer.setOnSeekBarChangeListener(seekbarDimmerListener);
+
 
         // radio motor button
         RadioButton rm1 = (RadioButton) v.findViewById(R.id.radio_motor1);
@@ -180,9 +146,7 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener{
         RadioButton rm5 = (RadioButton) v.findViewById(R.id.radio_motor5);
         rm5.setOnClickListener(chooseMotorListener);
 
-        // power button
-        ToggleButton powerButton = (ToggleButton) v.findViewById(R.id.powerButton);
-        powerButton.setOnClickListener(togglePowerListener);
+
 
         // reset button
         Button resetButton = (Button) v.findViewById(R.id.button_reset);
@@ -210,7 +174,6 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener{
         @Override
         public void onClick(View v) {
             mListener.adjustAllMotorToZero();
-            // TODO dont know if lamp send 0  position as reply???
         }
     };
 
@@ -287,40 +250,7 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener{
         }
     };
 
-    View.OnClickListener togglePowerListener = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            // Is the toggle on?
-            boolean on = ((ToggleButton) view).isChecked();
 
-            if (on) {
-                // lamp is on
-                // TODO send command to arduino
-            } else {
-                // lamp is off
-                // TODO send command to arduino
-            }
-        }
-    };
-
-    SeekBar.OnSeekBarChangeListener seekbarDimmerListener = new SeekBar.OnSeekBarChangeListener() {
-        @Override
-        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            // set new dimmer value
-            dimmerProgress = progress;
-        }
-
-        @Override
-        public void onStartTrackingTouch(SeekBar seekBar) { /* nothing*/}
-
-        @Override
-        public void onStopTrackingTouch(SeekBar seekBar) {
-            // if more than 1 LED dimmer use seekBar.getID() to get LED ID;
-
-            // send dimmer value to lamp
-            mListener.sendMsg(MsgCreator.setLED(0, dimmerProgress));
-        }
-    };
 
     View.OnClickListener chooseMotorListener = new View.OnClickListener() {
         @Override
@@ -355,75 +285,6 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener{
 
 
 
-    public void togglePower (View view) {
-
-    }
-
-    public void controlUPDOWN(View view) {
-
-        String value = rotationEdit.getText().toString();
-        if (value != "") {
-            currRotation = Float.parseFloat(value);
-        } else {
-            // do nothing
-            return;
-        }
-
-        switch(view.getId()) {
-            case R.id.button_down:
-                //send position to arduino
-                boolean b = mListener.sendMsg(MsgCreator.move(currentMotor, -currRotation));
-                if (b) {
-                    motorPosView.get(currentMotor).setVisibility(View.GONE);
-                    motorProgView.get(currentMotor).setVisibility(View.VISIBLE);
-                }
-                break;
-            case R.id.button_up:
-                //send position to arduino
-                boolean b1 = mListener.sendMsg(MsgCreator.move(currentMotor, currRotation));
-                if (b1) {
-                    motorPosView.get(currentMotor).setVisibility(View.GONE);
-                    motorProgView.get(currentMotor).setVisibility(View.VISIBLE);
-                }
-                break;
-        }
-    }
-
-    public void resetMotors(View v) {
-        // TODO test if motors are running
-        for(int i = 0; i < motor.length; i++) {
-            mListener.sendMsg(MsgCreator.forceReset(i));
-            motorPosView.get(i).setVisibility(View.GONE);
-            motorProgView.get(i).setVisibility(View.VISIBLE);
-        }
-    }
-
-    public void setZero(View v) {
-        for(int i = 0; i < motor.length; i++) {
-            mListener.sendMsg(MsgCreator.overridePos(i, 0));
-        }
-    }
-
-    /**
-     * set Button:
-     * sets the given position to selected motor
-     * */
-    public void setPosition(View v) {
-        Log.d(TAG, "set position ");
-        float position = 0;
-        String value = absPosEdit.getText().toString();
-        if (value != "") {
-            position = Float.parseFloat(value);
-        } else {
-            // do nothing
-            return;
-        }
-        mListener.sendMsg(MsgCreator.moveTo(currentMotor, position));
-        motorPosView.get(currentMotor).setVisibility(View.GONE);
-        motorProgView.get(currentMotor).setVisibility(View.VISIBLE);
-
-    }
-
 
     /*
     * update the gui
@@ -437,6 +298,4 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener{
         motorProgView.get(motorIndex).setVisibility(View.INVISIBLE);
     }
 
-
 }
-

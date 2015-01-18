@@ -36,8 +36,8 @@ import java.util.concurrent.Executors;
 
 import Util.Motor;
 import Util.MsgCreator;
-import fragments.DeveloperFragment;
-import fragments.FormsFragment;
+import fragments.developer.DeveloperFragment;
+import fragments.forms.FormsFragment;
 import fragments.OnFragmentInteractionListener;
 import fragments.OnReceiverListener;
 
