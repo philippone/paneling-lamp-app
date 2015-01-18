@@ -3,13 +3,19 @@ package fragments;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
+import net.philippschardt.panelinglamp.PanelingLamp;
 import net.philippschardt.panelinglamp.R;
+
+import Util.SlidingTabLayout;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -19,7 +25,7 @@ import net.philippschardt.panelinglamp.R;
  * Use the {@link FormsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FormsFragment extends Fragment implements OnReceiverListener{
+public class FormsFragment extends Fragment implements OnReceiverListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String FORMS_ARG_PARAM1 = "forms_section_number";
@@ -28,6 +34,10 @@ public class FormsFragment extends Fragment implements OnReceiverListener{
     private int mSectionNr;
 
     private OnFragmentInteractionListener mListener;
+
+    private ViewPagerAdapter pagerAdapter;
+    private ViewPager mViewPager;
+    private SlidingTabLayout mSlidingTabLayout;
 
     /**
      * Use this factory method to create a new instance of
@@ -63,16 +73,70 @@ public class FormsFragment extends Fragment implements OnReceiverListener{
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_forms, container, false);
 
-        Button test = (Button) v.findViewById(R.id.button_test);
-        test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("test", "klappt");
 
-            }
-        });
+        // init view pager
+        pagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
+        //pager.setAdapter(pagerAdapter);
+
+
+        mViewPager = (ViewPager) v.findViewById(R.id.frag_forms_viewPager);
+        mViewPager.setAdapter(pagerAdapter);
+        mSlidingTabLayout = (SlidingTabLayout) v.findViewById(R.id.frag_forms_sliding_tabs);
+        mSlidingTabLayout.setViewPager(mViewPager);
 
         return v;
+    }
+
+    class ViewPagerAdapter extends FragmentStatePagerAdapter {
+
+        private int pages = 2;
+
+        public ViewPagerAdapter(FragmentManager fm) {
+            super(fm);
+
+        }
+
+        public Fragment getItem(int num) {
+            switch (num) {
+                case 0:
+                    break;
+            }
+            return PanelingLamp.PlaceholderFragment.newInstance(num + 1);
+        }
+
+        @Override
+        public int getCount() {
+            return pages;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return "Sezione " + position;
+        }
+
+    }
+
+
+
+
+
+    public class MyFormsPagerAdapter extends FragmentPagerAdapter {
+
+        private int pages = 2;
+
+        public MyFormsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return PanelingLamp.PlaceholderFragment.newInstance(position + 1);
+        }
+
+        @Override
+        public int getCount() {
+            return pages;
+        }
     }
 
 
@@ -97,7 +161,6 @@ public class FormsFragment extends Fragment implements OnReceiverListener{
         super.onDetach();
         mListener = null;
     }
-
 
 
     @Override

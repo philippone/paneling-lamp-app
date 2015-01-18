@@ -8,8 +8,9 @@
 
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:id="@+id/imageView" />
+        android:layout_height="96dp"
+        android:id="@+id/imageView"
+        android:background="#d60025ff" />
 
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
