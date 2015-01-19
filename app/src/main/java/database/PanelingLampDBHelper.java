@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class PanelingLampDBHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "PanelingLamp.db";
 
 
@@ -19,7 +19,7 @@ public class PanelingLampDBHelper extends SQLiteOpenHelper {
     }
 
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(SQL_CREATE_ENTRIES);
+        db.execSQL(PanelingLampContract.FormEntry.SQL_CREATE_ENTRIES);
     }
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // This database is only a cache for online data, so its upgrade policy is
@@ -32,17 +32,7 @@ public class PanelingLampDBHelper extends SQLiteOpenHelper {
     }
 
 
-    private static final String TEXT_TYPE = " TEXT";
-    private static final String FLOAT_TYPE = " FLOAT";
-    private static final String COMMA_SEP = ",";
-    private static final String SQL_CREATE_ENTRIES =
-            "CREATE TABLE " + PanelingLampContract.FormEntry.TABLE_NAME + " (" +
-                    PanelingLampContract.FormEntry._ID + " INTEGER PRIMARY KEY," +
-                    PanelingLampContract.FormEntry.COLUMN_NAME_ENTRY_ID + TEXT_TYPE + COMMA_SEP +
-                    PanelingLampContract.FormEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
-                    PanelingLampContract.FormEntry.COLUMN_POS_MOTOR_0 + FLOAT_TYPE + COMMA_SEP +
-// TODO
-            " )";
+
 
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + PanelingLampContract.FormEntry.TABLE_NAME;

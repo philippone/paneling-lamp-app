@@ -1,20 +1,14 @@
 package fragments.forms;
 
 import android.app.Activity;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 
 import net.philippschardt.panelinglamp.R;
 
-import database.FormAdapter;
-import database.PanelingLampContract;
 import fragments.OnFragmentInteractionListener;
 
 /**
@@ -22,10 +16,10 @@ import fragments.OnFragmentInteractionListener;
  * Activities that contain this fragment must implement the
  * {@link OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link FormsCards#newInstance} factory method to
+ * Use the {@link FormsStandardFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FormsCards extends Fragment  {
+public class FormsStandardFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -36,7 +30,6 @@ public class FormsCards extends Fragment  {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-    private GridView grid;
 
     /**
      * Use this factory method to create a new instance of
@@ -44,11 +37,11 @@ public class FormsCards extends Fragment  {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment FormsCards.
+     * @return A new instance of fragment FormsPreInstalled.
      */
     // TODO: Rename and change types and number of parameters
-    public static FormsCards newInstance(String param1, String param2) {
-        FormsCards fragment = new FormsCards();
+    public static FormsStandardFragment newInstance(String param1, String param2) {
+        FormsStandardFragment fragment = new FormsStandardFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -56,7 +49,7 @@ public class FormsCards extends Fragment  {
         return fragment;
     }
 
-    public FormsCards() {
+    public FormsStandardFragment() {
         // Required empty public constructor
     }
 
@@ -73,29 +66,8 @@ public class FormsCards extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v =  inflater.inflate(R.layout.fragment_forms_cards, container, false);
-
-
-        grid = (GridView) v.findViewById(R.id.gridView_frag_forms);
-
-        // create cursoradapter
-        SQLiteDatabase sqLiteDatabase = mListener.getDBHelper().getReadableDatabase();
-
-        String query = "SELECT * FROM " + PanelingLampContract.FormEntry.TABLE_NAME;
-
-        // rawQuery must not include a trailing ';'
-        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
-
-        Log.d("test", "cursor count " + cursor.getCount());
-
-        FormAdapter adapter = new FormAdapter(getActivity(), R.layout.form_card, cursor);
-
-        // populate gridview
-        grid.setAdapter(adapter);
-
-        return v;
+        return inflater.inflate(R.layout.fragment_forms_pre_installed, container, false);
     }
-
 
 
     @Override
@@ -107,9 +79,6 @@ public class FormsCards extends Fragment  {
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-
-
-
     }
 
     @Override

@@ -10,6 +10,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -36,10 +38,12 @@ import java.util.concurrent.Executors;
 
 import Util.Motor;
 import Util.MsgCreator;
-import fragments.developer.DeveloperFragment;
-import fragments.forms.FormsFragment;
+import database.PanelingLampContract;
+import database.PanelingLampDBHelper;
 import fragments.OnFragmentInteractionListener;
 import fragments.OnReceiverListener;
+import fragments.developer.DeveloperFragment;
+import fragments.forms.FormsFragment;
 
 
 public class PanelingLamp extends ActionBarActivity
@@ -77,10 +81,8 @@ public class PanelingLamp extends ActionBarActivity
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
 
-    /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
-     */
     private CharSequence mTitle;
+    private PanelingLampDBHelper mDbHelper;
 
     public Toolbar getToolbar() {
         return toolbar;
@@ -117,6 +119,23 @@ public class PanelingLamp extends ActionBarActivity
 
         initModel();
 
+
+        mDbHelper = new PanelingLampDBHelper(this);
+
+
+        // Create a new map of values, where column names are the keys
+        Drawable d = getResources().getDrawable(R.drawable.ic_drawer);
+        Log.d(TAG, "drawable string " + d.toString() );
+
+
+        // Gets the data repository in write mode
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
+        // Insert the new row, returning the primary key value of the new row
+        db.insert(
+                PanelingLampContract.FormEntry.TABLE_NAME,
+                null,
+                PanelingLampContract.FormEntry.createContentValues("Form1", d.toString(),0.0f,1.0f, 2.0f, 3.0f, 4.0f, 255, 255, 0, 0, false));
 
     }
 
@@ -318,6 +337,11 @@ public class PanelingLamp extends ActionBarActivity
 
     public boolean moveMotorToPos(int index, float position) {
         return sendMsg(MsgCreator.moveTo(index, position));
+    }
+
+    @Override
+    public PanelingLampDBHelper getDBHelper() {
+        return mDbHelper;
     }
 
 

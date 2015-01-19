@@ -1,5 +1,7 @@
 package fragments;
 
+import database.PanelingLampDBHelper;
+
 /**
  * This interface must be implemented by activities that contain this
  * fragment to allow an interaction in this fragment to be communicated
@@ -17,4 +19,6 @@ public interface OnFragmentInteractionListener {
     public boolean liftMotorUp(int index, float roations);
     public boolean liftMotorDown(int index, float rotations);
     public boolean moveMotorToPos(int index, float position);
+
+    public PanelingLampDBHelper getDBHelper();
 }

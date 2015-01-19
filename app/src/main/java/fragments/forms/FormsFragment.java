@@ -89,7 +89,7 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
 
     class ViewPagerAdapter extends FragmentStatePagerAdapter  {
 
-        private String[] titles = new String[] {getString(R.string.favs), getString(R.string.own)};
+        private String[] titles = new String[] {getString(R.string.favs), getString(R.id.standard) ,getString(R.string.own)};
 
         public ViewPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -100,6 +100,8 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
             switch (num) {
                 case 0:
                     return FormsCards.newInstance("test", "test");
+                case 1:
+                    return FormsStandardFragment.newInstance("nix", "nix");
                 default:
                     return PanelingLamp.PlaceholderFragment.newInstance(num + 1);
             }
