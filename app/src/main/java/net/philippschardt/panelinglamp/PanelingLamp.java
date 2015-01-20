@@ -124,13 +124,27 @@ public class PanelingLamp extends ActionBarActivity
         // Gets the data repository in write mode
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
-        /*
-        for (int i = 0; i < 15; i++) {
+
+/*
+
+        // Insert the new row, returning the primary key value of the new row
+        db.insert(
+                PanelingLampContract.FormEntry.TABLE_NAME,
+                null,
+                PanelingLampContract.FormEntry.createContentValues("Form 1" , R.drawable.paneling_lamp + "", 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 255, 255, 0, 0, false, true, 0));
+
+        // Insert the new row, returning the primary key value of the new row
+        db.insert(
+                PanelingLampContract.FormEntry.TABLE_NAME,
+                null,
+                PanelingLampContract.FormEntry.createContentValues("Form 2", R.drawable.paneling_lamp2 + "", 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 255, 255, 0, 0, false, true, 1));
+
+         for (int i = 2; i < 15; i++) {
             // Insert the new row, returning the primary key value of the new row
             db.insert(
                     PanelingLampContract.FormEntry.TABLE_NAME,
                     null,
-                    PanelingLampContract.FormEntry.createContentValues("Form " + i, getResources().getDrawable(R.drawable.paneling_lamp).toString(), 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 255, 255, 0, 0, false, true, i));
+                    PanelingLampContract.FormEntry.createContentValues("Form " + i, R.drawable.paneling_lamp + "", 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 255, 255, 0, 0, false, true, i));
         }*/
     }
 
@@ -205,45 +219,6 @@ public class PanelingLamp extends ActionBarActivity
 
     }
 
-    /*
-        public void restoreActionBar() {
-            ActionBar actionBar = getSupportActionBar();
-            actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-            actionBar.setDisplayShowTitleEnabled(true);
-            actionBar.setTitle(mTitle);
-            //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-            //setSupportActionBar(toolbar);
-        }
-
-
-        @Override
-        public boolean onCreateOptionsMenu(Menu menu) {
-            if (!mNavigationDrawerFragment.isDrawerOpen()) {
-                // Only show items in the action bar relevant to this screen
-                // if the drawer is not showing. Otherwise, let the drawer
-                // decide what to show in the action bar.
-                getMenuInflater().inflate(R.menu.paneling_lamp, menu);
-                restoreActionBar();
-                return true;
-            }
-            return super.onCreateOptionsMenu(menu);
-        }
-
-        @Override
-        public boolean onOptionsItemSelected(MenuItem item) {
-            // Handle action bar item clicks here. The action bar will
-            // automatically handle clicks on the Home/Up button, so long
-            // as you specify a parent activity in AndroidManifest.xml.
-            int id = item.getItemId();
-
-            //noinspection SimplifiableIfStatement
-            if (id == R.id.action_settings) {
-                return true;
-            }
-
-            return super.onOptionsItemSelected(item);
-        }
-    /*
 
 
 

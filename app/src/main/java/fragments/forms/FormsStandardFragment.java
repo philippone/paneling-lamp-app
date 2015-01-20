@@ -13,6 +13,9 @@ import android.view.ViewGroup;
 
 import net.philippschardt.panelinglamp.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import database.MyRecyclerViewAdapter;
 import database.PanelingLampContract;
 import fragments.OnFragmentInteractionListener;
@@ -95,6 +98,13 @@ public class FormsStandardFragment extends Fragment {
 
         mAdapter = new MyRecyclerViewAdapter(getActivity(),mRecyclerView, sqLiteDatabase, PanelingLampContract.FormEntry.COLUMN_FAV,  PanelingLampContract.FormEntry.COLUMN_FAV_POS);
 
+        int dataSize = 100;
+        List<Integer> data = new ArrayList<>(dataSize);
+        for (int i = 1; i < dataSize + 1; i++) {
+            data.add(i);
+        }
+
+        //ExampleAdapter example = new ExampleAdapter(getActivity(), mRecyclerView, data);
         mRecyclerView.setAdapter(mAdapter);
 
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());

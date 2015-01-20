@@ -1,5 +1,6 @@
 package database;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DataSetObserver;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.makeramen.dragsortadapter.DragSortAdapter;
@@ -29,6 +31,7 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
 
     private final String TAG = this.getClass().getName();
     private final Context mContext;
+    private final RecyclerView mRecyclerView;
     private  List<CardHolder> mCards;
     private final SQLiteDatabase mDB;
     private final String mCategory;
@@ -39,6 +42,8 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
     class MainViewHolder extends DragSortAdapter.ViewHolder implements
             View.OnClickListener, View.OnLongClickListener {
 
+        private final ProgressBar progressBar;
+        private final ImageView activeIndic;
         public ViewGroup container;
         public TextView name;
         public ImageView thumbnail;
@@ -46,10 +51,13 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
 
         public MainViewHolder(View v) {
             super(v);
+
             container = (ViewGroup) v.findViewById(R.id.card_form_card_view);
             name = (TextView) v.findViewById(R.id.card_form_name);
             thumbnail = (ImageView) v.findViewById(R.id.card_from_thumbnail);
             options = (ImageView) v.findViewById(R.id.card_form_options);
+            progressBar = (ProgressBar) v.findViewById(R.id.card_form_progressBar);
+            activeIndic = (ImageView) v.findViewById(R.id.card_form_active_indicator);
 
             options.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -73,10 +81,51 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 // TODO
+                switch (item.getItemId()) {
+                    case R.id.fav_removeform_fav:
+                        mCards.remove(getPosition());
+                        notifyDataSetChanged();
+                        break;
+                    case R.id.fav_moveinform:
+                        ViewHolder vh = (ViewHolder) mRecyclerView.findViewHolderForItemId(getPosition());
+                        Log.d(TAG, "get " +  vh.getItemId());
+                        break;
+                    case R.id.fav_editform:
+                        changeName(getPosition());
+                        break;
+
+                }
+
                 return false;
             }
         };
 
+        private void changeName(int position) {
+
+
+            long id = mCards.get(position).getId();
+
+            // New value for one column
+            ContentValues values = new ContentValues();
+            values.put(PanelingLampContract.FormEntry.COLUMN_NAME_TITLE, "noob");
+
+            // Which row to update, based on the ID
+            String selection = PanelingLampContract.FormEntry._ID + " LIKE ?";
+            String[] selectionArgs = { String.valueOf(id) };
+
+            int count = mDB.update(
+                    PanelingLampContract.FormEntry.TABLE_NAME,
+                    values,
+                    selection,
+                    selectionArgs);
+
+            Log.d(TAG, "count " + count);
+
+            mCards.get(position).setName("noob_text");
+
+            notifyDataSetChanged();
+
+        }
 
 
         @Override
@@ -84,6 +133,7 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
 
 
             Log.d(TAG, "OnClick");
+
 
             // TODO
 
@@ -105,6 +155,7 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
     public MyRecyclerViewAdapter(Context ctx, RecyclerView recyclerView, SQLiteDatabase db, String column_Category, String column_Position) {
         super(recyclerView);
 
+        mRecyclerView = recyclerView;
         mContext = ctx;
         mDB = db;
         mCategory = column_Category;
@@ -157,7 +208,7 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
             @Override
             public void onChanged() {
                 super.onChanged();
-                mCards = CardHolder.createListfrom(mCursor, mCategory, mPos);
+                //mCards = CardHolder.createListfrom(mCursor, mCategory, mPos);
                 Log.d("observer", "datasetobserver onChange");
             }
 
@@ -184,12 +235,13 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
     @Override
     public void onBindViewHolder(MyRecyclerViewAdapter.MainViewHolder holder, int position) {
 
+        holder.thumbnail.setImageDrawable(mContext.getResources().getDrawable(Integer.parseInt(mCards.get(position).getThumbnail())));
 
         Log.d(TAG, "onBinderView - Card Name: " + mCards.get(position).getName());
         holder.name.setText(mCards.get(position).getName()
                 + " - " + mCards.get(position).getPosInView());
 
-        int itemId = mCards.get(position).getPosInView();
+        long itemId = mCards.get(position).getId();
         // NOTE: check for getDraggingId() match to set an "invisible space" while dragging
         holder.container.setVisibility(getDraggingId() == itemId ? View.INVISIBLE : View.VISIBLE);
         holder.container.postInvalidate();
@@ -205,26 +257,38 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
     @Override
     public long getItemId(int position) {
 
-        return mCards.get(position).getPosInView();
+        return mCards.get(position).getId();
     }
+
 
     @Override
     public int getPositionForId(long id) {
 
         for (int i = 0; i < mCards.size(); i++) {
-            if (mCards.get(i).getPosInView() == id)
+            if (mCards.get(i).getId() == id)
                 return mCards.indexOf(mCards.get(i));
         }
-        return -11;
+        return 0;
     }
 
     @Override
     public void move(int fromPosition, int toPosition) {
 
-
+        Log.d(TAG, "move ");
         mCards.add(toPosition, mCards.remove(fromPosition));
+
+        updateModel(fromPosition, toPosition);
         // update in database
         //updataePosInDB(fromPosition, toPosition)
+    }
+
+    private void updateModel(int fromPosition, int toPosition) {
+
+        for (int i = fromPosition; i < toPosition; i++) {
+
+            mCards.get(i).setPosInView(i);
+        }
+
     }
 /*
     private void dbWrite(int newValue, int oldValue) {

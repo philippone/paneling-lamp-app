@@ -24,5 +24,8 @@
     <string name="motorTab">Motors</string>
     <string name="ledTab">LEDs</string>
     <string name="power">Power</string>
+    <string name="move_in_form">Move in this position</string>
+    <string name="editform">Edit form</string>
+    <string name="removeform">Remove Form from Favorites</string>
 
 </resources>

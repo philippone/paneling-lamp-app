@@ -11,6 +11,7 @@ import java.util.List;
 public class CardHolder {
 
 
+    private long id;
     private boolean active;
     private boolean processing;
     private String name;
@@ -18,8 +19,8 @@ public class CardHolder {
     private int posInView;
 
 
-
-    public CardHolder(String cardName, String thumb, int posinCategory, boolean active) {
+    public CardHolder(long id, String cardName, String thumb, int posinCategory, boolean active) {
+        this.id = id;
         this.name = cardName;
         this.thumbnail = thumb;
         this.posInView = posinCategory;
@@ -27,6 +28,13 @@ public class CardHolder {
         this.processing = false;
     }
 
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -69,7 +77,6 @@ public class CardHolder {
     }
 
 
-
     public static List<CardHolder> createListfrom(Cursor c, String mCategory, String mPos) {
 
 
@@ -78,13 +85,14 @@ public class CardHolder {
         c.moveToFirst();
         for (int i = 0; i < c.getCount(); i++) {
 
+            long id = c.getLong(c.getColumnIndex(PanelingLampContract.FormEntry._ID));
             String cardName = c.getString(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_NAME_TITLE));
             String thumb = c.getString(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_PATH_THUMBNAIL));
             int pos = c.getInt(c.getColumnIndex(mPos));
             int active = c.getInt(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_ACTIVE));
 
 
-            CardHolder card = new CardHolder(cardName, thumb, pos, active == 1 ? true : false);
+            CardHolder card = new CardHolder(id, cardName, thumb, pos, active == 1 ? true : false);
             list.add(card);
 
 

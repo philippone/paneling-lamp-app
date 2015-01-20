@@ -1,18 +1,15 @@
 package fragments.forms;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.GridView;
 
 import net.philippschardt.panelinglamp.R;
@@ -84,36 +81,15 @@ public class FormsFragmentFavs extends Fragment  {
         View v =  inflater.inflate(R.layout.fragment_forms_favs, container, false);
 
 
-        Button b = (Button) v.findViewById(R.id.button_change);
-        b.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-                // New value for one column
-                ContentValues values = new ContentValues();
-                values.put(PanelingLampContract.FormEntry.COLUMN_NAME_TITLE, "title test3");
-
-                // Which row to update, based on the ID
-                String selection = PanelingLampContract.FormEntry.COLUMN_NAME_TITLE + " LIKE ?";
-                String[] selectionArgs = { "title test2" };
-
-                int count = mListener.getDBHelper().getWritableDatabase().update(
-                        PanelingLampContract.FormEntry.TABLE_NAME,
-                        values,
-                        selection,
-                        selectionArgs);
-
-                Log.d("update " , "chagned " + count);
-                mRecyclerView.getAdapter().notifyDataSetChanged();
-
-            }
-        });
 
         mRecyclerView = (RecyclerView) v.findViewById(R.id.frag_favs_recycler_view);
 
         // use this setting to improve performance if you know that changes
         // in content do not change the layout size of the RecyclerView
-        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setHasFixedSize(false);
+
+
 
         // use a linear layout manager
         mLayoutManager = new GridLayoutManager(getActivity(), 2);
