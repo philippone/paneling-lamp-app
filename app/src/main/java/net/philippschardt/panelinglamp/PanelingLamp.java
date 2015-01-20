@@ -11,7 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -38,7 +37,6 @@ import java.util.concurrent.Executors;
 
 import Util.Motor;
 import Util.MsgCreator;
-import database.PanelingLampContract;
 import database.PanelingLampDBHelper;
 import fragments.OnFragmentInteractionListener;
 import fragments.OnReceiverListener;
@@ -123,20 +121,17 @@ public class PanelingLamp extends ActionBarActivity
         mDbHelper = new PanelingLampDBHelper(this);
 
 
-        // Create a new map of values, where column names are the keys
-        Drawable d = getResources().getDrawable(R.drawable.ic_drawer);
-        Log.d(TAG, "drawable string " + d.toString() );
-
-
         // Gets the data repository in write mode
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
-        // Insert the new row, returning the primary key value of the new row
-        db.insert(
-                PanelingLampContract.FormEntry.TABLE_NAME,
-                null,
-                PanelingLampContract.FormEntry.createContentValues("Form1", d.toString(),0.0f,1.0f, 2.0f, 3.0f, 4.0f, 255, 255, 0, 0, false));
-
+        /*
+        for (int i = 0; i < 15; i++) {
+            // Insert the new row, returning the primary key value of the new row
+            db.insert(
+                    PanelingLampContract.FormEntry.TABLE_NAME,
+                    null,
+                    PanelingLampContract.FormEntry.createContentValues("Form " + i, getResources().getDrawable(R.drawable.paneling_lamp).toString(), 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 255, 255, 0, 0, false, true, i));
+        }*/
     }
 
 
@@ -156,7 +151,7 @@ public class PanelingLamp extends ActionBarActivity
         super.onStart();
 
         // register Reciever and open connection
-        setBTConnection();
+        //setBTConnection();
 
 
     }
@@ -166,7 +161,7 @@ public class PanelingLamp extends ActionBarActivity
         super.onPostResume();
 
         // send startMessage
-        sendMsg(MsgCreator.initConnection());
+        //sendMsg(MsgCreator.initConnection());
     }
 
     @Override

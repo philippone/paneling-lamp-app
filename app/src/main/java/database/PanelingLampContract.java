@@ -32,8 +32,10 @@ public class PanelingLampContract {
         public static final String COLUMN_LED_3 = "led_3";
 
         public static final String COLUMN_ACTIVE = "active";
+        public static final String COLUMN_FAV = "in_favs";
+        public static final String COLUMN_FAV_POS = "fav_position";
 
-        public static ContentValues createContentValues(String name, String thumbnail, float pos0, float pos1, float pos2, float pos3, float pos4, int led0, float led1, float led2, float led3, boolean active) {
+        public static ContentValues createContentValues(String name, String thumbnail, float pos0, float pos1, float pos2, float pos3, float pos4, int led0, float led1, float led2, float led3, boolean active, boolean inFavs, int favPos) {
             ContentValues values = new ContentValues();
 
             //values.put(FormEntry.COLUMN_NAME_ENTRY_ID, id);
@@ -49,6 +51,8 @@ public class PanelingLampContract {
             values.put(FormEntry.COLUMN_LED_2, led2);
             values.put(FormEntry.COLUMN_LED_3, led3);
             values.put(FormEntry.COLUMN_ACTIVE, active ? 1 : 0);
+            values.put(FormEntry.COLUMN_FAV, inFavs ? 1: 0);
+            values.put(FormEntry.COLUMN_FAV_POS, favPos);
 
             return values;
         }
@@ -59,20 +63,22 @@ public class PanelingLampContract {
         private static final String COMMA_SEP = ",";
         public static final String SQL_CREATE_ENTRIES =
                 "CREATE TABLE IF NOT EXISTS " + PanelingLampContract.FormEntry.TABLE_NAME + " (" +
-                        PanelingLampContract.FormEntry._ID + " INTEGER PRIMARY KEY," +
-                        PanelingLampContract.FormEntry.COLUMN_NAME_ENTRY_ID + TEXT_TYPE + COMMA_SEP +
-                        PanelingLampContract.FormEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
-                        PanelingLampContract.FormEntry.COLUMN_PATH_THUMBNAIL + TEXT_TYPE + COMMA_SEP +
-                        PanelingLampContract.FormEntry.COLUMN_POS_MOTOR_0 + FLOAT_TYPE + COMMA_SEP +
-                        PanelingLampContract.FormEntry.COLUMN_POS_MOTOR_1 + FLOAT_TYPE + COMMA_SEP +
-                        PanelingLampContract.FormEntry.COLUMN_POS_MOTOR_2 + FLOAT_TYPE + COMMA_SEP +
-                        PanelingLampContract.FormEntry.COLUMN_POS_MOTOR_3 + FLOAT_TYPE + COMMA_SEP +
-                        PanelingLampContract.FormEntry.COLUMN_POS_MOTOR_4 + FLOAT_TYPE + COMMA_SEP +
-                        PanelingLampContract.FormEntry.COLUMN_LED_0 + INT_TYPE + COMMA_SEP +
-                        PanelingLampContract.FormEntry.COLUMN_LED_1 + INT_TYPE + COMMA_SEP +
-                        PanelingLampContract.FormEntry.COLUMN_LED_2 + INT_TYPE + COMMA_SEP +
-                        PanelingLampContract.FormEntry.COLUMN_LED_3 + INT_TYPE + COMMA_SEP +
-                        PanelingLampContract.FormEntry.COLUMN_ACTIVE + INT_TYPE  +
+                        FormEntry._ID + " INTEGER PRIMARY KEY," +
+                        FormEntry.COLUMN_NAME_ENTRY_ID + TEXT_TYPE + COMMA_SEP +
+                        FormEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA_SEP +
+                        FormEntry.COLUMN_PATH_THUMBNAIL + TEXT_TYPE + COMMA_SEP +
+                        FormEntry.COLUMN_POS_MOTOR_0 + FLOAT_TYPE + COMMA_SEP +
+                        FormEntry.COLUMN_POS_MOTOR_1 + FLOAT_TYPE + COMMA_SEP +
+                        FormEntry.COLUMN_POS_MOTOR_2 + FLOAT_TYPE + COMMA_SEP +
+                        FormEntry.COLUMN_POS_MOTOR_3 + FLOAT_TYPE + COMMA_SEP +
+                        FormEntry.COLUMN_POS_MOTOR_4 + FLOAT_TYPE + COMMA_SEP +
+                        FormEntry.COLUMN_LED_0 + INT_TYPE + COMMA_SEP +
+                        FormEntry.COLUMN_LED_1 + INT_TYPE + COMMA_SEP +
+                        FormEntry.COLUMN_LED_2 + INT_TYPE + COMMA_SEP +
+                        FormEntry.COLUMN_LED_3 + INT_TYPE + COMMA_SEP +
+                        FormEntry.COLUMN_ACTIVE + INT_TYPE  + COMMA_SEP +
+                        FormEntry.COLUMN_FAV + INT_TYPE  + COMMA_SEP +
+                        FormEntry.COLUMN_FAV_POS + INT_TYPE  +
                         " )";
 
     }

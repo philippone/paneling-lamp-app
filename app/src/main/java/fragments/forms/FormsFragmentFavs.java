@@ -1,19 +1,23 @@
 package fragments.forms;
 
 import android.app.Activity;
-import android.database.Cursor;
+import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.GridView;
 
 import net.philippschardt.panelinglamp.R;
 
-import database.FormAdapter;
+import database.MyRecyclerViewAdapter;
 import database.PanelingLampContract;
 import fragments.OnFragmentInteractionListener;
 
@@ -22,10 +26,10 @@ import fragments.OnFragmentInteractionListener;
  * Activities that contain this fragment must implement the
  * {@link OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link FormsCards#newInstance} factory method to
+ * Use the {@link FormsFragmentFavs#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FormsCards extends Fragment  {
+public class FormsFragmentFavs extends Fragment  {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -37,6 +41,9 @@ public class FormsCards extends Fragment  {
 
     private OnFragmentInteractionListener mListener;
     private GridView grid;
+    private RecyclerView mRecyclerView;
+    private GridLayoutManager mLayoutManager;
+    private MyRecyclerViewAdapter mAdapter;
 
     /**
      * Use this factory method to create a new instance of
@@ -47,8 +54,8 @@ public class FormsCards extends Fragment  {
      * @return A new instance of fragment FormsCards.
      */
     // TODO: Rename and change types and number of parameters
-    public static FormsCards newInstance(String param1, String param2) {
-        FormsCards fragment = new FormsCards();
+    public static FormsFragmentFavs newInstance(String param1, String param2) {
+        FormsFragmentFavs fragment = new FormsFragmentFavs();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -56,7 +63,7 @@ public class FormsCards extends Fragment  {
         return fragment;
     }
 
-    public FormsCards() {
+    public FormsFragmentFavs() {
         // Required empty public constructor
     }
 
@@ -69,29 +76,61 @@ public class FormsCards extends Fragment  {
         }
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v =  inflater.inflate(R.layout.fragment_forms_cards, container, false);
+        View v =  inflater.inflate(R.layout.fragment_forms_favs, container, false);
 
 
-        grid = (GridView) v.findViewById(R.id.gridView_frag_forms);
+        Button b = (Button) v.findViewById(R.id.button_change);
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                // New value for one column
+                ContentValues values = new ContentValues();
+                values.put(PanelingLampContract.FormEntry.COLUMN_NAME_TITLE, "title test3");
+
+                // Which row to update, based on the ID
+                String selection = PanelingLampContract.FormEntry.COLUMN_NAME_TITLE + " LIKE ?";
+                String[] selectionArgs = { "title test2" };
+
+                int count = mListener.getDBHelper().getWritableDatabase().update(
+                        PanelingLampContract.FormEntry.TABLE_NAME,
+                        values,
+                        selection,
+                        selectionArgs);
+
+                Log.d("update " , "chagned " + count);
+                mRecyclerView.getAdapter().notifyDataSetChanged();
+
+            }
+        });
+
+        mRecyclerView = (RecyclerView) v.findViewById(R.id.frag_favs_recycler_view);
+
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        mRecyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        mLayoutManager = new GridLayoutManager(getActivity(), 2);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // specify an adapter (see also next example)
 
         // create cursoradapter
-        SQLiteDatabase sqLiteDatabase = mListener.getDBHelper().getReadableDatabase();
+        SQLiteDatabase sqLiteDatabase = mListener.getDBHelper().getWritableDatabase();
 
-        String query = "SELECT * FROM " + PanelingLampContract.FormEntry.TABLE_NAME;
 
-        // rawQuery must not include a trailing ';'
-        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+        mAdapter = new MyRecyclerViewAdapter(getActivity(), mRecyclerView, sqLiteDatabase, PanelingLampContract.FormEntry.COLUMN_FAV,  PanelingLampContract.FormEntry.COLUMN_FAV_POS);
 
-        Log.d("test", "cursor count " + cursor.getCount());
+        mRecyclerView.setAdapter(mAdapter);
 
-        FormAdapter adapter = new FormAdapter(getActivity(), R.layout.form_card, cursor);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        // populate gridview
-        grid.setAdapter(adapter);
 
         return v;
     }

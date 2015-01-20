@@ -1,14 +1,20 @@
 package fragments.forms;
 
 import android.app.Activity;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import net.philippschardt.panelinglamp.R;
 
+import database.MyRecyclerViewAdapter;
+import database.PanelingLampContract;
 import fragments.OnFragmentInteractionListener;
 
 /**
@@ -30,6 +36,9 @@ public class FormsStandardFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private RecyclerView mRecyclerView;
+    private GridLayoutManager mLayoutManager;
+    private MyRecyclerViewAdapter mAdapter;
 
     /**
      * Use this factory method to create a new instance of
@@ -66,7 +75,30 @@ public class FormsStandardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_forms_pre_installed, container, false);
+        View v = inflater.inflate(R.layout.fragment_forms_standard, container, false);
+
+        mRecyclerView = (RecyclerView) v.findViewById(R.id.frag_standard_recycler_view);
+
+        // use this setting to improve performance if you know that changes
+        // in content do not change the layout size of the RecyclerView
+        mRecyclerView.setHasFixedSize(true);
+
+        // use a linear layout manager
+        mLayoutManager = new GridLayoutManager(getActivity(), 2);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+
+        // specify an adapter (see also next example)
+
+        // create cursoradapter
+        SQLiteDatabase sqLiteDatabase = mListener.getDBHelper().getWritableDatabase();
+
+
+        mAdapter = new MyRecyclerViewAdapter(getActivity(),mRecyclerView, sqLiteDatabase, PanelingLampContract.FormEntry.COLUMN_FAV,  PanelingLampContract.FormEntry.COLUMN_FAV_POS);
+
+        mRecyclerView.setAdapter(mAdapter);
+
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        return v;
     }
 
 

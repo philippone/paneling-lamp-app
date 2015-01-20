@@ -99,7 +99,7 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
         public Fragment getItem(int num) {
             switch (num) {
                 case 0:
-                    return FormsCards.newInstance("test", "test");
+                    return FormsFragmentFavs.newInstance("test", "test");
                 case 1:
                     return FormsStandardFragment.newInstance("nix", "nix");
                 default:

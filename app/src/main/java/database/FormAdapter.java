@@ -37,5 +37,11 @@ public class FormAdapter extends CursorAdapter {
         ImageView thumbnail = (ImageView) view.findViewById(R.id.card_from_thumbnail);
         TextView name = (TextView) view.findViewById(R.id.card_form_name);
 
+
+        cursor.moveToFirst();
+        String nameS = cursor.getString(cursor.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_NAME_TITLE));
+        name.setText(nameS);
+
+
     }
 }

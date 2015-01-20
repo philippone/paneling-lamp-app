@@ -23,5 +23,6 @@
     <string name="own">Own</string>
     <string name="motorTab">Motors</string>
     <string name="ledTab">LEDs</string>
+    <string name="power">Power</string>
 
 </resources>

@@ -6,5 +6,15 @@
         <item name="android:windowAllowReturnTransitionOverlap" tools:ignore="NewApi">true</item>
         <item name="android:windowSharedElementEnterTransition" tools:ignore="NewApi">@android:transition/move</item>
         <item name="android:windowSharedElementExitTransition" tools:ignore="NewApi">@android:transition/move</item>
+
+        <!-- Main theme colors -->
+        <!--   your app branding color for the app bar -->
+        <item name="colorPrimary">@color/primary</item>
+        <!--   darker variant for the status bar and contextual app bars -->
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <!--   theme UI controls like checkboxes and text fields -->
+        <item name="colorAccent">@color/accent</item>
+
+
     </style>
 </resources>
