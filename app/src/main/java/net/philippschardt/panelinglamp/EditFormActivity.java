@@ -1,7 +1,10 @@
 package net.philippschardt.panelinglamp;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,8 +22,9 @@ import com.astuetz.PagerSlidingTabStrip;
 import database.PanelingLampDBHelper;
 import fragments.EditFragments.EditMotorsFragment;
 import fragments.OnFragmentInteractionListener;
+import fragments.forms.OnHandleMessageListener;
 
-public class EditFormActivity extends ActionBarActivity implements OnFragmentInteractionListener {
+public class EditFormActivity extends ActionBarActivity implements OnFragmentInteractionListener, OnHandleMessageListener {
 
     public static final String EXTRA_CARD = "editFormActivy_extra_card";
     public static final String EXTRA_NAME = "editFormActivy_extra_name";
@@ -28,22 +32,24 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
     private Toolbar toolbar;
     private ViewPager mViewPager;
     private ViewPagerAdapter pagerAdapter;
+    private Fragment mEditMotorsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_form);
 
+        // Fragments
+        mEditMotorsFragment = EditMotorsFragment.newInstance(0, 0, 0, 0, 0);
 
+        // Toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setTitle(R.string.editformTitle);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-
+        // Viewpager + Tabs
         mViewPager = (ViewPager) findViewById(R.id.edit_form_viewPager);
         pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(pagerAdapter);
@@ -53,21 +59,54 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
         tabs.setViewPager(mViewPager);
 
 
+        // receive values
         Intent dataIntent = getIntent();
+        if (dataIntent != null) {
 
-        String name = dataIntent.getStringExtra(EXTRA_NAME);
+            String name = dataIntent.getStringExtra(EXTRA_NAME);
 
-        // set values
-        EditText et = (EditText)findViewById(R.id.edit_motors_name);
-        et.setText(name);
-        et.setSelection(et.getText().length());
+            // set values
+            EditText et = (EditText) findViewById(R.id.edit_motors_name);
+            et.setText(name);
+            et.setSelection(et.getText().length());
 
+        }
+    }
+
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if (intent != null) {
+                String msg = intent.getStringExtra(MySocketService.EXTRA_MESSAGE_FORWARD);
+                handleInput(msg);
+            }
+        }
+    };
+
+
+
+    @Override
+    public void handleInput(String message) {
 
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        // register Reciever
+        registerReceiver(mMessageReceiver, new IntentFilter(MySocketService.BROADCAST_ACTION));
+    }
+
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        // unregister message receiver
+        unregisterReceiver(mMessageReceiver);
     }
 
     @Override
@@ -77,12 +116,14 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
 
     @Override
     public boolean sendMsg(String message) {
+
+        // TODO
         return false;
     }
 
     @Override
     public void resetAllMotors() {
-
+        // TODO
     }
 
     @Override
@@ -92,21 +133,31 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
 
     @Override
     public void adjustAllMotorToZero() {
+        // TODO
 
     }
 
     @Override
     public boolean liftMotorUp(int index, float roations) {
+        // TODO
         return false;
     }
 
     @Override
     public boolean liftMotorDown(int index, float rotations) {
+        // TODO
         return false;
     }
 
     @Override
     public boolean moveMotorToPos(int index, float position) {
+        // TODO
+         return false;
+    }
+
+    @Override
+    public boolean moveToForm(long id, float[] motorPos, int[] ledValues) {
+        // TODO
         return false;
     }
 
@@ -114,6 +165,8 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
     public PanelingLampDBHelper getDBHelper() {
         return null;
     }
+
+
 
     class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
@@ -128,7 +181,7 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
             switch (num) {
 
                 case 0:
-                    return EditMotorsFragment.newInstance(0,0,0,0,0);
+                    return mEditMotorsFragment;
                 default:
                     return EditPlaceHolder.newInstance(num );
             }

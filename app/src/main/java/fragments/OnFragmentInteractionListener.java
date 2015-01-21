@@ -19,6 +19,10 @@ public interface OnFragmentInteractionListener {
     public boolean liftMotorUp(int index, float roations);
     public boolean liftMotorDown(int index, float rotations);
     public boolean moveMotorToPos(int index, float position);
+    public boolean moveToForm(long id, float[] motorPos, int[] ledValues );
+
 
     public PanelingLampDBHelper getDBHelper();
+
+
 }

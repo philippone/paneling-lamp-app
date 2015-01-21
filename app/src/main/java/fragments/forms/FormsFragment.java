@@ -173,7 +173,15 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
     @Override
     public void updateMotorPosinGUI(int motorNr, float motorPos) {
         // called if pos update is received
-        ((OnReceiverListener) mFavsFrag).updateMotorPosinGUI(motorNr, motorPos);
+
+        //((OnReceiverListener) mFavsFrag).updateMotorPosinGUI(motorNr, motorPos);
+
+
         //((OnReceiverListener) mStandardFrag).updateMotorPosinGUI(motorNr, motorPos);
+    }
+
+    @Override
+    public void updateActiveStatus(long formID) {
+        ((OnReceiverListener) mFavsFrag).updateActiveStatus(formID);
     }
 }

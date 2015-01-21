@@ -24,11 +24,12 @@ import fragments.OnFragmentInteractionListener;
 import fragments.OnReceiverListener;
 import fragments.developer.DeveloperFragment;
 import fragments.forms.FormsFragment;
+import fragments.forms.OnHandleMessageListener;
 
 
 public class PanelingLamp extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
-        OnFragmentInteractionListener {
+        OnFragmentInteractionListener, OnHandleMessageListener {
 
 
     private String TAG = getClass().getName();
@@ -91,28 +92,28 @@ public class PanelingLamp extends ActionBarActivity
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
 
+
 /*
+        // Insert the new row, returning the primary key value of the new row
+        db.insert(
+                PanelingLampContract.FormEntry.TABLE_NAME,
+                null,
+                PanelingLampContract.FormEntry.createContentValues("Form 1" , R.drawable.paneling_lamp + "", 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 255, 255, 0, 0, false, true, 0, true, 0));
 
         // Insert the new row, returning the primary key value of the new row
         db.insert(
                 PanelingLampContract.FormEntry.TABLE_NAME,
                 null,
-                PanelingLampContract.FormEntry.createContentValues("Form 1" , R.drawable.paneling_lamp + "", 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 255, 255, 0, 0, false, true, 0));
-
-        // Insert the new row, returning the primary key value of the new row
-        db.insert(
-                PanelingLampContract.FormEntry.TABLE_NAME,
-                null,
-                PanelingLampContract.FormEntry.createContentValues("Form 2", R.drawable.paneling_lamp2 + "", 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 255, 255, 0, 0, false, true, 1));
+                PanelingLampContract.FormEntry.createContentValues("Form 2", R.drawable.paneling_lamp2 + "", 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 255, 255, 0, 0, false, true, 1, true, 1));
 
          for (int i = 2; i < 15; i++) {
             // Insert the new row, returning the primary key value of the new row
             db.insert(
                     PanelingLampContract.FormEntry.TABLE_NAME,
                     null,
-                    PanelingLampContract.FormEntry.createContentValues("Form " + i, R.drawable.paneling_lamp + "", 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 255, 255, 0, 0, false, true, i));
-        }*/
-
+                    PanelingLampContract.FormEntry.createContentValues("Form " + i, R.drawable.paneling_lamp + "", 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 255, 255, 0, 0, false, true, i, false, 0));
+        }
+*/
         Intent i = new Intent(this, MySocketService.class);
         startService(i);
     }
@@ -134,9 +135,7 @@ public class PanelingLamp extends ActionBarActivity
         super.onStart();
 
         // register Reciever
-
         registerReceiver(mMessageReceiver, new IntentFilter(MySocketService.BROADCAST_ACTION));
-
     }
 
 
@@ -257,9 +256,17 @@ public class PanelingLamp extends ActionBarActivity
     }
 
     @Override
+    public boolean moveToForm(long id, float[] motorPos, int[] ledValues) {
+        sendMsg(MsgCreator.moveToForm(id, motorPos, ledValues));
+        return false;
+    }
+
+
+    @Override
     public PanelingLampDBHelper getDBHelper() {
         return mDbHelper;
     }
+
 
 
 
@@ -310,6 +317,8 @@ public class PanelingLamp extends ActionBarActivity
     /**
      * handle inputs from arduino/lamp
      * */
+
+    @Override
     public void handleInput(String message) {
 
         Log.d("test", message);
@@ -317,6 +326,8 @@ public class PanelingLamp extends ActionBarActivity
             handleMotorUpdate(message);
         } else if (message.startsWith("r;"))
             handleConnectionReply(message);
+        else if (message.startsWith("mfr;"))
+            handleMoveToFormReply(message);
     }
 
 
@@ -337,10 +348,33 @@ public class PanelingLamp extends ActionBarActivity
         }
     }
 
-    /*
+
+    /**
+    * move form reply
+     * " mfr; formID; "
+     *
+    * */
+    private void handleMoveToFormReply(String message) {
+        String[] splitted = message.split(";");
+
+        long id = Long.parseLong(splitted[1]);
+
+        // update DB
+        setFormActiveInDB(id);
+
+        // notify view
+        ((OnReceiverListener)currentFragment).updateActiveStatus(id);
+
+    }
+
+    public void setFormActiveInDB(long formActiveInDB) {
+        // TODO update db
+    }
+
+
+    /**
     * handle motor update message
     * receive: "ms;motor index; motor position"
-    *
     * */
     private void handleMotorUpdate(String message) {
         String[] splitted = message.split(";");
@@ -361,8 +395,9 @@ public class PanelingLamp extends ActionBarActivity
      * */
     private void updateMotorPosInGUI(int motorNr, float motorPos) {
         ((OnReceiverListener)currentFragment).updateMotorPosinGUI(motorNr,  motorPos);
-
     }
+
+
 
 
 

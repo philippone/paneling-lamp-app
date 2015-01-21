@@ -143,18 +143,20 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
         @Override
         public void onClick(@NonNull View v) {
 
+            CardHolder card = mCards.get(getPosition());
+
             for (int i = 0; i < getItemCount(); i++) {
-                CardHolder card = mCards.get(i);
-                if (card.getStatus() > 0) {
-                    card.setStatus(0);
-                    notifyItemChanged(card.getPosInView());
+                CardHolder tmpCard = mCards.get(i);
+                if (tmpCard.getStatus() > 0) {
+                    tmpCard.setStatus(0);
+                    notifyItemChanged(tmpCard.getPosInView());
                 }
             }
 
             progressBar.setVisibility(View.VISIBLE);
-            mCards.get(getPosition()).setStatus(2);
+            card.setStatus(2);
             mCurrentActiveCard = getPosition();
-            mListener.moveMotorToPos(0, 3);
+            mListener.moveToForm(card.getId(), card.getMotorPos(), card.getLedValues());
 
 
         }

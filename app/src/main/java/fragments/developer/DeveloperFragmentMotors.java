@@ -298,4 +298,9 @@ public class DeveloperFragmentMotors extends Fragment implements OnReceiverListe
         motorProgView.get(motorIndex).setVisibility(View.INVISIBLE);
     }
 
+    @Override
+    public void updateActiveStatus(long formID) {
+        // do nothing
+    }
+
 }

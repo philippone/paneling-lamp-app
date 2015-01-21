@@ -104,6 +104,11 @@ public class EditMotorsFragment extends Fragment implements OnReceiverListener{
 
     @Override
     public void updateMotorPosinGUI(int motorNr, float motorPos) {
+        // TODO update motors
+    }
 
+    @Override
+    public void updateActiveStatus(long formID) {
+        // do nothing
     }
 }

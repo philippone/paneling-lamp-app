@@ -101,6 +101,11 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
         motorFragment.updateMotorPosinGUI(motorNr, motorPos);
     }
 
+    @Override
+    public void updateActiveStatus(long formID) {
+        // do nothing
+    }
+
     class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
         private String[] titles = new String[] {getString(R.string.motorTab), getString(R.string.ledTab)};

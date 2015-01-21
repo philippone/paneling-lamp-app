@@ -26,6 +26,9 @@ int led[4] = {
 String message;
 int msg = 0;
 int pos = 0;
+boolean powerStatus = false;
+long currFormID = -1;
+boolean moveToForm = false;
 
 void setup(){  
 
@@ -54,15 +57,16 @@ void loop() {
 
     if (msg == '*' || msg == '\n') {
       message += "\n";
-      handle(message);
-
-      // send back to phone (test only)
-      //Serial1.print("all: ");
-      //Serial1.println(message);
-      
+	  
       // send to usb 
       Serial.print("inc: ");
       Serial.print(message);
+	  
+      // send back to phone (test only)
+      //Serial1.print("all: ");
+      //Serial1.println(message);
+	  
+      handle(message);
 
       // reset Message
       message = "";
@@ -101,6 +105,7 @@ void loop() {
     }
   }
 
+  // send rely to phone when motor has reached his position
   for (int i = 0; i < motorCount; i++) {
     if (motors[i]->distanceToGo() == 0) {
       if(motorRunning[i]) {
@@ -120,10 +125,23 @@ void loop() {
     }
   }
 
-
-
-
-}
+  // check if form is reached
+  // and send message to phone
+  if (moveToForm) {
+	  boolean reached = true;
+	  for (int i = 0; i < motorCount; i++) {
+	    if (motors[i]->distanceToGo() > 0) {
+	    	reached = false;
+	    }
+	  }  
+	  
+	  if (reached) {
+		  moveToForm = false;
+		  sendFormReachedReply(currFormID);
+	  }
+  }
+  
+} /*loop end*/
 
 /**
  * handle incomming messages
@@ -132,6 +150,8 @@ void handle(String message) {
 
 	if (message.startsWith("c;")) 
 		handleConnectedPhone(message.substring(2));
+	else if (message.startsWith("mf;"))
+		handleMoveForm(message.substring(3));
   	else if (message.startsWith("sa;"))
     	handleStepperPos(message.substring(3), true);
   	else if (message.startsWith("sr;"))
@@ -157,6 +177,58 @@ void handleConnectedPhone(String message) {
 		Serial1.print(";");
 	}
 	Serial1.print("\n");
+}
+
+
+
+
+/*
+ * move lamp to form
+*/
+void handleMoveForm(String message) {
+	float m[5];
+	int l[4];
+	moveToForm = true; /* set to false if form is reached */
+	
+	int msgCounter = 0;
+	String tmp = "";
+    for (int i = 0; i < message.length(); i++) {
+      if(message.charAt(i) != ';') {
+        tmp += message.charAt(i);
+      } 
+      else {
+		  // load id
+		  if (msgCounter == 0) {
+			  char buffer[10];
+			  tmp.toCharArray(buffer, 10);
+			  long id = atol(buffer);
+			  currFormID = id;
+
+			  
+		  } else if (msgCounter > 0 && msgCounter < 6) {
+			  // receive m0 - m4
+	          // parse rotation
+	          char buffer[10];
+	          tmp.toCharArray(buffer, 10);
+	          float p = atof(buffer);
+			  
+			  m[msgCounter -1 ] = p *  oneRotation;
+			  // move to position
+			  moveMotorTo(msgCounter -1, p * oneRotation);
+
+			  
+		  } else if (msgCounter > 5 && msgCounter < 10) {
+			  // receive l0 - l3
+			  int v = tmp.toInt();
+			  l[msgCounter -1] = v;
+			  
+			  setLEDto(msgCounter -1, v);
+
+		  }
+	      tmp = "";
+	      msgCounter++;
+      }
+	}
 }
 
 /**
@@ -202,17 +274,17 @@ void handleStepperPos(String message, boolean aboslutePosition) {
     long r = rotations * oneRotation;
     // if motor is not running, and in range
     long cPos = motors[stepper]->currentPosition();
-    if (motors[stepper]->distanceToGo() == 0 &&  cPos + r >= motorMinPos /*&& cPos + r <= motorMaxPos*/) {
+    if (cPos + r >= motorMinPos /*&& cPos + r <= motorMaxPos*/) {
 
       if (aboslutePosition) {
         // move to aboslute position
-        motorRunning[stepper] = true;
-        motors[stepper]->moveTo(r);
+		  moveMotorTo(stepper, r);
       } 
       else {
-        // move to relative position
-        motorRunning[stepper] = true;
-        motors[stepper]->move(r);
+		  if (motors[stepper]->distanceToGo() == 0) {
+        	  // move to relative position
+        	  moveMotorRel(stepper, r);
+			}
       }
     } 
     else fail = true;
@@ -230,6 +302,27 @@ void handleStepperPos(String message, boolean aboslutePosition) {
   } 
 }
 
+/*
+* move motor to absolute position
+*/
+void moveMotorTo(int stepper, long position) {
+	Serial.print("moveMotorTo ");
+	Serial.print(stepper);
+	Serial.print(" to ");
+	Serial.println(position);
+    motorRunning[stepper] = true;
+    motors[stepper]->moveTo(position);
+}
+
+/*
+* move motor relative stepps
+* @param stepper which should run
+* @param stepps how many stepps the stepper should run relative from its current pos
+*/
+void moveMotorRel(int stepper, long stepps) {
+    motorRunning[stepper] = true;
+    motors[stepper]->move(stepps);
+}
 
 void handleStepperForceStop(String message) {
   int stepper = -1;
@@ -378,14 +471,26 @@ void handleLEDMsg(String message) {
   }
 
   // set value
-  if (ledP >= 0 && value >= 0 && value <= 255) {
-    analogWrite(led[ledP], value);
-  }
+  setLEDto(ledP, value);
 }
 
 
+/*
+* set led to value
+* 0 is off
+*/
+void setLEDto(int ledP, int value) {
+    if (ledP >= 0 && value >= 0 && value <= 255) {
+      analogWrite(led[ledP], value);
+    }
+}
 
 
+void sendFormReachedReply(long currFormID) {
+    Serial1.print("mfr;");
+    Serial1.print(currFormID);
+    Serial1.println(";\n");
+}
 
 
 void initStepper() {
