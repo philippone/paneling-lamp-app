@@ -203,6 +203,7 @@ public class PanelingLamp extends ActionBarActivity
                 break;
         }
 
+        Log.d(TAG, "set Title" + mTitle);
         getSupportActionBar().setTitle(mTitle);
     }
 
@@ -305,8 +306,7 @@ public class PanelingLamp extends ActionBarActivity
         @Override
         public void onAttach(Activity activity) {
             super.onAttach(activity);
-            ((PanelingLamp) activity).onSectionAttached(
-                    getArguments().getInt(ARG_SECTION_NUMBER));
+
         }
     }
 

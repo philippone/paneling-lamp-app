@@ -60,8 +60,6 @@ public class MySocketService extends Service {
         int i = super.onStartCommand(intent, flags, startId);
 
         if (paired) {
-            Log.d(TAG, "connection paired onStartcommand");
-
             if (intent != null && intent.hasExtra(EXTRA_MESSAGE)) {
                 boolean sent = sendMsg(intent.getStringExtra(EXTRA_MESSAGE));
                 // TODO notify activity

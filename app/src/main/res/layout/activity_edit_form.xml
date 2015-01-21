@@ -50,9 +50,8 @@
             android:id="@+id/edit_motors_floating_buttn_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            fab:fab_plusIconColor="#000011"
-            fab:fab_colorNormal="#11FF00"
-            fab:fab_colorPressed="#1111FF"
+            fab:fab_colorNormal="@color/floatingButtonNormal"
+            fab:fab_colorPressed="@color/floatingButtonPressed"
 
             fab:fab_icon="@drawable/ic_action_save"
             android:layout_alignParentEnd="true"
@@ -60,13 +59,33 @@
 
 
             android:layout_alignParentStart="false"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="15dp"
             android:layout_alignParentTop="false"
             android:layout_alignParentBottom="false"
             android:layout_alignBottom="@+id/edit_motors_tabs"
             android:layout_marginBottom="16dp"
             android:fillViewport="false"
          />
+
+
+        <com.getbase.floatingactionbutton.FloatingActionButton
+            android:id="@+id/edit_motors_floating_buttn_moveToForm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            fab:fab_colorNormal="@color/floatingButtonNormal"
+            fab:fab_colorPressed="@color/floatingButtonPressed"
+
+            fab:fab_icon="@drawable/ic_action_send_now"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="false"
+            android:layout_marginEnd="50dp"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentBottom="false"
+            android:layout_alignBottom="@+id/edit_motors_tabs"
+            android:layout_marginBottom="16dp"
+            android:fillViewport="false"
+            android:layout_marginRight="85dp" />
 
 
         <android.support.v4.view.ViewPager

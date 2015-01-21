@@ -14,4 +14,7 @@
     <color name="white">#FFF</color>
     <color name="black">#000</color>
 
+    <color name="floatingButtonNormal">#81c784</color>
+    <color name="floatingButtonPressed">#e8f5e9</color>
+
 </resources>

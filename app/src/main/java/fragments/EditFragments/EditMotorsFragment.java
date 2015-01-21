@@ -6,9 +6,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import net.philippschardt.panelinglamp.R;
 
+import Util.MotorItemView;
 import fragments.OnFragmentInteractionListener;
 import fragments.OnReceiverListener;
 
@@ -44,7 +46,6 @@ public class EditMotorsFragment extends Fragment implements OnReceiverListener{
 
      * @return A new instance of fragment EditMotorsFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static EditMotorsFragment newInstance(float m0, float m1, float m2, float m3, float m4) {
         EditMotorsFragment fragment = new EditMotorsFragment();
         Bundle args = new Bundle();
@@ -80,6 +81,38 @@ public class EditMotorsFragment extends Fragment implements OnReceiverListener{
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_edit_motors, container, false);
 
+        // TODO set motor values in GUI
+
+        LinearLayout cont = (LinearLayout) v.findViewById(R.id.frag_edit_motor_container);
+
+
+        cont.addView(new MotorItemView(getActivity(), mListener, 0, m0));
+        cont.addView(new MotorItemView(getActivity(), mListener, 1, 2.0f));
+        cont.addView(new MotorItemView(getActivity(), mListener, 2, m2));
+        cont.addView(new MotorItemView(getActivity(), mListener, 3, m3));
+        cont.addView(new MotorItemView(getActivity(), mListener, 4, m4));
+
+        /*Button up = (Button) v.findViewById(R.id.frag_edit_motors_up_button);
+
+        up.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+
+                    case MotionEvent.ACTION_UP:
+                        mListener.sendMsg(MsgCreator.forceStop(0));
+
+                        break;
+                    default:
+                        // TODO set max
+                        mListener.sendMsg(MsgCreator.move(0, 100));
+                        break;
+
+                }
+                return true;
+            }
+        });
+*/
         return v;
     }
 

@@ -1,6 +1,5 @@
 package net.philippschardt.panelinglamp;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -12,14 +11,12 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.astuetz.PagerSlidingTabStrip;
 
 import database.PanelingLampDBHelper;
+import fragments.EditFragments.EditLEDFragment;
 import fragments.EditFragments.EditMotorsFragment;
 import fragments.OnFragmentInteractionListener;
 import fragments.forms.OnHandleMessageListener;
@@ -33,6 +30,7 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
     private ViewPager mViewPager;
     private ViewPagerAdapter pagerAdapter;
     private Fragment mEditMotorsFragment;
+    private EditLEDFragment mEditLEDFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +39,7 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
 
         // Fragments
         mEditMotorsFragment = EditMotorsFragment.newInstance(0, 0, 0, 0, 0);
+        mEditLEDFragment = EditLEDFragment.newInstance(0,0,0,0);
 
         // Toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -115,9 +114,11 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
     }
 
     @Override
-    public boolean sendMsg(String message) {
-
-        // TODO
+    public boolean sendMsg(String msg) {
+        Intent i = new Intent(this, MySocketService.class);
+        i.putExtra(MySocketService.EXTRA_MESSAGE, msg);
+        if (startService(i) != null)
+            return true;
         return false;
     }
 
@@ -163,6 +164,8 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
 
     @Override
     public PanelingLampDBHelper getDBHelper() {
+
+        // TODO
         return null;
     }
 
@@ -182,8 +185,10 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
 
                 case 0:
                     return mEditMotorsFragment;
+                case 1:
+                    return mEditLEDFragment;
                 default:
-                    return EditPlaceHolder.newInstance(num );
+                    return null;
             }
         }
 
@@ -197,44 +202,6 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
             return titles[position];
         }
 
-    }
-
-
-
-    public static class EditPlaceHolder extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static EditPlaceHolder newInstance(int sectionNumber) {
-            EditPlaceHolder fragment = new EditPlaceHolder();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public EditPlaceHolder() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_paneling_lamp, container, false);
-            return rootView;
-        }
-
-        @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
-
-        }
     }
 
 
