@@ -42,6 +42,8 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
     private ViewPagerAdapter pagerAdapter;
     private ViewPager mViewPager;
     private SlidingTabLayout mSlidingTabLayout;
+    private FormsFragmentFavs mFavsFrag;
+    private FormsStandardFragment mStandardFrag;
 
     /**
      * Use this factory method to create a new instance of
@@ -68,6 +70,9 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
         if (getArguments() != null) {
             mSectionNr = getArguments().getInt(FORMS_ARG_PARAM1);
         }
+
+        mFavsFrag = FormsFragmentFavs.newInstance("test", "test");
+        mStandardFrag = FormsStandardFragment.newInstance("nix", "nix");
     }
 
     @Override
@@ -99,9 +104,9 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
         public Fragment getItem(int num) {
             switch (num) {
                 case 0:
-                    return FormsFragmentFavs.newInstance("test", "test");
+                    return mFavsFrag;
                 case 1:
-                    return FormsStandardFragment.newInstance("nix", "nix");
+                    return mStandardFrag;
                 default:
                     return PanelingLamp.PlaceholderFragment.newInstance(num + 1);
             }
@@ -168,5 +173,7 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
     @Override
     public void updateMotorPosinGUI(int motorNr, float motorPos) {
         // called if pos update is received
+        ((OnReceiverListener) mFavsFrag).updateMotorPosinGUI(motorNr, motorPos);
+        //((OnReceiverListener) mStandardFrag).updateMotorPosinGUI(motorNr, motorPos);
     }
 }

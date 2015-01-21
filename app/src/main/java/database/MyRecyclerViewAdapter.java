@@ -2,8 +2,8 @@ package database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
-import android.database.DataSetObserver;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.PopupMenu;
@@ -20,9 +20,12 @@ import android.widget.TextView;
 
 import com.makeramen.dragsortadapter.DragSortAdapter;
 
+import net.philippschardt.panelinglamp.EditFormActivity;
 import net.philippschardt.panelinglamp.R;
 
 import java.util.List;
+
+import fragments.OnFragmentInteractionListener;
 
 /**
  * Created by philipp on 20.01.15.
@@ -32,18 +35,22 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
     private final String TAG = this.getClass().getName();
     private final Context mContext;
     private final RecyclerView mRecyclerView;
+    private final OnFragmentInteractionListener mListener;
     private  List<CardHolder> mCards;
     private final SQLiteDatabase mDB;
     private final String mCategory;
     private final String mPos;
     private Cursor mCursor;
 
+    // which card is active
+    private int mCurrentActiveCard;
+
 
     class MainViewHolder extends DragSortAdapter.ViewHolder implements
             View.OnClickListener, View.OnLongClickListener {
 
-        private final ProgressBar progressBar;
-        private final ImageView activeIndic;
+        public ProgressBar progressBar;
+        public ImageView activeIndic;
         public ViewGroup container;
         public TextView name;
         public ImageView thumbnail;
@@ -87,11 +94,16 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
                         notifyDataSetChanged();
                         break;
                     case R.id.fav_moveinform:
-                        ViewHolder vh = (ViewHolder) mRecyclerView.findViewHolderForItemId(getPosition());
-                        Log.d(TAG, "get " +  vh.getItemId());
+                        changeName(getPosition());
                         break;
                     case R.id.fav_editform:
-                        changeName(getPosition());
+
+                        CardHolder cCard = mCards.get(getPosition());
+                        Intent editActivity = new Intent(mContext, EditFormActivity.class);
+                        //editActivity.putExtra(EditFormActivity.EXTRA_CARD, mCards.get(getPosition()))
+                        editActivity.putExtra(EditFormActivity.EXTRA_NAME, cCard.getName());
+                        mContext.startActivity(editActivity);
+
                         break;
 
                 }
@@ -131,13 +143,18 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
         @Override
         public void onClick(@NonNull View v) {
 
+            for (int i = 0; i < getItemCount(); i++) {
+                CardHolder card = mCards.get(i);
+                if (card.getStatus() > 0) {
+                    card.setStatus(0);
+                    notifyItemChanged(card.getPosInView());
+                }
+            }
 
-            Log.d(TAG, "OnClick");
-
-
-            // TODO
-
-
+            progressBar.setVisibility(View.VISIBLE);
+            mCards.get(getPosition()).setStatus(2);
+            mCurrentActiveCard = getPosition();
+            mListener.moveMotorToPos(0, 3);
 
 
         }
@@ -152,19 +169,20 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
     }
 
 
-    public MyRecyclerViewAdapter(Context ctx, RecyclerView recyclerView, SQLiteDatabase db, String column_Category, String column_Position) {
+    public MyRecyclerViewAdapter(Context ctx, OnFragmentInteractionListener listener, RecyclerView recyclerView, SQLiteDatabase db, String column_Category, String column_Position) {
         super(recyclerView);
 
+        mListener = listener;
         mRecyclerView = recyclerView;
         mContext = ctx;
         mDB = db;
         mCategory = column_Category;
         mPos = column_Position;
-        getCards();
+        AndUpdateCards();
 
     }
 
-    protected void getCards() {
+    public void AndUpdateCards() {
 
         String query = "SELECT * FROM " + PanelingLampContract.FormEntry.TABLE_NAME;
 
@@ -180,7 +198,16 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
                 mCategory,
                 mPos,
                 PanelingLampContract.FormEntry.COLUMN_ACTIVE,
-                PanelingLampContract.FormEntry.COLUMN_PATH_THUMBNAIL
+                PanelingLampContract.FormEntry.COLUMN_PATH_THUMBNAIL,
+                PanelingLampContract.FormEntry.COLUMN_POS_MOTOR_0,
+                PanelingLampContract.FormEntry.COLUMN_POS_MOTOR_1,
+                PanelingLampContract.FormEntry.COLUMN_POS_MOTOR_2,
+                PanelingLampContract.FormEntry.COLUMN_POS_MOTOR_3,
+                PanelingLampContract.FormEntry.COLUMN_POS_MOTOR_4,
+                PanelingLampContract.FormEntry.COLUMN_LED_0,
+                PanelingLampContract.FormEntry.COLUMN_LED_1,
+                PanelingLampContract.FormEntry.COLUMN_LED_2,
+                PanelingLampContract.FormEntry.COLUMN_LED_3
         };
 
         // How you want the results sorted in the resulting Cursor
@@ -204,23 +231,22 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
                 sortOrder                                 // The sort order
         );
 
-        mCursor.registerDataSetObserver(new DataSetObserver() {
-            @Override
-            public void onChanged() {
-                super.onChanged();
-                //mCards = CardHolder.createListfrom(mCursor, mCategory, mPos);
-                Log.d("observer", "datasetobserver onChange");
-            }
-
-            @Override
-            public void onInvalidated() {
-                super.onInvalidated();
-            }
-        });
-
-
-
         mCards = CardHolder.createListfrom(mCursor, mCategory, mPos);
+        notifyDataSetChanged();
+    }
+
+
+    public int getmCurrentActiveCard() {
+        return mCurrentActiveCard;
+    }
+
+    public void setmCurrentActiveCard(int mCurrentActiveCard) {
+        this.mCurrentActiveCard = mCurrentActiveCard;
+    }
+
+    public void updateStatus(int cardPosition, int status) {
+        mCards.get(cardPosition).setStatus(status);
+        notifyItemChanged(cardPosition);
     }
 
     @Override
@@ -235,11 +261,28 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
     @Override
     public void onBindViewHolder(MyRecyclerViewAdapter.MainViewHolder holder, int position) {
 
+        CardHolder card = mCards.get(position);
+
         holder.thumbnail.setImageDrawable(mContext.getResources().getDrawable(Integer.parseInt(mCards.get(position).getThumbnail())));
 
         Log.d(TAG, "onBinderView - Card Name: " + mCards.get(position).getName());
         holder.name.setText(mCards.get(position).getName()
                 + " - " + mCards.get(position).getPosInView());
+
+        if (card.getStatus() == 1) {
+            // active
+            holder.activeIndic.setVisibility(View.VISIBLE);
+            holder.progressBar.setVisibility(View.GONE);
+        } else if (card.getStatus() == 0) {
+            // nothing
+            holder.activeIndic.setVisibility(View.GONE);
+            holder.progressBar.setVisibility(View.GONE);
+        } else if (card.getStatus() == 2) {
+            // nothing
+            holder.activeIndic.setVisibility(View.GONE);
+            holder.progressBar.setVisibility(View.VISIBLE);
+        }
+
 
         long itemId = mCards.get(position).getId();
         // NOTE: check for getDraggingId() match to set an "invisible space" while dragging
@@ -277,7 +320,7 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
         Log.d(TAG, "move ");
         mCards.add(toPosition, mCards.remove(fromPosition));
 
-        updateModel(fromPosition, toPosition);
+        //updateModel(fromPosition, toPosition);
         // update in database
         //updataePosInDB(fromPosition, toPosition)
     }

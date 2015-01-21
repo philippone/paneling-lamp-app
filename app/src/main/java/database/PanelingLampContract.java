@@ -34,8 +34,10 @@ public class PanelingLampContract {
         public static final String COLUMN_ACTIVE = "active";
         public static final String COLUMN_FAV = "in_favs";
         public static final String COLUMN_FAV_POS = "fav_position";
+        public static final String COLUMN_IS_STANDARD = "is_standard";
+        public static final String COLUMN_STANDARD_OWN_POS = "standard_position";
 
-        public static ContentValues createContentValues(String name, String thumbnail, float pos0, float pos1, float pos2, float pos3, float pos4, int led0, float led1, float led2, float led3, boolean active, boolean inFavs, int favPos) {
+        public static ContentValues createContentValues(String name, String thumbnail, float pos0, float pos1, float pos2, float pos3, float pos4, int led0, float led1, float led2, float led3, boolean active, boolean inFavs, int favPos, boolean isStandard, int standardOwnPos) {
             ContentValues values = new ContentValues();
 
             //values.put(FormEntry.COLUMN_NAME_ENTRY_ID, id);
@@ -53,6 +55,8 @@ public class PanelingLampContract {
             values.put(FormEntry.COLUMN_ACTIVE, active ? 1 : 0);
             values.put(FormEntry.COLUMN_FAV, inFavs ? 1: 0);
             values.put(FormEntry.COLUMN_FAV_POS, favPos);
+            values.put(COLUMN_IS_STANDARD, isStandard ? 1 : 0);
+            values.put(COLUMN_STANDARD_OWN_POS, standardOwnPos);
 
             return values;
         }
@@ -78,7 +82,9 @@ public class PanelingLampContract {
                         FormEntry.COLUMN_LED_3 + INT_TYPE + COMMA_SEP +
                         FormEntry.COLUMN_ACTIVE + INT_TYPE  + COMMA_SEP +
                         FormEntry.COLUMN_FAV + INT_TYPE  + COMMA_SEP +
-                        FormEntry.COLUMN_FAV_POS + INT_TYPE  +
+                        FormEntry.COLUMN_FAV_POS + INT_TYPE  + COMMA_SEP +
+                        FormEntry.COLUMN_IS_STANDARD + INT_TYPE  + COMMA_SEP +
+                        FormEntry.COLUMN_STANDARD_OWN_POS + INT_TYPE   +
                         " )";
 
     }

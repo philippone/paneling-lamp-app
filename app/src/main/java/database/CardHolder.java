@@ -12,24 +12,43 @@ public class CardHolder {
 
 
     private long id;
-    private boolean active;
-    private boolean processing;
+    private int status;
     private String name;
     private String thumbnail;
     private int posInView;
+    private float[] motorPos;
+    private int[] ledValues;
 
 
-    public CardHolder(long id, String cardName, String thumb, int posinCategory, boolean active) {
+    public CardHolder(long id, String cardName, String thumb, int posinCategory, int status, float[] motorPos, int[] ledValues) {
         this.id = id;
         this.name = cardName;
         this.thumbnail = thumb;
         this.posInView = posinCategory;
-        this.active = active;
-        this.processing = false;
+        this.motorPos = motorPos;
+        this.ledValues = ledValues;
+
     }
 
     public long getId() {
         return id;
+    }
+
+
+    public float[] getMotorPos() {
+        return motorPos;
+    }
+
+    public void setMotorPos(float[] motorPos) {
+        this.motorPos = motorPos;
+    }
+
+    public int[] getLedValues() {
+        return ledValues;
+    }
+
+    public void setLedValues(int[] ledValues) {
+        this.ledValues = ledValues;
     }
 
     public void setId(long id) {
@@ -52,20 +71,12 @@ public class CardHolder {
         this.thumbnail = thumbnail;
     }
 
-    public boolean isActive() {
-        return active;
+    public int getStatus() {
+        return status;
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public boolean isProcessing() {
-        return processing;
-    }
-
-    public void setProcessing(boolean processing) {
-        this.processing = processing;
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public int getPosInView() {
@@ -89,10 +100,20 @@ public class CardHolder {
             String cardName = c.getString(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_NAME_TITLE));
             String thumb = c.getString(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_PATH_THUMBNAIL));
             int pos = c.getInt(c.getColumnIndex(mPos));
-            int active = c.getInt(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_ACTIVE));
+            int status = c.getInt(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_ACTIVE));
 
+            float m0 = c.getFloat(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_POS_MOTOR_0));
+            float m1 = c.getFloat(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_POS_MOTOR_1));
+            float m2 = c.getFloat(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_POS_MOTOR_2));
+            float m3 = c.getFloat(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_POS_MOTOR_3));
+            float m4 = c.getFloat(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_POS_MOTOR_4));
 
-            CardHolder card = new CardHolder(id, cardName, thumb, pos, active == 1 ? true : false);
+            int l0 = c.getInt(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_LED_0));
+            int l1 = c.getInt(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_LED_1));
+            int l2 = c.getInt(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_LED_2));
+            int l3 = c.getInt(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_LED_3));
+
+            CardHolder card = new CardHolder(id, cardName, thumb, pos, status, new float[] {m0,m1,m2,m3,m4}, new int[] {l0,l1,l2,l3});
             list.add(card);
 
 

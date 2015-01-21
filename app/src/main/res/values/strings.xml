@@ -27,5 +27,10 @@
     <string name="move_in_form">Move in this position</string>
     <string name="editform">Edit form</string>
     <string name="removeform">Remove Form from Favorites</string>
+    <string name="title_activity_edit_form">EditFormActivity</string>
+    <string name="editformTitle">Edit Form</string>
+    <string name="up">Up</string>
+    <string name="down">Down</string>
+    <string name="motor_1">Motor 1</string>
 
 </resources>

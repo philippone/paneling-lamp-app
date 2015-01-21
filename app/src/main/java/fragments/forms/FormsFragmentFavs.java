@@ -17,6 +17,7 @@ import net.philippschardt.panelinglamp.R;
 import database.MyRecyclerViewAdapter;
 import database.PanelingLampContract;
 import fragments.OnFragmentInteractionListener;
+import fragments.OnReceiverListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -26,7 +27,7 @@ import fragments.OnFragmentInteractionListener;
  * Use the {@link FormsFragmentFavs#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FormsFragmentFavs extends Fragment  {
+public class FormsFragmentFavs extends Fragment implements OnReceiverListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -101,7 +102,7 @@ public class FormsFragmentFavs extends Fragment  {
         SQLiteDatabase sqLiteDatabase = mListener.getDBHelper().getWritableDatabase();
 
 
-        mAdapter = new MyRecyclerViewAdapter(getActivity(), mRecyclerView, sqLiteDatabase, PanelingLampContract.FormEntry.COLUMN_FAV,  PanelingLampContract.FormEntry.COLUMN_FAV_POS);
+        mAdapter = new MyRecyclerViewAdapter(getActivity(), mListener, mRecyclerView, sqLiteDatabase, PanelingLampContract.FormEntry.COLUMN_FAV,  PanelingLampContract.FormEntry.COLUMN_FAV_POS);
 
         mRecyclerView.setAdapter(mAdapter);
 
@@ -135,4 +136,11 @@ public class FormsFragmentFavs extends Fragment  {
 
 
 
+
+
+    @Override
+    public void updateMotorPosinGUI(int motorNr, float motorPos) {
+        mAdapter.AndUpdateCards();
+        //mAdapter.updateStatus(mAdapter.getmCurrentActiveCard(), 1);
+    }
 }

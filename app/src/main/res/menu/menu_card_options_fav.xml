@@ -12,6 +12,5 @@
         />
     <item
         android:id="@+id/fav_removeform_fav"
-        android:title="@string/removeform"
-        />
+        android:title="@string/removeform" />
 </menu>

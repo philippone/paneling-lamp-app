@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-
+<!-- blue
     <color name="primary">#303F9F</color>
     <color name="primary_dark">#3F5155</color>
     <color name="accent">#C5CAE9</color>
+
+-->
+
+    <color name="primary">#4caf50</color>
+    <color name="primary_dark">#1b5e20</color>
+    <color name="accent">#43a047</color>
+    <color name="white">#FFF</color>
+    <color name="black">#000</color>
 
 </resources>
