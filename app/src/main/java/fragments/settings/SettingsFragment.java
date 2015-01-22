@@ -78,7 +78,9 @@ public class SettingsFragment extends Fragment implements OnReceiverListener {
     }
 
     @Override
-    public void updateActiveStatus(long formID) {
-
+    public void notifyAdapters() {
+        // nothing to do
     }
+
+
 }

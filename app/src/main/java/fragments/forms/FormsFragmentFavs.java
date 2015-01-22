@@ -144,9 +144,7 @@ public class FormsFragmentFavs extends Fragment implements OnReceiverListener {
     }
 
     @Override
-    public void updateActiveStatus(long formID) {
-        mAdapter.updateStatus(formID, 1);
+    public void notifyAdapters() {
         mAdapter.AndUpdateCards();
-
     }
 }

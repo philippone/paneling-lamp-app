@@ -299,8 +299,10 @@ public class DeveloperFragmentMotors extends Fragment implements OnReceiverListe
     }
 
     @Override
-    public void updateActiveStatus(long formID) {
-        // do nothing
+    public void notifyAdapters() {
+         // do nothing
+        // has no adapters
     }
+
 
 }

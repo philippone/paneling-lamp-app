@@ -88,9 +88,11 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
         PopupMenu.OnMenuItemClickListener optionItemListener = new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                // TODO
+                CardHolder cCard = mCards.get(getPosition());
+
                 switch (item.getItemId()) {
                     case R.id.fav_removeform_fav:
+                        PanelingLampContract.setFavStatus(mDB, cCard.getId(), false);
                         mCards.remove(getPosition());
                         notifyDataSetChanged();
                         break;
@@ -99,15 +101,18 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
                         break;
                     case R.id.fav_editform:
 
-                        CardHolder cCard = mCards.get(getPosition());
                         Intent editActivity = new Intent(mContext, EditFormActivity.class);
                         //editActivity.putExtra(EditFormActivity.EXTRA_CARD, mCards.get(getPosition()))
                         editActivity.putExtra(EditFormActivity.EXTRA_NAME, cCard.getName());
                         mContext.startActivity(editActivity);
                         break;
                     case R.id.add_form_to_favs:
+                        // TODO update fav_fragment
+                        PanelingLampContract.setFavStatus(mDB, cCard.getId(), true);
+                        mListener.updateAdatpers();
                         break;
                     case R.id.delete_form:
+                        mListener.updateAdatpers();
                         break;
 
                 }

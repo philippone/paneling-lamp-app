@@ -21,6 +21,7 @@ public interface OnFragmentInteractionListener {
     public boolean moveMotorToPos(int index, float position);
     public boolean moveToForm(long id, float[] motorPos, int[] ledValues );
 
+    public void updateAdatpers();
 
     public PanelingLampDBHelper getDBHelper();
 

@@ -238,6 +238,11 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
     }
 
     @Override
+    public void updateAdatpers() {
+        // nothing do do
+    }
+
+    @Override
     public PanelingLampDBHelper getDBHelper() {
 
         // TODO

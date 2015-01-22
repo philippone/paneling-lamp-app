@@ -81,7 +81,8 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_sliding_tabs, container, false);
+        View v = inflater.inflate(R.layout.fragment_sliding_tabs_forms, container, false);
+
 
 
         mViewPager = (ViewPager) v.findViewById(R.id.frag_forms_viewPager);
@@ -182,9 +183,10 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
         //((OnReceiverListener) mStandardFrag).updateMotorPosinGUI(motorNr, motorPos);
     }
 
+
     @Override
-    public void updateActiveStatus(long formID) {
-        ((OnReceiverListener) mFavsFrag).updateActiveStatus(formID);
-        ((OnReceiverListener) mStandardFrag).updateActiveStatus(formID);
+    public void notifyAdapters() {
+        ((OnReceiverListener) mFavsFrag).notifyAdapters();
+        ((OnReceiverListener) mStandardFrag).notifyAdapters();
     }
 }

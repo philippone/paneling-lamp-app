@@ -106,10 +106,14 @@ public class EditLEDFragment extends Fragment implements OnReceiverListener{
     @Override
     public void updateMotorPosinGUI(int motorNr, float motorPos) {
         // nothing to do in this fragment
+        // has no motors
     }
 
     @Override
-    public void updateActiveStatus(long formID) {
-        // nothing to do in this fragment
+    public void notifyAdapters() {
+        // do nothing
+        // has no adapters
     }
+
+
 }

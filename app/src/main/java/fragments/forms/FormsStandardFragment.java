@@ -136,8 +136,9 @@ public class FormsStandardFragment extends Fragment implements OnReceiverListene
         // nothing to do
     }
 
+
     @Override
-    public void updateActiveStatus(long formID) {
+    public void notifyAdapters() {
         mAdapter.AndUpdateCards();
     }
 }

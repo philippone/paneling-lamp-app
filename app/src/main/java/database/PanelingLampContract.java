@@ -127,4 +127,26 @@ public class PanelingLampContract {
                 selectionArgs);
         return count;
     }
+
+
+    public static int setFavStatus(SQLiteDatabase db, long id, boolean isFav) {
+        // TODO update fav pos
+
+        // New value for one column
+        ContentValues values = new ContentValues();
+        values.put( FormEntry.COLUMN_FAV, isFav ? 1 : 0);
+
+        // Which row to update, based on the ID
+        String selection = FormEntry._ID + " = ?";
+        String[] selectionArgs = { String.valueOf(id) };
+
+        int count = db.update(
+                FormEntry.TABLE_NAME,
+                values,
+                selection,
+                selectionArgs);
+
+        return count;
+    }
+
 }

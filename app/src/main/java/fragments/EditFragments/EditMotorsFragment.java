@@ -141,7 +141,10 @@ public class EditMotorsFragment extends Fragment implements OnReceiverListener{
     }
 
     @Override
-    public void updateActiveStatus(long formID) {
+    public void notifyAdapters() {
         // do nothing
+        // has no adapters
     }
+
+
 }

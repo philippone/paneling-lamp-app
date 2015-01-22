@@ -34,6 +34,19 @@
             android:layout_below="@+id/frag_forms_tabs"
             android:layout_alignParentStart="true" />
 
+        <com.getbase.floatingactionbutton.AddFloatingActionButton
+            android:id="@+id/floating_add_form"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            fab:fab_plusIconColor="@color/white"
+            fab:fab_colorNormal="@color/floatingButtonNormal"
+            fab:fab_colorPressed="@color/floatingButtonPressed"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_margin="10dp"
+             />
     </RelativeLayout>
 
 

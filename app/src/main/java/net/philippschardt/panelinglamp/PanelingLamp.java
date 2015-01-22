@@ -268,6 +268,11 @@ public class PanelingLamp extends ActionBarActivity
         return false;
     }
 
+    @Override
+    public void updateAdatpers() {
+        ((OnReceiverListener)currentFragment).notifyAdapters();
+    }
+
 
     @Override
     public PanelingLampDBHelper getDBHelper() {
@@ -370,7 +375,7 @@ public class PanelingLamp extends ActionBarActivity
 
         // notify view
         // todo notify all listviews
-        ((OnReceiverListener)currentFragment).updateActiveStatus(id);
+        ((OnReceiverListener)currentFragment).notifyAdapters();
 
     }
 
