@@ -45,6 +45,8 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
     private FormsFragmentFavs mFavsFrag;
     private FormsStandardFragment mStandardFrag;
 
+
+
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
@@ -183,5 +185,6 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
     @Override
     public void updateActiveStatus(long formID) {
         ((OnReceiverListener) mFavsFrag).updateActiveStatus(formID);
+        ((OnReceiverListener) mStandardFrag).updateActiveStatus(formID);
     }
 }

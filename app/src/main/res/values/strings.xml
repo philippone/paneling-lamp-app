@@ -24,9 +24,10 @@
     <string name="motorTab">Motors</string>
     <string name="ledTab">LEDs</string>
     <string name="power">Power</string>
-    <string name="move_in_form">Move in this position</string>
-    <string name="editform">Edit form</string>
-    <string name="removeform">Remove Form from Favorites</string>
+    <string name="move_in_form">Activate Form</string>
+    <string name="editform">Edit Form</string>
+    <string name="removeform">Remove from Favorites</string>
+    <string name="deleteform">Delete Form</string>
     <string name="title_activity_edit_form">EditFormActivity</string>
     <string name="editformTitle">Edit Form</string>
     <string name="up">Up</string>

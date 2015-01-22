@@ -141,13 +141,11 @@ public class FormsFragmentFavs extends Fragment implements OnReceiverListener {
     @Override
     public void updateMotorPosinGUI(int motorNr, float motorPos) {
         // do nothing
-        // interesting for this view is only a form change
-        // /mAdapter.AndUpdateCards();
-        //mAdapter.updateStatus(mAdapter.getmCurrentActiveCard(), 1);
     }
 
     @Override
     public void updateActiveStatus(long formID) {
+        mAdapter.updateStatus(formID, 1);
         mAdapter.AndUpdateCards();
 
     }

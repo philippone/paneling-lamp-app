@@ -11,21 +11,29 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.widget.EditText;
 
 import com.astuetz.PagerSlidingTabStrip;
 
+import Util.Motor;
 import database.PanelingLampDBHelper;
 import fragments.EditFragments.EditLEDFragment;
 import fragments.EditFragments.EditMotorsFragment;
 import fragments.OnFragmentInteractionListener;
+import fragments.OnReceiverListener;
 import fragments.forms.OnHandleMessageListener;
 
 public class EditFormActivity extends ActionBarActivity implements OnFragmentInteractionListener, OnHandleMessageListener {
 
+
+    private final String TAG = getClass().getName();
     public static final String EXTRA_CARD = "editFormActivy_extra_card";
     public static final String EXTRA_NAME = "editFormActivy_extra_name";
 
+
+    // init motors
+    private Motor[] motor;
     private Toolbar toolbar;
     private ViewPager mViewPager;
     private ViewPagerAdapter pagerAdapter;
@@ -37,6 +45,8 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_form);
 
+
+        initModel();
         // Fragments
         mEditMotorsFragment = EditMotorsFragment.newInstance(0, 0, 0, 0, 0);
         mEditLEDFragment = EditLEDFragment.newInstance(0,0,0,0);
@@ -72,6 +82,16 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
         }
     }
 
+    private void initModel() {
+        // init motor
+        motor = new Motor[] {
+                new Motor(0),
+                new Motor(1),
+                new Motor(2),
+                new Motor(3),
+                new Motor(4)};
+    }
+
 
     private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
 
@@ -89,7 +109,62 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
 
     @Override
     public void handleInput(String message) {
+        Log.d(TAG, "handleInput " + message);
+        if (message.startsWith("ms;")) {
+            handleMotorUpdate(message);
+        } else if (message.startsWith("r;"))
+            handleConnectionReply(message);
+        else if (message.startsWith("mfr;"))
+            handleMoveToFormReply(message);
+    }
 
+    private void handleMotorUpdate(String message) {
+        String[] splitted = message.split(";");
+
+        int motorNr = Integer.parseInt(splitted[1]);
+        float motorPos = Float.parseFloat(splitted[2]);
+
+        updateMotorPosInGUI(motorNr, motorPos);
+    }
+
+    private void updateMotorPosInGUI(int motorNr, float motorPos) {
+        ((OnReceiverListener) mEditMotorsFragment).updateMotorPosinGUI(motorNr, motorPos);
+    }
+
+    /**
+     * handle Connection Reply message
+     * "r;motor1 position; motor 2 position; ...; motor n position"
+     * */
+    private void handleConnectionReply(String message) {
+        String[] splitted = message.substring(2).split(";");
+
+        for(int i = 0; i < motor.length; i++) {
+            // update motor (and gui)
+            float p = Float.parseFloat(splitted[i]);
+
+            // update GUI
+            updateMotorPosInGUI(i, p);
+        }
+    }
+
+
+    /**
+     * move form reply
+     * " mfr; formID; "
+     *
+     * */
+    private void handleMoveToFormReply(String message) {
+        // TODO nothing to do
+        /*String[] splitted = message.split(";");
+
+        long id = Long.parseLong(splitted[1]);
+
+        // update DB
+        setFormActiveInDB(id);
+
+        // notify view
+        ((OnReceiverListener)currentFragment).updateActiveStatus(id);
+*/
     }
 
     @Override

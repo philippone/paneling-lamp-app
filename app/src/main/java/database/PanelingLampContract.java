@@ -1,6 +1,7 @@
 package database;
 
 import android.content.ContentValues;
+import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
 /**
@@ -87,5 +88,43 @@ public class PanelingLampContract {
                         FormEntry.COLUMN_STANDARD_OWN_POS + INT_TYPE   +
                         " )";
 
+    }
+
+
+    public static int updateStatus(SQLiteDatabase db, long id, int status) {
+        unsetStatusAll(db);
+
+        // New value for one column
+        ContentValues values = new ContentValues();
+        values.put( FormEntry.COLUMN_ACTIVE, status);
+
+        // Which row to update, based on the ID
+        String selection = FormEntry._ID + " = ?";
+        String[] selectionArgs = { String.valueOf(id) };
+
+        int count = db.update(
+                FormEntry.TABLE_NAME,
+                values,
+                selection,
+                selectionArgs);
+
+        return count;
+    }
+
+    public static int unsetStatusAll(SQLiteDatabase db) {
+        // New value for one column
+        ContentValues values = new ContentValues();
+        values.put( FormEntry.COLUMN_ACTIVE, 0);
+
+        // Which row to update, based on the ID
+        String selection = FormEntry.COLUMN_ACTIVE + " != ?";
+        String[] selectionArgs = { String.valueOf(0) };
+
+        int count = db.update(
+                FormEntry.TABLE_NAME,
+                values,
+                selection,
+                selectionArgs);
+        return count;
     }
 }

@@ -107,6 +107,8 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
                         break;
                     case R.id.add_form_to_favs:
                         break;
+                    case R.id.delete_form:
+                        break;
 
                 }
 
@@ -189,12 +191,6 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
 
     public void AndUpdateCards() {
 
-        String query = "SELECT * FROM " + PanelingLampContract.FormEntry.TABLE_NAME;
-
-        // rawQuery must not include a trailing ';'
-        Cursor cursor = mDB.rawQuery(query, null);
-
-
         // Define a projection that specifies which columns from the database
         // you will actually use after this query.
         String[] projection = {
@@ -247,9 +243,10 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
         this.mCurrentActiveCard = mCurrentActiveCard;
     }
 
-    public void updateStatus(int cardPosition, int status) {
-        mCards.get(cardPosition).setStatus(status);
-        notifyItemChanged(cardPosition);
+    public void updateStatus(long id, int status) {
+        int pos = getPositionForId(id);
+        mCards.get(pos).setStatus(status);
+        notifyItemChanged(pos);
     }
 
     @Override

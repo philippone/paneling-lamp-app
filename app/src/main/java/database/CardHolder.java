@@ -27,6 +27,7 @@ public class CardHolder {
         this.posInView = posinCategory;
         this.motorPos = motorPos;
         this.ledValues = ledValues;
+        this.status = status;
 
     }
 

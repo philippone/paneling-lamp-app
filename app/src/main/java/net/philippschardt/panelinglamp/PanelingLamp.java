@@ -19,12 +19,14 @@ import android.view.ViewGroup;
 
 import Util.Motor;
 import Util.MsgCreator;
+import database.PanelingLampContract;
 import database.PanelingLampDBHelper;
 import fragments.OnFragmentInteractionListener;
 import fragments.OnReceiverListener;
 import fragments.developer.DeveloperFragment;
 import fragments.forms.FormsFragment;
 import fragments.forms.OnHandleMessageListener;
+import fragments.settings.SettingsFragment;
 
 
 public class PanelingLamp extends ActionBarActivity
@@ -158,6 +160,10 @@ public class PanelingLamp extends ActionBarActivity
             case 1:
                 currentFragment = DeveloperFragment.newInstance(position + 1);
                 break;
+            case 2:
+                currentFragment = SettingsFragment.newInstance(position + 1);
+                break;
+            case 3:
             // TODO settings, about
             default:
                 currentFragment = PlaceholderFragment.newInstance(position + 1);
@@ -321,7 +327,7 @@ public class PanelingLamp extends ActionBarActivity
     @Override
     public void handleInput(String message) {
 
-        Log.d("test", message);
+        Log.d(TAG, "handleInput " + message);
         if (message.startsWith("ms;")) {
             handleMotorUpdate(message);
         } else if (message.startsWith("r;"))
@@ -363,12 +369,17 @@ public class PanelingLamp extends ActionBarActivity
         setFormActiveInDB(id);
 
         // notify view
+        // todo notify all listviews
         ((OnReceiverListener)currentFragment).updateActiveStatus(id);
 
     }
 
     public void setFormActiveInDB(long formActiveInDB) {
-        // TODO update db
+        // set all to status 0
+        // set active to 1
+        int c = PanelingLampContract.updateStatus(mDbHelper.getWritableDatabase(), formActiveInDB , 1);
+
+        Log.d(TAG, "changed " + c);
     }
 
 

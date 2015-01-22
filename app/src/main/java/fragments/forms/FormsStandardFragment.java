@@ -19,6 +19,7 @@ import java.util.List;
 import database.MyRecyclerViewAdapter;
 import database.PanelingLampContract;
 import fragments.OnFragmentInteractionListener;
+import fragments.OnReceiverListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -28,7 +29,7 @@ import fragments.OnFragmentInteractionListener;
  * Use the {@link FormsStandardFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FormsStandardFragment extends Fragment {
+public class FormsStandardFragment extends Fragment implements OnReceiverListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -130,5 +131,13 @@ public class FormsStandardFragment extends Fragment {
     }
 
 
+    @Override
+    public void updateMotorPosinGUI(int motorNr, float motorPos) {
+        // nothing to do
+    }
 
+    @Override
+    public void updateActiveStatus(long formID) {
+        mAdapter.AndUpdateCards();
+    }
 }
