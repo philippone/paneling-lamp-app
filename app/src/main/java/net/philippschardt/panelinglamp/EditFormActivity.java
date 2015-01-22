@@ -12,11 +12,19 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
+
+import Util.LedItemView;
 import Util.Motor;
+import Util.MotorItemView;
+import database.PanelingLampContract;
 import database.PanelingLampDBHelper;
 import fragments.EditFragments.EditLEDFragment;
 import fragments.EditFragments.EditMotorsFragment;
@@ -27,9 +35,15 @@ import fragments.forms.OnHandleMessageListener;
 public class EditFormActivity extends ActionBarActivity implements OnFragmentInteractionListener, OnHandleMessageListener {
 
 
+    public static final String EXTRA_ID = "editFormActivy_extra_ID";
+    public static final String EXTRA_IS_STANDARD = "editFormActivy_extra_is_standard";
     private final String TAG = getClass().getName();
-    public static final String EXTRA_CARD = "editFormActivy_extra_card";
+
     public static final String EXTRA_NAME = "editFormActivy_extra_name";
+    public static final String EXTRA_THUMBNAIL = "editFormActivy_extra_thumbnail";
+    public static final String EXTRA_m = "editFormActivy_extra_m";
+    public static final String EXTRA_l = "editFormActivy_extra_l";
+
 
 
     // init motors
@@ -37,19 +51,23 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
     private Toolbar toolbar;
     private ViewPager mViewPager;
     private ViewPagerAdapter pagerAdapter;
-    private Fragment mEditMotorsFragment;
+    private EditMotorsFragment mEditMotorsFragment;
     private EditLEDFragment mEditLEDFragment;
+    private float[] motorV;
+    private int[] ledV;
+    private long cardID;
+    private EditText editName;
+    private PanelingLampDBHelper mDbHelper;
+    private ImageView thumbView;
+    private String thumb;
+    private boolean isStandard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_form);
 
-
-        initModel();
-        // Fragments
-        mEditMotorsFragment = EditMotorsFragment.newInstance(0, 0, 0, 0, 0);
-        mEditLEDFragment = EditLEDFragment.newInstance(0,0,0,0);
+        mDbHelper = new PanelingLampDBHelper(this);
 
         // Toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -72,14 +90,60 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
         Intent dataIntent = getIntent();
         if (dataIntent != null) {
 
+            cardID = dataIntent.getLongExtra(EXTRA_ID, -1);
+
             String name = dataIntent.getStringExtra(EXTRA_NAME);
 
             // set values
-            EditText et = (EditText) findViewById(R.id.edit_motors_name);
-            et.setText(name);
-            et.setSelection(et.getText().length());
+            editName = (EditText) findViewById(R.id.edit_motors_name);
+            editName.setText(name);
+            editName.setSelection(editName.getText().length());
+
+            // set Thumbnail
+            thumb = dataIntent.getStringExtra(EXTRA_THUMBNAIL);
+            thumbView = (ImageView) findViewById(R.id.edit_form_thumbnail);
+
+            isStandard = dataIntent.getBooleanExtra(EXTRA_IS_STANDARD, true);
+
+            if (isStandard) {
+                thumbView.setImageDrawable(getResources().getDrawable(Integer.parseInt(thumb)));
+            } else {
+                // TODO
+            }
+            // get motor and led valus to pass to fragments
+            motorV = dataIntent.getFloatArrayExtra(EXTRA_m);
+            ledV = dataIntent.getIntArrayExtra(EXTRA_l);
 
         }
+
+        initModel();
+        // Fragments
+        mEditMotorsFragment = EditMotorsFragment.newInstance(motorV);
+        mEditLEDFragment = EditLEDFragment.newInstance(ledV);
+
+
+        // save button
+        FloatingActionButton saveButton = (FloatingActionButton) findViewById(R.id.edit_motors_floating_buttn_save);
+        FloatingActionButton moveToButton = (FloatingActionButton) findViewById(R.id.edit_motors_floating_buttn_moveToForm);
+
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // get new values
+                String name = editName.getText().toString();
+                ArrayList<MotorItemView> m = mEditMotorsFragment.getMotorItem();
+                ArrayList<LedItemView> l = mEditLEDFragment.getLedItem();
+
+
+
+                float[] mV = new float[]{m.get(0).getmPos(),m.get(1).getmPos(),m.get(2).getmPos(),m.get(3).getmPos(),m.get(4).getmPos()};
+                int[] lV = new int[] {l.get(0).getValue(),l.get(1).getValue(),l.get(2).getValue(),l.get(3).getValue()};
+
+                //update db
+                PanelingLampContract.updateCardMotorLED(mDbHelper.getWritableDatabase(), cardID, name, thumb, mV, lV);
+            }
+        });
+
     }
 
     private void initModel() {

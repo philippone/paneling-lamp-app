@@ -6,15 +6,21 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import net.philippschardt.panelinglamp.PanelingLamp;
 import net.philippschardt.panelinglamp.R;
 
+import Util.MsgCreator;
+import fragments.EditFragments.EditLEDFragment;
+import fragments.EditFragments.EditMotorsFragment;
 import fragments.OnFragmentInteractionListener;
 import fragments.OnReceiverListener;
 
@@ -39,7 +45,10 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
     private ViewPager mViewPager;
     private ViewPagerAdapter pagerAdapter;
     private DeveloperFragmentMotors motorFragment;
-    private DeveloperFragmentLEDs ledFragment;
+
+    private EditLEDFragment mEditLEDFragment;
+    private EditMotorsFragment mEditMotorsFragment;
+    private ImageView alphaView;
 
     /**
      * Use this factory method to create a new instance of
@@ -72,7 +81,11 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
         motorFragment = DeveloperFragmentMotors.newInstance();
         // todo set last value/ currentvalue
         // TODO besser wert an lampe abfragen
-        ledFragment = DeveloperFragmentLEDs.newInstance(0);
+        mEditMotorsFragment = EditMotorsFragment.newInstance();
+        mEditLEDFragment = EditLEDFragment.newInstance(new int[] {0,0,0,0});
+
+
+
 
     }
 
@@ -82,7 +95,7 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_sliding_tabs, container, false);
+        View v = inflater.inflate(R.layout.fragment_sliding_tabs_manual_control, container, false);
         
         mViewPager = (ViewPager) v.findViewById(R.id.frag_forms_viewPager);
         pagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
@@ -91,6 +104,26 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
         // Bind the tabs to the ViewPager
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) v.findViewById(R.id.frag_forms_tabs);
         tabs.setViewPager(mViewPager);
+
+
+        alphaView = (ImageView) v.findViewById(R.id.manual_control_apha_view);
+        final FloatingActionsMenu floatingMenu = (FloatingActionsMenu) v.findViewById(R.id.manual_control_floating_menu_bttn);
+
+        floatingMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
+            @Override
+            public void onMenuExpanded() {
+                Log.d(TAG, "expand menu");
+                alphaView.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onMenuCollapsed() {
+                Log.d(TAG, "collapse menu");
+                alphaView.setVisibility(View.GONE);
+            }
+        });
+
+
         
         
         return v;
@@ -99,6 +132,7 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
     @Override
     public void updateMotorPosinGUI(int motorNr, float motorPos) {
         motorFragment.updateMotorPosinGUI(motorNr, motorPos);
+        mEditMotorsFragment.updateMotorPosinGUI(motorNr, motorPos);
     }
 
     @Override
@@ -110,7 +144,7 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
 
     class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
-        private String[] titles = new String[] {getString(R.string.motorTab), getString(R.string.ledTab)};
+        private String[] titles = new String[] {getString(R.string.motorTab), getString(R.string.ledTab), "tmpMotors"};
 
         public ViewPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -122,7 +156,9 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
                 case 0:
                     return motorFragment;
                 case 1:
-                    return ledFragment;
+                    return mEditLEDFragment;
+                case 2:
+                    return mEditMotorsFragment;
             }
             return PanelingLamp.PlaceholderFragment.newInstance(num + 1);
         }
@@ -143,6 +179,8 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
     @Override
     public void onResume() {
         super.onResume();
+
+        mListener.sendMsg(MsgCreator.requestCurrentStatus());
 
        
     }

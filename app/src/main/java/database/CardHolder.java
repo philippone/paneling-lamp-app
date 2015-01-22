@@ -18,9 +18,10 @@ public class CardHolder {
     private int posInView;
     private float[] motorPos;
     private int[] ledValues;
+    private boolean standard;
 
 
-    public CardHolder(long id, String cardName, String thumb, int posinCategory, int status, float[] motorPos, int[] ledValues) {
+    public CardHolder(long id, String cardName, String thumb, int posinCategory, int status, boolean isStandard, float[] motorPos, int[] ledValues) {
         this.id = id;
         this.name = cardName;
         this.thumbnail = thumb;
@@ -28,7 +29,16 @@ public class CardHolder {
         this.motorPos = motorPos;
         this.ledValues = ledValues;
         this.status = status;
+        this.standard = isStandard;
 
+    }
+
+    public boolean isStandard() {
+        return standard;
+    }
+
+    public void setStandard(boolean standard) {
+        this.standard = standard;
     }
 
     public long getId() {
@@ -114,7 +124,9 @@ public class CardHolder {
             int l2 = c.getInt(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_LED_2));
             int l3 = c.getInt(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_LED_3));
 
-            CardHolder card = new CardHolder(id, cardName, thumb, pos, status, new float[] {m0,m1,m2,m3,m4}, new int[] {l0,l1,l2,l3});
+            boolean isStandard = c.getInt(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_IS_STANDARD)) == 1 ? true : false;
+
+            CardHolder card = new CardHolder(id, cardName, thumb, pos, status, isStandard, new float[] {m0,m1,m2,m3,m4}, new int[] {l0,l1,l2,l3});
             list.add(card);
 
 

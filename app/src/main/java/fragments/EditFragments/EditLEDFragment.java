@@ -10,6 +10,8 @@ import android.widget.LinearLayout;
 
 import net.philippschardt.panelinglamp.R;
 
+import java.util.ArrayList;
+
 import Util.LedItemView;
 import fragments.OnFragmentInteractionListener;
 import fragments.OnReceiverListener;
@@ -29,6 +31,7 @@ public class EditLEDFragment extends Fragment implements OnReceiverListener{
     private int led3;
 
     private OnFragmentInteractionListener mListener;
+    private ArrayList<LedItemView> ledItem;
 
     /**
      * Use this factory method to create a new instance of
@@ -38,13 +41,13 @@ public class EditLEDFragment extends Fragment implements OnReceiverListener{
      * @return A new instance of fragment EditLEDFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static EditLEDFragment newInstance(int l0, int l1, int l2, int l3) {
+    public static EditLEDFragment newInstance(int... l) {
         EditLEDFragment fragment = new EditLEDFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_PARAM_LED_0, l0);
-        args.putInt(ARG_PARAM_LED_1, l1);
-        args.putInt(ARG_PARAM_LED_2, l2);
-        args.putInt(ARG_PARAM_LED_3, l3);
+        args.putInt(ARG_PARAM_LED_0, l[0]);
+        args.putInt(ARG_PARAM_LED_1, l[1]);
+        args.putInt(ARG_PARAM_LED_2, l[2]);
+        args.putInt(ARG_PARAM_LED_3, l[3]);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,11 +59,19 @@ public class EditLEDFragment extends Fragment implements OnReceiverListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ledItem = new ArrayList<LedItemView>();
+
         if (getArguments() != null) {
             led0 = getArguments().getInt(ARG_PARAM_LED_0);
             led1 = getArguments().getInt(ARG_PARAM_LED_1);
             led2 = getArguments().getInt(ARG_PARAM_LED_2);
             led3 = getArguments().getInt(ARG_PARAM_LED_3);
+
+
+            ledItem.add(new LedItemView(getActivity(), mListener, 0, "1", led0));
+            ledItem.add(new LedItemView(getActivity(), mListener, 1, "2", led1));
+            ledItem.add(new LedItemView(getActivity(), mListener, 2, "3", led2));
+            ledItem.add(new LedItemView(getActivity(), mListener, 3, "4", led3));
         }
     }
 
@@ -69,16 +80,14 @@ public class EditLEDFragment extends Fragment implements OnReceiverListener{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_edit_led, container, false);
-
-        // todo set led values to GUI
-
         LinearLayout cont = (LinearLayout) v.findViewById(R.id.frag_edit_led_container);
 
-        cont.addView(new LedItemView(getActivity(), mListener, 0, "All", 0));
-        cont.addView(new LedItemView(getActivity(), mListener, 0, "1", 0));
-        cont.addView(new LedItemView(getActivity(), mListener, 1, "2", 0));
-        cont.addView(new LedItemView(getActivity(), mListener, 2, "3", 0));
-        cont.addView(new LedItemView(getActivity(), mListener, 3, "4", 0));
+        for(LedItemView lv : ledItem) {
+            cont.addView(lv);
+        }
+
+
+
 
         return v;
     }
@@ -115,5 +124,11 @@ public class EditLEDFragment extends Fragment implements OnReceiverListener{
         // has no adapters
     }
 
+    public ArrayList<LedItemView> getLedItem() {
+        return ledItem;
+    }
 
+    public void setLedItem(ArrayList<LedItemView> ledItem) {
+        this.ledItem = ledItem;
+    }
 }

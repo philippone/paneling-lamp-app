@@ -13,6 +13,8 @@ public class PanelingLampContract {
     public PanelingLampContract() {
     }
 
+
+
     public static abstract class FormEntry implements BaseColumns {
         public static final String TABLE_NAME = "forms";
         public static final String COLUMN_NAME_NULLABLE = "";
@@ -147,6 +149,44 @@ public class PanelingLampContract {
                 selectionArgs);
 
         return count;
+    }
+
+    public static int updateCardMotorLED(SQLiteDatabase db, long id, String name, String thumb, float[] m, int[] l) {
+        // New value for one column
+        ContentValues values = new ContentValues();
+        values.put( FormEntry.COLUMN_NAME_TITLE, name);
+        values.put(FormEntry.COLUMN_PATH_THUMBNAIL, thumb);
+        values.put( FormEntry.COLUMN_POS_MOTOR_0, m[0]);
+        values.put( FormEntry.COLUMN_POS_MOTOR_1, m[1]);
+        values.put( FormEntry.COLUMN_POS_MOTOR_2, m[2]);
+        values.put( FormEntry.COLUMN_POS_MOTOR_3, m[3]);
+        values.put( FormEntry.COLUMN_POS_MOTOR_4, m[4]);
+        values.put( FormEntry.COLUMN_LED_0, l[0]);
+        values.put( FormEntry.COLUMN_LED_1, l[1]);
+        values.put( FormEntry.COLUMN_LED_2, l[2]);
+        values.put( FormEntry.COLUMN_LED_3, l[3]);
+
+        // Which row to update, based on the ID
+        String selection = FormEntry._ID + " = ?";
+        String[] selectionArgs = { String.valueOf(id) };
+
+        int count = db.update(
+                FormEntry.TABLE_NAME,
+                values,
+                selection,
+                selectionArgs);
+
+        return count;
+    }
+
+
+    public static void deleteForm(SQLiteDatabase mDB, long id) {
+        // Define 'where' part of query.
+        String selection = FormEntry._ID + " LIKE ?";
+        // Specify arguments in placeholder order.
+        String[] selectionArgs = { String.valueOf(id) };
+        // Issue SQL statement.
+        mDB.delete(FormEntry.TABLE_NAME, selection, selectionArgs);
     }
 
 }

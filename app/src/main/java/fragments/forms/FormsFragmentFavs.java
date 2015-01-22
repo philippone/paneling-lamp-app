@@ -113,6 +113,11 @@ public class FormsFragmentFavs extends Fragment implements OnReceiverListener {
     }
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mAdapter.AndUpdateCards();
+    }
 
     @Override
     public void onAttach(Activity activity) {

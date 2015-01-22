@@ -25,6 +25,7 @@
 
         <activity
             android:name=".PanelingLamp"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_paneling_lamp" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -35,6 +36,7 @@
         <activity
             android:name=".EditFormActivity"
             android:label="@string/title_activity_edit_form"
+            android:screenOrientation="portrait"
             android:parentActivityName=".PanelingLamp" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

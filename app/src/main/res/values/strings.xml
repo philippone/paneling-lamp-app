@@ -34,5 +34,9 @@
     <string name="down">Down</string>
     <string name="motor_1">Motor 1</string>
     <string name="add_form_to_favs">Add to Favourites</string>
+    <string name="save_as_new_form">save as new form</string>
+    <string name="move_motors">move motors</string>
+    <string name="reset_motors_to_0">move motors to 0</string>
+    <string name="set_as_zero">set current as 0</string>
 
 </resources>

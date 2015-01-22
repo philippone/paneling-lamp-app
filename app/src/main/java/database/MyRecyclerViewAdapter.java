@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -97,21 +99,25 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
                         notifyDataSetChanged();
                         break;
                     case R.id.fav_moveinform:
-                        changeName(getPosition());
+                        moveToForm(cCard);
                         break;
                     case R.id.fav_editform:
 
                         Intent editActivity = new Intent(mContext, EditFormActivity.class);
-                        //editActivity.putExtra(EditFormActivity.EXTRA_CARD, mCards.get(getPosition()))
+                        editActivity.putExtra(EditFormActivity.EXTRA_ID, cCard.getId());
                         editActivity.putExtra(EditFormActivity.EXTRA_NAME, cCard.getName());
+                        editActivity.putExtra(EditFormActivity.EXTRA_THUMBNAIL, cCard.getThumbnail());
+                        editActivity.putExtra(EditFormActivity.EXTRA_m, cCard.getMotorPos());
+                        editActivity.putExtra(EditFormActivity.EXTRA_l, cCard.getLedValues());
+                        editActivity.putExtra(EditFormActivity.EXTRA_IS_STANDARD, cCard.isStandard());
                         mContext.startActivity(editActivity);
                         break;
                     case R.id.add_form_to_favs:
-                        // TODO update fav_fragment
                         PanelingLampContract.setFavStatus(mDB, cCard.getId(), true);
                         mListener.updateAdatpers();
                         break;
                     case R.id.delete_form:
+                        PanelingLampContract.deleteForm(mDB, cCard.getId());
                         mListener.updateAdatpers();
                         break;
 
@@ -154,6 +160,19 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
 
             CardHolder card = mCards.get(getPosition());
 
+            moveToForm(card);
+
+
+        }
+
+        @Override
+        public boolean onLongClick(@NonNull View v) {
+            startDrag();
+            return true;
+        }
+
+
+        public void moveToForm(CardHolder card) {
             for (int i = 0; i < getItemCount(); i++) {
                 CardHolder tmpCard = mCards.get(i);
                 if (tmpCard.getStatus() > 0) {
@@ -166,14 +185,6 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
             card.setStatus(2);
             mCurrentActiveCard = getPosition();
             mListener.moveToForm(card.getId(), card.getMotorPos(), card.getLedValues());
-
-
-        }
-
-        @Override
-        public boolean onLongClick(@NonNull View v) {
-            startDrag();
-            return true;
         }
 
 
@@ -204,6 +215,7 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
                 mCategory,
                 mPos,
                 PanelingLampContract.FormEntry.COLUMN_ACTIVE,
+                PanelingLampContract.FormEntry.COLUMN_IS_STANDARD,
                 PanelingLampContract.FormEntry.COLUMN_PATH_THUMBNAIL,
                 PanelingLampContract.FormEntry.COLUMN_POS_MOTOR_0,
                 PanelingLampContract.FormEntry.COLUMN_POS_MOTOR_1,
@@ -268,7 +280,15 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
 
         CardHolder card = mCards.get(position);
 
-        holder.thumbnail.setImageDrawable(mContext.getResources().getDrawable(Integer.parseInt(mCards.get(position).getThumbnail())));
+        if (card.isStandard()) {
+            holder.thumbnail.setImageDrawable(mContext.getResources().getDrawable(Integer.parseInt(mCards.get(position).getThumbnail())));
+        } else {
+            // TODO load from path
+            Bitmap bmp = BitmapFactory.decodeFile(mCards.get(position).getThumbnail());
+            holder.thumbnail.setImageBitmap(bmp);
+        }
+
+
 
         Log.d(TAG, "onBinderView - Card Name: " + mCards.get(position).getName());
         holder.name.setText(mCards.get(position).getName()

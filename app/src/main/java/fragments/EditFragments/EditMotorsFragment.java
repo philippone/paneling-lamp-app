@@ -10,7 +10,10 @@ import android.widget.LinearLayout;
 
 import net.philippschardt.panelinglamp.R;
 
+import java.util.ArrayList;
+
 import Util.MotorItemView;
+import Util.MsgCreator;
 import fragments.OnFragmentInteractionListener;
 import fragments.OnReceiverListener;
 
@@ -30,14 +33,19 @@ public class EditMotorsFragment extends Fragment implements OnReceiverListener{
     private static final String ARG_PARAM_M_3 = "EditMotorsFragment_m3";
     private static final String ARG_PARAM_M_4 = "EditMotorsFragment_m4";
 
-    // TODO: Rename and change types of parameters
-    private float m0;
-    private float m1;
-    private float m2;
-    private float m3;
-    private float m4;
+    private float m0 = 0;
+    private float m1 = 0;
+    private float m2 = 0;
+    private float m3 = 0;
+    private float m4 = 0;
 
     private OnFragmentInteractionListener mListener;
+
+
+
+    private ArrayList<MotorItemView> motorItem;
+    private boolean attached = false;
+    private boolean requestCurrentStatus = false;
 
     /**
      * Use this factory method to create a new instance of
@@ -46,16 +54,21 @@ public class EditMotorsFragment extends Fragment implements OnReceiverListener{
 
      * @return A new instance of fragment EditMotorsFragment.
      */
-    public static EditMotorsFragment newInstance(float m0, float m1, float m2, float m3, float m4) {
+    public static EditMotorsFragment newInstance(float... m) {
         EditMotorsFragment fragment = new EditMotorsFragment();
         Bundle args = new Bundle();
-        args.putFloat(ARG_PARAM_M_0, m0);
-        args.putFloat(ARG_PARAM_M_1, m1);
-        args.putFloat(ARG_PARAM_M_2, m2);
-        args.putFloat(ARG_PARAM_M_3, m3);
-        args.putFloat(ARG_PARAM_M_4, m4);
+        args.putFloat(ARG_PARAM_M_0, m[0]);
+        args.putFloat(ARG_PARAM_M_1, m[1]);
+        args.putFloat(ARG_PARAM_M_2, m[2]);
+        args.putFloat(ARG_PARAM_M_3, m[3]);
+        args.putFloat(ARG_PARAM_M_4, m[4]);
 
         fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static EditMotorsFragment newInstance() {
+        EditMotorsFragment fragment = new EditMotorsFragment();
         return fragment;
     }
 
@@ -66,13 +79,26 @@ public class EditMotorsFragment extends Fragment implements OnReceiverListener{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        motorItem = new ArrayList<MotorItemView>();
+
         if (getArguments() != null) {
             m0 = getArguments().getFloat(ARG_PARAM_M_0);
             m1 = getArguments().getFloat(ARG_PARAM_M_1);
             m2 = getArguments().getFloat(ARG_PARAM_M_2);
             m3 = getArguments().getFloat(ARG_PARAM_M_3);
             m4 = getArguments().getFloat(ARG_PARAM_M_4);
+        } else {
+                // request current status
+                mListener.sendMsg(MsgCreator.requestCurrentStatus());
         }
+
+        motorItem.add(new MotorItemView(getActivity(), mListener, 0, m0));
+        motorItem.add(new MotorItemView(getActivity(), mListener, 1, m1));
+        motorItem.add(new MotorItemView(getActivity(), mListener, 2, m2));
+        motorItem.add(new MotorItemView(getActivity(), mListener, 3, m3));
+        motorItem.add(new MotorItemView(getActivity(), mListener, 4, m4));
+
+
     }
 
     @Override
@@ -81,38 +107,15 @@ public class EditMotorsFragment extends Fragment implements OnReceiverListener{
         // Inflate the layout for this fragment
         View v =  inflater.inflate(R.layout.fragment_edit_motors, container, false);
 
-        // TODO set motor values in GUI
-
         LinearLayout cont = (LinearLayout) v.findViewById(R.id.frag_edit_motor_container);
 
+        // add motor items
+        for (MotorItemView mv : motorItem) {
+            cont.addView(mv);
+        }
 
-        cont.addView(new MotorItemView(getActivity(), mListener, 0, m0));
-        cont.addView(new MotorItemView(getActivity(), mListener, 1, 2.0f));
-        cont.addView(new MotorItemView(getActivity(), mListener, 2, m2));
-        cont.addView(new MotorItemView(getActivity(), mListener, 3, m3));
-        cont.addView(new MotorItemView(getActivity(), mListener, 4, m4));
 
-        /*Button up = (Button) v.findViewById(R.id.frag_edit_motors_up_button);
 
-        up.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-
-                    case MotionEvent.ACTION_UP:
-                        mListener.sendMsg(MsgCreator.forceStop(0));
-
-                        break;
-                    default:
-                        // TODO set max
-                        mListener.sendMsg(MsgCreator.move(0, 100));
-                        break;
-
-                }
-                return true;
-            }
-        });
-*/
         return v;
     }
 
@@ -126,6 +129,14 @@ public class EditMotorsFragment extends Fragment implements OnReceiverListener{
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
     }
 
     @Override
@@ -137,7 +148,8 @@ public class EditMotorsFragment extends Fragment implements OnReceiverListener{
 
     @Override
     public void updateMotorPosinGUI(int motorNr, float motorPos) {
-        // TODO update motors
+        if (motorItem != null)
+            motorItem.get(motorNr).setmPos(motorPos);
     }
 
     @Override
@@ -146,5 +158,13 @@ public class EditMotorsFragment extends Fragment implements OnReceiverListener{
         // has no adapters
     }
 
+
+    public ArrayList<MotorItemView> getMotorItem() {
+        return motorItem;
+    }
+
+    public void setMotorItem(ArrayList<MotorItemView> motorItem) {
+        this.motorItem = motorItem;
+    }
 
 }

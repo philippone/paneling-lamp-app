@@ -114,6 +114,12 @@ public class FormsStandardFragment extends Fragment implements OnReceiverListene
 
 
     @Override
+    public void onResume() {
+        super.onResume();
+        mAdapter.AndUpdateCards();
+    }
+
+    @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {

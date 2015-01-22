@@ -86,4 +86,8 @@ public class MsgCreator {
     }
 
 
+    public static String requestCurrentStatus() {
+        // TODO vielleicht noch aendern
+        return "c;\n";
+    }
 }

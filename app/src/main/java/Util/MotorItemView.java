@@ -51,6 +51,8 @@ public class MotorItemView extends RelativeLayout {
         indexView.setText(i +"");
         ePos = (EditText) findViewById(R.id.motor_item_ePos);
         ePos.setText(mPos + "");
+
+        // TODO UP/DOWN button functionality
     }
 
 
@@ -63,7 +65,7 @@ public class MotorItemView extends RelativeLayout {
     }
 
     public float getmPos() {
-        return mPos;
+        return Float.parseFloat(ePos.getText().toString());
     }
 
     public void setmPos(float mPos) {

@@ -1,0 +1,101 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="fragments.forms.FormsFragment">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <com.astuetz.PagerSlidingTabStrip
+            android:id="@+id/frag_forms_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            />
+
+
+        <android.support.v4.view.ViewPager
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/frag_forms_viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/frag_forms_tabs"
+            android:layout_alignParentStart="true" />
+
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/manual_control_apha_view"
+            android:layout_below="@+id/frag_forms_tabs"
+            android:layout_alignParentStart="true"
+            android:background="#DD000000"
+            android:focusable="false"
+            android:visibility="gone"/>
+
+        <com.getbase.floatingactionbutton.FloatingActionsMenu
+            android:id="@+id/manual_control_floating_menu_bttn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            fab:fab_addButtonColorNormal="@color/floatingButtonNormal"
+            fab:fab_addButtonColorPressed="@color/floatingButtonPressed"
+            fab:fab_addButtonPlusIconColor="#66000000"
+            fab:fab_labelStyle="@style/menu_labels_style"
+            android:layout_marginBottom="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp">
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/action_a"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_colorNormal="@color/floatingButtonNormal"
+                fab:fab_title="@string/move_motors"
+                fab:fab_icon="@drawable/ic_action_send_now"
+                fab:fab_colorPressed="@color/floatingButtonPressed"
+                />
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/action_b"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_colorNormal="@color/floatingButtonNormal"
+                fab:fab_title="@string/reset_motors_to_0"
+                fab:fab_icon="@drawable/ic_action_discard"
+                fab:fab_colorPressed="@color/floatingButtonPressed"/>
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/action_c"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_colorNormal="@color/floatingButtonNormal"
+                fab:fab_icon="@drawable/ic_action_edit"
+                fab:fab_title="@string/set_as_zero"
+                fab:fab_colorPressed="@color/floatingButtonPressed"/>
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/action_d"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_colorNormal="@color/floatingButtonNormal"
+                fab:fab_icon="@drawable/ic_action_save"
+                fab:fab_title="@string/save_as_new_form"
+                fab:fab_colorPressed="@color/floatingButtonPressed"/>
+
+
+        </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+    </RelativeLayout>
+
+
+
+</FrameLayout>

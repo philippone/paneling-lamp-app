@@ -186,6 +186,7 @@ public class PanelingLamp extends ActionBarActivity
         * */
     @Override
     public boolean sendMsg(String msg) {
+        Log.d(TAG, "sent: " + msg);
         Intent i = new Intent(this, MySocketService.class);
         i.putExtra(MySocketService.EXTRA_MESSAGE, msg);
         if (startService(i) != null)
