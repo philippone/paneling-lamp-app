@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/fav_moveinform"
+        android:title="@string/move_in_form"
+        />
+
+    <item
+        android:id="@+id/fav_editform"
+        android:title="@string/editform"
+        />
+    <item
+        android:id="@+id/add_form_to_favs"
+        android:title="@string/add_form_to_favs" />
+</menu>

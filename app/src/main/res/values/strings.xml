@@ -12,7 +12,7 @@
     <string name="set_zero">set zero</string>
     <string name="title_activity_paneling_lamp">PanelingLamp</string>
     <string name="title_section1">Forms</string>
-    <string name="title_section2">Developer</string>
+    <string name="title_section2">Manual Control</string>
     <string name="title_section3">Settings</string>
     <string name="title_section4">About</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
@@ -32,5 +32,6 @@
     <string name="up">Up</string>
     <string name="down">Down</string>
     <string name="motor_1">Motor 1</string>
+    <string name="add_form_to_favs">Add to Favourites</string>
 
 </resources>

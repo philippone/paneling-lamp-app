@@ -96,7 +96,7 @@ public class FormsStandardFragment extends Fragment {
         SQLiteDatabase sqLiteDatabase = mListener.getDBHelper().getWritableDatabase();
 
 
-        mAdapter = new MyRecyclerViewAdapter(getActivity(), mListener, mRecyclerView, sqLiteDatabase, PanelingLampContract.FormEntry.COLUMN_FAV,  PanelingLampContract.FormEntry.COLUMN_FAV_POS);
+        mAdapter = new MyRecyclerViewAdapter(getActivity(), mListener, mRecyclerView, sqLiteDatabase, PanelingLampContract.FormEntry.COLUMN_IS_STANDARD,  PanelingLampContract.FormEntry.COLUMN_STANDARD_OWN_POS, R.menu.menu_card_options_standard);
 
         int dataSize = 100;
         List<Integer> data = new ArrayList<>(dataSize);

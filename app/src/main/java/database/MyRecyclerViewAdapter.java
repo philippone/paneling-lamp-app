@@ -36,11 +36,12 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
     private final Context mContext;
     private final RecyclerView mRecyclerView;
     private final OnFragmentInteractionListener mListener;
-    private  List<CardHolder> mCards;
+    private List<CardHolder> mCards;
     private final SQLiteDatabase mDB;
     private final String mCategory;
     private final String mPos;
     private Cursor mCursor;
+    private int mOptionsLayout;
 
     // which card is active
     private int mCurrentActiveCard;
@@ -75,7 +76,7 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
 
                     popup.setOnMenuItemClickListener(optionItemListener);
                     MenuInflater inflater = popup.getMenuInflater();
-                    inflater.inflate(R.menu.menu_card_options_fav, popup.getMenu());
+                    inflater.inflate(mOptionsLayout, popup.getMenu());
                     popup.show();
                 }
             });
@@ -103,7 +104,8 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
                         //editActivity.putExtra(EditFormActivity.EXTRA_CARD, mCards.get(getPosition()))
                         editActivity.putExtra(EditFormActivity.EXTRA_NAME, cCard.getName());
                         mContext.startActivity(editActivity);
-
+                        break;
+                    case R.id.add_form_to_favs:
                         break;
 
                 }
@@ -123,7 +125,7 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
 
             // Which row to update, based on the ID
             String selection = PanelingLampContract.FormEntry._ID + " LIKE ?";
-            String[] selectionArgs = { String.valueOf(id) };
+            String[] selectionArgs = {String.valueOf(id)};
 
             int count = mDB.update(
                     PanelingLampContract.FormEntry.TABLE_NAME,
@@ -171,7 +173,7 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
     }
 
 
-    public MyRecyclerViewAdapter(Context ctx, OnFragmentInteractionListener listener, RecyclerView recyclerView, SQLiteDatabase db, String column_Category, String column_Position) {
+    public MyRecyclerViewAdapter(Context ctx, OnFragmentInteractionListener listener, RecyclerView recyclerView, SQLiteDatabase db, String column_Category, String column_Position, int optionsLayout) {
         super(recyclerView);
 
         mListener = listener;
@@ -180,6 +182,7 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
         mDB = db;
         mCategory = column_Category;
         mPos = column_Position;
+        mOptionsLayout = optionsLayout;
         AndUpdateCards();
 
     }
@@ -218,9 +221,7 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
         // Which row to update, based on the ID
         String selection = mCategory + " LIKE ?";
         // is true
-        String[] selectionArgs = { String.valueOf(1) };
-
-
+        String[] selectionArgs = {String.valueOf(1)};
 
 
         mCursor = mDB.query(

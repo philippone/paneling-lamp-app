@@ -102,7 +102,7 @@ public class FormsFragmentFavs extends Fragment implements OnReceiverListener {
         SQLiteDatabase sqLiteDatabase = mListener.getDBHelper().getWritableDatabase();
 
 
-        mAdapter = new MyRecyclerViewAdapter(getActivity(), mListener, mRecyclerView, sqLiteDatabase, PanelingLampContract.FormEntry.COLUMN_FAV,  PanelingLampContract.FormEntry.COLUMN_FAV_POS);
+        mAdapter = new MyRecyclerViewAdapter(getActivity(), mListener, mRecyclerView, sqLiteDatabase, PanelingLampContract.FormEntry.COLUMN_FAV,  PanelingLampContract.FormEntry.COLUMN_FAV_POS, R.menu.menu_card_options_fav);
 
         mRecyclerView.setAdapter(mAdapter);
 

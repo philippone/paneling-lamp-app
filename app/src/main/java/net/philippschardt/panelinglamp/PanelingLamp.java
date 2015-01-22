@@ -158,7 +158,7 @@ public class PanelingLamp extends ActionBarActivity
             case 1:
                 currentFragment = DeveloperFragment.newInstance(position + 1);
                 break;
-            // TODO
+            // TODO settings, about
             default:
                 currentFragment = PlaceholderFragment.newInstance(position + 1);
                 break;
