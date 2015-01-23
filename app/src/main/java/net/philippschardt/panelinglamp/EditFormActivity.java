@@ -1,9 +1,12 @@
 package net.philippschardt.panelinglamp;
 
+import android.animation.Animator;
+import android.annotation.TargetApi;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,8 +14,13 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
+import android.transition.Explode;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -20,6 +28,7 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import Util.LedItemView;
 import Util.Motor;
@@ -61,19 +70,48 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
     private ImageView thumbView;
     private String thumb;
     private boolean isStandard;
+    private FloatingActionButton saveButton;
+    private FloatingActionButton moveToButton;
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu_edit_form, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // TODO
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_form);
 
+
+        // set an exit transition
+        getWindow().setEnterTransition(new Explode());
+        getWindow().setExitTransition(new Explode());
+
         mDbHelper = new PanelingLampDBHelper(this);
 
         // Toolbar
         toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //toolbar.inflateMenu(R.menu.menu_card_options_fav);
+        //toolbar.showOverflowMenu();
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.editformTitle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().men
+
+
 
 
         // Viewpager + Tabs
@@ -99,9 +137,23 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
             editName.setText(name);
             editName.setSelection(editName.getText().length());
 
+
             // set Thumbnail
             thumb = dataIntent.getStringExtra(EXTRA_THUMBNAIL);
             thumbView = (ImageView) findViewById(R.id.edit_form_thumbnail);
+
+            setEnterSharedElementCallback(new android.support.v4.app.SharedElementCallback() {
+                @Override
+                public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
+                    super.onSharedElementEnd(sharedElementNames, sharedElements, sharedElementSnapshots);
+                    editName.setVisibility(View.VISIBLE);
+
+                    revealView(saveButton);
+
+                }
+
+                
+            });
 
             isStandard = dataIntent.getBooleanExtra(EXTRA_IS_STANDARD, true);
 
@@ -123,8 +175,11 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
 
 
         // save button
-        FloatingActionButton saveButton = (FloatingActionButton) findViewById(R.id.edit_motors_floating_buttn_save);
-        FloatingActionButton moveToButton = (FloatingActionButton) findViewById(R.id.edit_motors_floating_buttn_moveToForm);
+         saveButton = (FloatingActionButton) findViewById(R.id.edit_motors_floating_buttn_save);
+         moveToButton = (FloatingActionButton) findViewById(R.id.edit_motors_floating_buttn_moveToForm);
+
+        saveButton.setVisibility(View.GONE);
+        moveToButton.setVisibility(View.GONE);
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -144,6 +199,27 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
             }
         });
 
+    }
+
+
+
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void revealView(View myView) {
+        // get the center for the clipping circle
+        int cx = (myView.getLeft() + myView.getRight()) / 2;
+        int cy = (myView.getTop() + myView.getBottom()) / 2;
+
+        // get the final radius for the clipping circle
+        int finalRadius = Math.max(myView.getWidth(), myView.getHeight());
+
+        // create the animator for this view (the start radius is zero)
+        Animator anim =
+                ViewAnimationUtils.createCircularReveal(myView, cx, cy, 0, finalRadius);
+
+        // make the view visible and start the animation
+        myView.setVisibility(View.VISIBLE);
+        anim.start();
     }
 
     private void initModel() {

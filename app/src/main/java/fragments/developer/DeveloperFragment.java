@@ -1,6 +1,9 @@
 package fragments.developer;
 
+import android.animation.Animator;
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -49,6 +53,7 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
     private EditLEDFragment mEditLEDFragment;
     private EditMotorsFragment mEditMotorsFragment;
     private ImageView alphaView;
+    private FloatingActionsMenu floatingMenu;
 
     /**
      * Use this factory method to create a new instance of
@@ -107,19 +112,47 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
 
 
         alphaView = (ImageView) v.findViewById(R.id.manual_control_apha_view);
-        final FloatingActionsMenu floatingMenu = (FloatingActionsMenu) v.findViewById(R.id.manual_control_floating_menu_bttn);
+         floatingMenu = (FloatingActionsMenu) v.findViewById(R.id.manual_control_floating_menu_bttn);
 
         floatingMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
+
+            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onMenuExpanded() {
                 Log.d(TAG, "expand menu");
-                alphaView.setVisibility(View.VISIBLE);
+
+                if (android.os.Build.VERSION.SDK_INT>= Build.VERSION_CODES.KITKAT) {
+                    // get the center for the clipping circle
+                    int cx =  alphaView.getRight() - 200;
+                    int cy =  alphaView.getBottom() + 200;
+
+                    // get the final radius for the clipping circle
+                    int finalRadius = Math.max(alphaView.getWidth(), alphaView.getHeight());
+
+                    // create the animator for this view (the start radius is zero)
+                    Animator anim =
+                            ViewAnimationUtils.createCircularReveal(alphaView, cx, cy, 0, finalRadius);
+
+                    // make the view visible and start the animation
+                    alphaView.setVisibility(View.VISIBLE);
+                    anim.start();
+                } else {
+
+                    alphaView.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
             public void onMenuCollapsed() {
                 Log.d(TAG, "collapse menu");
                 alphaView.setVisibility(View.GONE);
+            }
+        });
+
+        alphaView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                floatingMenu.toggle();
             }
         });
 

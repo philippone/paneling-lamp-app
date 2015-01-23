@@ -1,13 +1,16 @@
 package database;
 
-import android.content.ContentValues;
+import android.annotation.TargetApi;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.util.Pair;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -23,6 +26,7 @@ import android.widget.TextView;
 import com.makeramen.dragsortadapter.DragSortAdapter;
 
 import net.philippschardt.panelinglamp.EditFormActivity;
+import net.philippschardt.panelinglamp.PanelingLamp;
 import net.philippschardt.panelinglamp.R;
 
 import java.util.List;
@@ -88,6 +92,7 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
 
 
         PopupMenu.OnMenuItemClickListener optionItemListener = new PopupMenu.OnMenuItemClickListener() {
+            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 CardHolder cCard = mCards.get(getPosition());
@@ -110,7 +115,26 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
                         editActivity.putExtra(EditFormActivity.EXTRA_m, cCard.getMotorPos());
                         editActivity.putExtra(EditFormActivity.EXTRA_l, cCard.getLedValues());
                         editActivity.putExtra(EditFormActivity.EXTRA_IS_STANDARD, cCard.isStandard());
-                        mContext.startActivity(editActivity);
+
+
+                        MainViewHolder holder = (MainViewHolder) mRecyclerView.findViewHolderForItemId(cCard.getId());
+
+                        ImageView thumbnail = holder.thumbnail;
+
+                        ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
+                                (PanelingLamp)mContext,
+                                Pair.create((View)thumbnail, "thumbnail_shared")
+                                /*,
+                                Pair.create((View)holder.name, "name_shared")*/
+                        );
+
+
+
+                        // start the new activity
+                        mContext.startActivity(editActivity, options.toBundle());
+
+
+                        //mContext.startActivity(editActivity, ActivityOptions.makeSceneTransitionAnimation(((PanelingLamp) mListener)).toBundle());
                         break;
                     case R.id.add_form_to_favs:
                         PanelingLampContract.setFavStatus(mDB, cCard.getId(), true);
@@ -127,32 +151,7 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
             }
         };
 
-        private void changeName(int position) {
 
-
-            long id = mCards.get(position).getId();
-
-            // New value for one column
-            ContentValues values = new ContentValues();
-            values.put(PanelingLampContract.FormEntry.COLUMN_NAME_TITLE, "noob");
-
-            // Which row to update, based on the ID
-            String selection = PanelingLampContract.FormEntry._ID + " LIKE ?";
-            String[] selectionArgs = {String.valueOf(id)};
-
-            int count = mDB.update(
-                    PanelingLampContract.FormEntry.TABLE_NAME,
-                    values,
-                    selection,
-                    selectionArgs);
-
-            Log.d(TAG, "count " + count);
-
-            mCards.get(position).setName("noob_text");
-
-            notifyDataSetChanged();
-
-        }
 
 
         @Override

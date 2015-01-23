@@ -2,10 +2,10 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <solid android:color="@color/floatingButtonNormal"/>
     <padding
-        android:left="16dp"
-        android:top="6dp"
-        android:right="16dp"
-        android:bottom="6dp"/>
+        android:left="13dp"
+        android:top="4dp"
+        android:right="13dp"
+        android:bottom="4dp"/>
     <corners
         android:radius="2dp"/>
 </shape>

@@ -2,8 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="net.philippschardt.panelinglamp.PanelingLamp">
-    <item android:id="@+id/action_example" android:title="@string/action_example"
-        android:showAsAction="withText|ifRoom" />
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+
+    <item android:id="@+id/menu_paneling_lamp_add_new_form" android:title="@string/add_new_form"
         android:orderInCategory="100" android:showAsAction="never" />
 </menu>

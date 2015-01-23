@@ -37,7 +37,8 @@
             android:name=".EditFormActivity"
             android:label="@string/title_activity_edit_form"
             android:screenOrientation="portrait"
-            android:parentActivityName=".PanelingLamp" >
+            android:parentActivityName=".PanelingLamp"
+            android:windowSoftInputMode="stateHidden">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.philippschardt.panelinglamp.PanelingLamp" />

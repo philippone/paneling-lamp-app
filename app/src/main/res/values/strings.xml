@@ -38,5 +38,8 @@
     <string name="move_motors">move motors</string>
     <string name="reset_motors_to_0">move motors to 0</string>
     <string name="set_as_zero">set current as 0</string>
+    <string name="edit_picture">Edit Picture</string>
+    <string name="save">Save</string>
+    <string name="add_new_form">Add New Form</string>
 
 </resources>

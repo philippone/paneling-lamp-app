@@ -6,16 +6,29 @@
     <color name="primary_dark">#3F5155</color>
     <color name="accent">#C5CAE9</color>
 
--->
 
+    green
     <color name="primary">#4caf50</color>
     <color name="primary_dark">#1b5e20</color>
     <color name="accent">#43a047</color>
-    <color name="white">#FFF</color>
-    <color name="black">#000</color>
-
     <color name="floatingButtonNormal">#81c784</color>
     <color name="floatingButtonPressed">#e8f5e9</color>
     <color name="black_semi_transparent">#DD000000</color>
+
+    -->
+
+
+    <color name="white">#FFF</color>
+    <color name="black">#000</color>
+    <color name="black_semi_transparent">#DD000000</color>
+    <color name="white_semi_transparent">#CCFFFFFF</color>
+
+    <color name="primary">#009688</color>
+    <color name="primary_dark">#00695c</color>
+    <color name="accent">#26a69a</color>
+
+    <color name="floatingButtonNormal">#ff9800</color>
+    <color name="floatingButtonPressed">#fff3e0</color>
+
 
 </resources>

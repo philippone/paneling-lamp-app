@@ -2,6 +2,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="net.philippschardt.panelinglamp.EditFormActivity">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+
+
+    <item
+        android:id="@+id/menu_edit_form_move_motors"
+        android:title="@string/move_motors"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_edit_form_edit_pic"
+        android:title="@string/edit_picture" />
+    <item
+        android:id="@+id/menu_edit_form_save"
+        android:title="@string/save" />
 </menu>

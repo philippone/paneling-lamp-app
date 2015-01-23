@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_parent_view"
     android:layout_width="match_parent"
@@ -20,8 +20,13 @@
     <RelativeLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp">
+        android:layout_height="@dimen/abc_action_button_min_height_material"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_below="@+id/imageView"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentStart="false"
+        android:id="@+id/relativeLayout">
 
         <Switch
             android:layout_width="wrap_content"
@@ -29,7 +34,7 @@
             android:id="@+id/switch_power_drawer"
             android:layout_alignTop="@+id/textView2"
             android:layout_alignParentEnd="true"
-            android:checked="false" />
+            android:checked="true" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -37,7 +42,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/power"
             android:id="@+id/textView2"
-            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
             android:layout_alignParentStart="true" />
     </RelativeLayout>
 
@@ -50,7 +55,28 @@
         android:dividerHeight="0dp"
         android:background="#cccc"
         tools:context="net.philippschardt.panelinglamp.NavigationDrawerFragment"
-        android:id="@+id/drawer_listview" />
+        android:id="@+id/drawer_listview"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/linearLayout2"
+        android:layout_below="@+id/relativeLayout" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/abc_action_button_min_height_material"
+        android:layout_gravity="center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/linearLayout2"
+        android:background="@color/primary"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/imageView2"
+            android:src="@drawable/ic_action_settings" />
+    </LinearLayout>
 
 
-</LinearLayout>
+</RelativeLayout>

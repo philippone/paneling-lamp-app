@@ -14,6 +14,8 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -140,6 +142,13 @@ public class PanelingLamp extends ActionBarActivity
         registerReceiver(mMessageReceiver, new IntentFilter(MySocketService.BROADCAST_ACTION));
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.paneling_lamp, menu);
+        return true;
+    }
 
     @Override
     protected void onPause() {

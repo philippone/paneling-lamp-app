@@ -30,7 +30,9 @@
             android:scaleType="centerInside"
             android:adjustViewBounds="true"
 
-            android:minHeight="50dp" />
+            android:minHeight="50dp"
+            android:transitionName="thumbnail_shared"
+            />
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -42,6 +44,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Name"
+            android:transitionName="name_shared"
             android:layout_margin="10dp" />
 
 
