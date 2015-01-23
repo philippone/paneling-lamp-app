@@ -66,6 +66,8 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
         public MainViewHolder(View v) {
             super(v);
 
+
+
             container = (ViewGroup) v.findViewById(R.id.card_form_card_view);
             name = (TextView) v.findViewById(R.id.card_form_name);
             thumbnail = (ImageView) v.findViewById(R.id.card_from_thumbnail);
@@ -105,6 +107,8 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
                         break;
                     case R.id.fav_moveinform:
                         moveToForm(cCard);
+
+
                         break;
                     case R.id.fav_editform:
 
@@ -176,7 +180,7 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
                 CardHolder tmpCard = mCards.get(i);
                 if (tmpCard.getStatus() > 0) {
                     tmpCard.setStatus(0);
-                    notifyItemChanged(tmpCard.getPosInView());
+                    notifyItemChanged(mRecyclerView.findViewHolderForItemId(tmpCard.getId()).getPosition());
                 }
             }
 
@@ -331,11 +335,13 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
     @Override
     public int getPositionForId(long id) {
 
+
+
         for (int i = 0; i < mCards.size(); i++) {
             if (mCards.get(i).getId() == id)
                 return mCards.indexOf(mCards.get(i));
         }
-        return 0;
+        return -1;
     }
 
     @Override

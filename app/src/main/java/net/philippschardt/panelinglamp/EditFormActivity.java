@@ -152,7 +152,7 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
 
                 }
 
-                
+
             });
 
             isStandard = dataIntent.getBooleanExtra(EXTRA_IS_STANDARD, true);
