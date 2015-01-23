@@ -55,18 +55,19 @@
             android:layout_marginEnd="16dp">
 
 
+
+
             <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/action_c"
+                android:id="@+id/manual_control_floating_bttn_save_as_form"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 fab:fab_colorNormal="@color/floatingButtonNormal"
-                fab:fab_icon="@drawable/ic_action_edit"
-                fab:fab_title="@string/set_as_zero"
+                fab:fab_icon="@drawable/ic_action_save"
+                fab:fab_title="@string/save_as_new_form"
                 fab:fab_size="mini"
                 fab:fab_colorPressed="@color/floatingButtonPressed"/>
-
             <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/action_b"
+                android:id="@+id/manual_control_floating_bttn_resetMotors"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 fab:fab_colorNormal="@color/floatingButtonNormal"
@@ -75,20 +76,20 @@
                 fab:fab_icon="@drawable/ic_action_discard"
                 fab:fab_colorPressed="@color/floatingButtonPressed"/>
 
-
-
             <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/action_d"
+                android:id="@+id/manual_control_floating_bttn_set_as_zero"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 fab:fab_colorNormal="@color/floatingButtonNormal"
-                fab:fab_icon="@drawable/ic_action_save"
-                fab:fab_title="@string/save_as_new_form"
+                fab:fab_icon="@drawable/ic_action_edit"
+                fab:fab_title="@string/set_as_zero"
                 fab:fab_size="mini"
                 fab:fab_colorPressed="@color/floatingButtonPressed"/>
 
+
+
             <com.getbase.floatingactionbutton.FloatingActionButton
-                android:id="@+id/action_a"
+                android:id="@+id/manual_control_floating_bttn_move_motors"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 fab:fab_colorNormal="@color/floatingButtonNormal"

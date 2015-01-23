@@ -10,10 +10,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.util.Pair;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -23,14 +23,14 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.makeramen.dragsortadapter.DragSortAdapter;
-
 import net.philippschardt.panelinglamp.EditFormActivity;
 import net.philippschardt.panelinglamp.PanelingLamp;
 import net.philippschardt.panelinglamp.R;
 
 import java.util.List;
 
+import Util.DragSortAdapter;
+import Util.MsgCreator;
 import fragments.OnFragmentInteractionListener;
 
 /**
@@ -187,7 +187,8 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
             progressBar.setVisibility(View.VISIBLE);
             card.setStatus(2);
             mCurrentActiveCard = getPosition();
-            mListener.moveToForm(card.getId(), card.getMotorPos(), card.getLedValues());
+            mListener.sendMsg(MsgCreator.moveToForm(card.getId(), card.getMotorPos(), card.getLedValues()));
+
         }
 
 
@@ -294,8 +295,7 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
 
 
         Log.d(TAG, "onBinderView - Card Name: " + mCards.get(position).getName());
-        holder.name.setText(mCards.get(position).getName()
-                + " - " + mCards.get(position).getPosInView());
+        holder.name.setText(mCards.get(position).getName());
 
         if (card.getStatus() == 1) {
             // active

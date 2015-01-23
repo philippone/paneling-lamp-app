@@ -21,7 +21,7 @@ int motorMaxPos = 100 * oneRotation;
 //LED stuff
 int led[4] = {
   13, 14, 15, 16};
-
+int ledValue[4] = {0,0,0,0}; 
 
 String message;
 int msg = 0;
@@ -102,6 +102,8 @@ void loop() {
   for (int i = 0; i < motorCount; i++) {
     if(motors[i]->currentPosition() >= 0)  {
       motors[i]->run();
+    } else if (motors[i]->currentPosition() < 0) {
+    	motors[i]->setCurrentPosition(0);
     }
   }
 
@@ -174,6 +176,10 @@ void handleConnectedPhone(String message) {
 	for (int i = 0; i < motorCount; i++) {
 		float position = motors[i]->currentPosition() / oneRotation;
 		Serial1.print(position);
+		Serial1.print(";");
+	}
+	for (int i = 0; i < sizeof(ledValue); i++) {
+		Serial1.print(ledValue[i]);
 		Serial1.print(";");
 	}
 	Serial1.print("\n");
@@ -274,7 +280,7 @@ void handleStepperPos(String message, boolean aboslutePosition) {
     long r = rotations * oneRotation;
     // if motor is not running, and in range
     long cPos = motors[stepper]->currentPosition();
-    if (cPos + r >= motorMinPos /*&& cPos + r <= motorMaxPos*/) {
+    //if (cPos + r >= motorMinPos /*&& cPos + r <= motorMaxPos*/) {
 
       if (aboslutePosition) {
         // move to aboslute position
@@ -286,8 +292,8 @@ void handleStepperPos(String message, boolean aboslutePosition) {
         	  moveMotorRel(stepper, r);
 			}
       }
-    } 
-    else fail = true;
+    //} 
+    //else fail = true;
   } 
   else fail = true;
 
@@ -298,7 +304,7 @@ void handleStepperPos(String message, boolean aboslutePosition) {
     Serial1.print(stepper);
     Serial1.print(";");
     Serial1.print(stopPosition);
-    Serial1.println(";\n");
+    Serial1.println(";fail;\n");
   } 
 }
 
@@ -337,7 +343,7 @@ void handleStepperForceStop(String message) {
     }
 
     if (stepper >= 0) {
-      if (motors[stepper]->distanceToGo() > 0)
+      //if (motors[stepper]->distanceToGo() > 0)
         motors[stepper]->stop();
     } 
   }
@@ -381,6 +387,10 @@ void handleStepperForceReset(String message) {
 
 }
 
+
+/**
+* override the currentPosition of the motor
+*/
 void handleStepperOverridePos(String message) {
 	
     int stepper 	= -1;
@@ -481,7 +491,8 @@ void handleLEDMsg(String message) {
 */
 void setLEDto(int ledP, int value) {
     if (ledP >= 0 && value >= 0 && value <= 255) {
-      analogWrite(led[ledP], value);
+		ledValue[ledP] = value;
+      	analogWrite(led[ledP], value);
     }
 }
 

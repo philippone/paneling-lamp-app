@@ -13,16 +13,15 @@ public interface OnFragmentInteractionListener {
     // change to the right section in navigation drawer
     public void onSectionAttached(int number);
     public boolean sendMsg(String message);
-    public void resetAllMotors();
+   /* public void resetAllMotors();
     public int getMotorCount();
     public void adjustAllMotorToZero();
     public boolean liftMotorUp(int index, float roations);
     public boolean liftMotorDown(int index, float rotations);
     public boolean moveMotorToPos(int index, float position);
     public boolean moveToForm(long id, float[] motorPos, int[] ledValues );
-
+*/
     public void updateAdatpers();
-
     public PanelingLampDBHelper getDBHelper();
 
 

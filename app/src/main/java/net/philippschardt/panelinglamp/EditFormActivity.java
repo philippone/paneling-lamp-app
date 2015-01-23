@@ -33,6 +33,7 @@ import java.util.List;
 import Util.LedItemView;
 import Util.Motor;
 import Util.MotorItemView;
+import Util.MsgCreator;
 import database.PanelingLampContract;
 import database.PanelingLampDBHelper;
 import fragments.EditFragments.EditLEDFragment;
@@ -149,6 +150,8 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
                     editName.setVisibility(View.VISIBLE);
 
                     revealView(saveButton);
+                    revealView(moveToButton);
+
 
                 }
 
@@ -196,6 +199,14 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
 
                 //update db
                 PanelingLampContract.updateCardMotorLED(mDbHelper.getWritableDatabase(), cardID, name, thumb, mV, lV);
+            }
+        });
+
+        moveToButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEditMotorsFragment.activateProgress(0, 1, 2, 3, 4);
+                sendMsg(MsgCreator.moveToForm(-1, mEditMotorsFragment.getMotorItem(), mEditLEDFragment.getLedItem()));
             }
         });
 
@@ -337,45 +348,7 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
         return false;
     }
 
-    @Override
-    public void resetAllMotors() {
-        // TODO
-    }
 
-    @Override
-    public int getMotorCount() {
-        return 0;
-    }
-
-    @Override
-    public void adjustAllMotorToZero() {
-        // TODO
-
-    }
-
-    @Override
-    public boolean liftMotorUp(int index, float roations) {
-        // TODO
-        return false;
-    }
-
-    @Override
-    public boolean liftMotorDown(int index, float rotations) {
-        // TODO
-        return false;
-    }
-
-    @Override
-    public boolean moveMotorToPos(int index, float position) {
-        // TODO
-         return false;
-    }
-
-    @Override
-    public boolean moveToForm(long id, float[] motorPos, int[] ledValues) {
-        // TODO
-        return false;
-    }
 
     @Override
     public void updateAdatpers() {

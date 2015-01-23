@@ -17,9 +17,9 @@ import net.philippschardt.panelinglamp.R;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import Util.MsgCreator;
 import fragments.OnFragmentInteractionListener;
 import fragments.OnReceiverListener;
-
 
 
 public class DeveloperFragmentMotors extends Fragment implements OnReceiverListener {
@@ -50,8 +50,8 @@ public class DeveloperFragmentMotors extends Fragment implements OnReceiverListe
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //if (getArguments() != null) {
-          //  mParam1 = getArguments().getString(ARG_PARAM1);
-            //mParam2 = getArguments().getString(ARG_PARAM2);
+        //  mParam1 = getArguments().getString(ARG_PARAM1);
+        //mParam2 = getArguments().getString(ARG_PARAM2);
         //}
     }
 
@@ -59,7 +59,7 @@ public class DeveloperFragmentMotors extends Fragment implements OnReceiverListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v =  inflater.inflate(R.layout.fragment_developer_fragment_motors, container, false);
+        View v = inflater.inflate(R.layout.fragment_developer_fragment_motors, container, false);
 
         // init GUI
         initGUI(v);
@@ -67,7 +67,6 @@ public class DeveloperFragmentMotors extends Fragment implements OnReceiverListe
         return v;
 
     }
-
 
 
     @Override
@@ -88,14 +87,9 @@ public class DeveloperFragmentMotors extends Fragment implements OnReceiverListe
     }
 
 
-
     /**
-     *
-     *
      * * GUI methods
-     *
-     *
-     * */
+     */
 
     // View stuff
     private EditText rotationEdit;
@@ -133,7 +127,6 @@ public class DeveloperFragmentMotors extends Fragment implements OnReceiverListe
         absPosEdit = (EditText) v.findViewById(R.id.editText_rot_abs);
 
 
-
         // radio motor button
         RadioButton rm1 = (RadioButton) v.findViewById(R.id.radio_motor1);
         rm1.setOnClickListener(chooseMotorListener);
@@ -145,7 +138,6 @@ public class DeveloperFragmentMotors extends Fragment implements OnReceiverListe
         rm4.setOnClickListener(chooseMotorListener);
         RadioButton rm5 = (RadioButton) v.findViewById(R.id.radio_motor5);
         rm5.setOnClickListener(chooseMotorListener);
-
 
 
         // reset button
@@ -173,7 +165,10 @@ public class DeveloperFragmentMotors extends Fragment implements OnReceiverListe
     View.OnClickListener setZeroListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            mListener.adjustAllMotorToZero();
+            // TODO motor size
+            for (int i = 0; i < 5; i++) {
+                mListener.sendMsg(MsgCreator.overridePos(i, 0));
+            }
         }
     };
 
@@ -188,12 +183,12 @@ public class DeveloperFragmentMotors extends Fragment implements OnReceiverListe
                 // do nothing
                 return;
             }
+            mListener.sendMsg(MsgCreator.moveUp(currentMotor, currRotation));
 
-            boolean b = mListener.liftMotorUp(currentMotor, currRotation);
-            if (b) {
-                motorPosView.get(currentMotor).setVisibility(View.GONE);
-                motorProgView.get(currentMotor).setVisibility(View.VISIBLE);
-            }
+
+            motorPosView.get(currentMotor).setVisibility(View.GONE);
+            motorProgView.get(currentMotor).setVisibility(View.VISIBLE);
+
 
         }
     };
@@ -209,11 +204,11 @@ public class DeveloperFragmentMotors extends Fragment implements OnReceiverListe
                 return;
             }
 
-            boolean b = mListener.liftMotorDown(currentMotor, currRotation);
-            if (b) {
-                motorPosView.get(currentMotor).setVisibility(View.GONE);
-                motorProgView.get(currentMotor).setVisibility(View.VISIBLE);
-            }
+            mListener.sendMsg(MsgCreator.moveDown(currentMotor, currRotation));
+
+            motorPosView.get(currentMotor).setVisibility(View.GONE);
+            motorProgView.get(currentMotor).setVisibility(View.VISIBLE);
+
         }
     };
 
@@ -228,7 +223,7 @@ public class DeveloperFragmentMotors extends Fragment implements OnReceiverListe
                 // do nothing
                 return;
             }
-            mListener.moveMotorToPos(currentMotor, position);
+            mListener.sendMsg(MsgCreator.moveTo(currentMotor, position));
 
             // GUI action
             motorPosView.get(currentMotor).setVisibility(View.GONE);
@@ -242,14 +237,18 @@ public class DeveloperFragmentMotors extends Fragment implements OnReceiverListe
 
         @Override
         public void onClick(View v) {
-            mListener.resetAllMotors();
-            for(int i = 0; i < mListener.getMotorCount(); i++) {
+            mListener.sendMsg(MsgCreator.forceReset(0));
+            mListener.sendMsg(MsgCreator.forceReset(1));
+            mListener.sendMsg(MsgCreator.forceReset(2));
+            mListener.sendMsg(MsgCreator.forceReset(3));
+            mListener.sendMsg(MsgCreator.forceReset(4));
+
+            for (int i = 0; i < 5; i++) {
                 motorPosView.get(i).setVisibility(View.GONE);
                 motorProgView.get(i).setVisibility(View.VISIBLE);
             }
         }
     };
-
 
 
     View.OnClickListener chooseMotorListener = new View.OnClickListener() {
@@ -258,7 +257,7 @@ public class DeveloperFragmentMotors extends Fragment implements OnReceiverListe
             boolean checked = ((RadioButton) view).isChecked();
 
             // Check which radio button was clicked
-            switch(view.getId()) {
+            switch (view.getId()) {
                 case R.id.radio_motor1:
                     if (checked)
                         currentMotor = 0;
@@ -284,23 +283,23 @@ public class DeveloperFragmentMotors extends Fragment implements OnReceiverListe
     };
 
 
-
-
     /*
     * update the gui
     *
     * set the received information in the related views
     * */
     public void updateMotorPosinGUI(int motorIndex, float rotations) {
-        motorPosView.get(motorIndex).setText(rotations + " rotations");
+        if (motorPosView != null) {
+            motorPosView.get(motorIndex).setText(rotations + " rotations");
 
-        motorPosView.get(motorIndex).setVisibility(View.VISIBLE);
-        motorProgView.get(motorIndex).setVisibility(View.INVISIBLE);
+            motorPosView.get(motorIndex).setVisibility(View.VISIBLE);
+            motorProgView.get(motorIndex).setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
     public void notifyAdapters() {
-         // do nothing
+        // do nothing
         // has no adapters
     }
 

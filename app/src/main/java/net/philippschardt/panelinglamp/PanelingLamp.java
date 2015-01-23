@@ -20,7 +20,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import Util.Motor;
-import Util.MsgCreator;
 import database.PanelingLampContract;
 import database.PanelingLampDBHelper;
 import fragments.OnFragmentInteractionListener;
@@ -115,7 +114,7 @@ public class PanelingLamp extends ActionBarActivity
             db.insert(
                     PanelingLampContract.FormEntry.TABLE_NAME,
                     null,
-                    PanelingLampContract.FormEntry.createContentValues("Form " + i, R.drawable.paneling_lamp + "", 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 255, 255, 0, 0, false, true, i, false, 0));
+                    PanelingLampContract.FormEntry.createContentValues("Form " + i, R.drawable.paneling_lamp + "", 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 255, 255, 0, 0, false, false, i, true, 0));
         }
 */
         Intent i = new Intent(this, MySocketService.class);
@@ -238,7 +237,17 @@ public class PanelingLamp extends ActionBarActivity
         }
     };
 
+    @Override
+    public void updateAdatpers() {
+        ((OnReceiverListener)currentFragment).notifyAdapters();
+    }
 
+    @Override
+    public PanelingLampDBHelper getDBHelper() {
+        return mDbHelper;
+    }
+
+/*
     public void resetAllMotors() {
         // TODO test if motors are running
         for(int i = 0; i < motor.length; i++) {
@@ -278,17 +287,7 @@ public class PanelingLamp extends ActionBarActivity
         return false;
     }
 
-    @Override
-    public void updateAdatpers() {
-        ((OnReceiverListener)currentFragment).notifyAdapters();
-    }
-
-
-    @Override
-    public PanelingLampDBHelper getDBHelper() {
-        return mDbHelper;
-    }
-
+*/
 
 
 
@@ -380,13 +379,14 @@ public class PanelingLamp extends ActionBarActivity
 
         long id = Long.parseLong(splitted[1]);
 
-        // update DB
-        setFormActiveInDB(id);
+        if (id > 0) {
+            // update DB
+            setFormActiveInDB(id);
 
-        // notify view
-        // todo notify all listviews
-        ((OnReceiverListener)currentFragment).notifyAdapters();
-
+            // notify view
+            // todo notify all listviews
+            ((OnReceiverListener) currentFragment).notifyAdapters();
+        }
     }
 
     public void setFormActiveInDB(long formActiveInDB) {

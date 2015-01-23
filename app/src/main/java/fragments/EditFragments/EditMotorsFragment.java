@@ -167,4 +167,10 @@ public class EditMotorsFragment extends Fragment implements OnReceiverListener{
         this.motorItem = motorItem;
     }
 
+    public void activateProgress(int... index) {
+        for (int i : index) {
+            if (i < motorItem.size())
+                motorItem.get(i).activateProgress();
+        }
+    }
 }

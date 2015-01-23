@@ -17,11 +17,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import net.philippschardt.panelinglamp.PanelingLamp;
 import net.philippschardt.panelinglamp.R;
 
+import Util.MotorItemView;
 import Util.MsgCreator;
 import fragments.EditFragments.EditLEDFragment;
 import fragments.EditFragments.EditMotorsFragment;
@@ -54,6 +56,10 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
     private EditMotorsFragment mEditMotorsFragment;
     private ImageView alphaView;
     private FloatingActionsMenu floatingMenu;
+    private FloatingActionButton floatingButton_resetMotors;
+    private FloatingActionButton floatingButton_set_zero;
+    private FloatingActionButton floatingButton_moveMotors;
+    private FloatingActionButton floatingButton_saveForm;
 
     /**
      * Use this factory method to create a new instance of
@@ -82,18 +88,15 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
             mSectionNr = getArguments().getInt(DEV_ARG_PARAM1);
         }
 
-        
+
         motorFragment = DeveloperFragmentMotors.newInstance();
         // todo set last value/ currentvalue
         // TODO besser wert an lampe abfragen
         mEditMotorsFragment = EditMotorsFragment.newInstance();
-        mEditLEDFragment = EditLEDFragment.newInstance(new int[] {0,0,0,0});
-
-
+        mEditLEDFragment = EditLEDFragment.newInstance(new int[]{0, 0, 0, 0});
 
 
     }
-
 
 
     @Override
@@ -101,7 +104,7 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_sliding_tabs_manual_control, container, false);
-        
+
         mViewPager = (ViewPager) v.findViewById(R.id.frag_forms_viewPager);
         pagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
         mViewPager.setAdapter(pagerAdapter);
@@ -112,7 +115,7 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
 
 
         alphaView = (ImageView) v.findViewById(R.id.manual_control_apha_view);
-         floatingMenu = (FloatingActionsMenu) v.findViewById(R.id.manual_control_floating_menu_bttn);
+        floatingMenu = (FloatingActionsMenu) v.findViewById(R.id.manual_control_floating_menu_bttn);
 
         floatingMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
 
@@ -121,10 +124,10 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
             public void onMenuExpanded() {
                 Log.d(TAG, "expand menu");
 
-                if (android.os.Build.VERSION.SDK_INT>= Build.VERSION_CODES.KITKAT) {
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                     // get the center for the clipping circle
-                    int cx =  alphaView.getRight() - 200;
-                    int cy =  alphaView.getBottom() + 200;
+                    int cx = alphaView.getRight() - 200;
+                    int cy = alphaView.getBottom() + 200;
 
                     // get the final radius for the clipping circle
                     int finalRadius = Math.max(alphaView.getWidth(), alphaView.getHeight());
@@ -157,8 +160,53 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
         });
 
 
-        
-        
+        floatingButton_resetMotors = (FloatingActionButton) v.findViewById(R.id.manual_control_floating_bttn_resetMotors);
+        floatingButton_set_zero = (FloatingActionButton) v.findViewById(R.id.manual_control_floating_bttn_set_as_zero);
+        floatingButton_moveMotors = (FloatingActionButton) v.findViewById(R.id.manual_control_floating_bttn_move_motors);
+        floatingButton_saveForm = (FloatingActionButton) v.findViewById(R.id.manual_control_floating_bttn_save_as_form);
+
+        floatingButton_moveMotors.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEditMotorsFragment.activateProgress(0, 1, 2, 3, 4);
+                mListener.sendMsg(MsgCreator.moveToForm(-1,mEditMotorsFragment.getMotorItem(), mEditLEDFragment.getLedItem()));
+                floatingMenu.toggle();
+            }
+        });
+
+
+        floatingButton_resetMotors.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                mEditMotorsFragment.activateProgress(0, 1, 2, 3, 4);
+
+                mListener.sendMsg(MsgCreator.forceReset(0));
+                mListener.sendMsg(MsgCreator.forceReset(1));
+                mListener.sendMsg(MsgCreator.forceReset(2));
+                mListener.sendMsg(MsgCreator.forceReset(3));
+                mListener.sendMsg(MsgCreator.forceReset(4));
+
+                floatingMenu.toggle();
+            }
+        });
+
+
+        floatingButton_set_zero.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                for(MotorItemView mV : mEditMotorsFragment.getMotorItem()) {
+
+                    mV.setCurrAsZero();
+
+                    mListener.sendMsg(MsgCreator.overridePos(mV.getmIndex(), mV.getmPos()));
+                    floatingMenu.toggle();
+
+                }
+
+            }
+        });
+
         return v;
     }
 
@@ -177,7 +225,7 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
 
     class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
-        private String[] titles = new String[] {getString(R.string.motorTab), getString(R.string.ledTab), "tmpMotors"};
+        private String[] titles = new String[]{getString(R.string.motorTab), getString(R.string.ledTab), "tmpMotors"};
 
         public ViewPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -187,11 +235,11 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
         public Fragment getItem(int num) {
             switch (num) {
                 case 0:
-                    return motorFragment;
+                    return mEditMotorsFragment;
                 case 1:
                     return mEditLEDFragment;
                 case 2:
-                    return mEditMotorsFragment;
+                    return motorFragment;
             }
             return PanelingLamp.PlaceholderFragment.newInstance(num + 1);
         }
@@ -207,7 +255,6 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
         }
     }
 
-   
 
     @Override
     public void onResume() {
@@ -215,7 +262,7 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
 
         mListener.sendMsg(MsgCreator.requestCurrentStatus());
 
-       
+
     }
 
     @Override
@@ -239,11 +286,6 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
         super.onDetach();
         mListener = null;
     }
-
-
-
-
-
 
 
 }

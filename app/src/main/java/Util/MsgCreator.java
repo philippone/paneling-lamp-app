@@ -1,5 +1,7 @@
 package Util;
 
+import java.util.ArrayList;
+
 /**
  * Created by philipp on 14.01.15.
  */
@@ -37,6 +39,13 @@ public class MsgCreator {
     public static String move(int stepper, float position) {
         return "sr;" + stepper + ";" + position + ";\n";
     }
+    public static String moveUp(int stepper, float pos) {
+        return move(stepper, pos);
+    }
+
+    public static String moveDown(int stepper, float pos) {
+        return move(stepper, -pos);
+    }
 
     /**
      * move stepper absolute position (x * rotations)
@@ -59,6 +68,19 @@ public class MsgCreator {
         }
 
         return msg + "\n";
+    }
+
+    public static String moveToForm(long id, ArrayList<MotorItemView> motorItem, ArrayList<LedItemView> ledItem) {
+        String msg = "mf;" + id + ";";
+        for(MotorItemView mV : motorItem) {
+            msg += mV.getmPos() + ";";
+        }
+        for (LedItemView lV : ledItem) {
+            msg += lV.getValue() + ";";
+        }
+
+        return msg + "\n";
+
     }
 
     public static String setCurrPos(int stepper, float rotations) {
@@ -90,4 +112,7 @@ public class MsgCreator {
         // TODO vielleicht noch aendern
         return "c;\n";
     }
+
+
+
 }
