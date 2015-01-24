@@ -28,12 +28,15 @@ int msg = 0;
 int pos = 0;
 boolean powerStatus = false;
 long currFormID = -1;
-boolean moveToForm = false;
+boolean moveToForm;
+boolean tranformToForm = false;
 
 void setup(){  
 
   initStepper();
   initLEDs();
+  
+  moveToForm = false;
 
   // Open serial communications and wait for port to open:
   Serial.begin(9600);
@@ -101,18 +104,25 @@ void loop() {
   // check that motor never reach position -1
   for (int i = 0; i < motorCount; i++) {
     if(motors[i]->currentPosition() >= 0)  {
-      motors[i]->run();
+		// run motor if all is correct
+      	motors[i]->run();
     } else if (motors[i]->currentPosition() < 0) {
     	motors[i]->setCurrentPosition(0);
     }
   }
+
+
+  
+
 
   // send rely to phone when motor has reached his position
   for (int i = 0; i < motorCount; i++) {
     if (motors[i]->distanceToGo() == 0) {
       if(motorRunning[i]) {
         float stopPosition = motors[i]->currentPosition() / oneRotation;
-        Serial.print("motor stopped at ");
+        Serial.print("motor ");
+		Serial.print(i);
+		Serial.print(" stopped at ");
         Serial.println(stopPosition);
 
         // send msg to phone with current Position of motor
@@ -129,7 +139,8 @@ void loop() {
 
   // check if form is reached
   // and send message to phone
-  if (moveToForm) {
+  
+  if (tranformToForm) {
 	  boolean reached = true;
 	  for (int i = 0; i < motorCount; i++) {
 	    if (motors[i]->distanceToGo() > 0) {
@@ -138,10 +149,12 @@ void loop() {
 	  }  
 	  
 	  if (reached) {
+		  tranformToForm = false;
 		  moveToForm = false;
 		  sendFormReachedReply(currFormID);
 	  }
   }
+  
   
 } /*loop end*/
 
@@ -195,6 +208,9 @@ void handleMoveForm(String message) {
 	float m[5];
 	int l[4];
 	moveToForm = true; /* set to false if form is reached */
+	Serial.println("set moveToForm = true");
+	
+	
 	
 	int msgCounter = 0;
 	String tmp = "";
@@ -211,7 +227,7 @@ void handleMoveForm(String message) {
 			  currFormID = id;
 
 			  
-		  } else if (msgCounter > 0 && msgCounter < 6) {
+		  } else if (msgCounter >= 1 && msgCounter <= 5) {
 			  // receive m0 - m4
 	          // parse rotation
 	          char buffer[10];
@@ -221,20 +237,21 @@ void handleMoveForm(String message) {
 			  m[msgCounter -1 ] = p *  oneRotation;
 			  // move to position
 			  moveMotorTo(msgCounter -1, p * oneRotation);
-
+			  moveToForm = true; /* set to false if form is reached */
 			  
-		  } else if (msgCounter > 5 && msgCounter < 10) {
+		  } else if (msgCounter >= 6 && msgCounter <= 9) {
 			  // receive l0 - l3
 			  int v = tmp.toInt();
-			  l[msgCounter -1] = v;
+			  l[msgCounter -6] = v;
 			  
-			  setLEDto(msgCounter -1, v);
+			  setLEDto(msgCounter -6, v);
 
 		  }
 	      tmp = "";
 	      msgCounter++;
       }
 	}
+	tranformToForm = true;
 }
 
 /**
@@ -498,9 +515,15 @@ void setLEDto(int ledP, int value) {
 
 
 void sendFormReachedReply(long currFormID) {
-    Serial1.print("mfr;");
+    // to phone
+	Serial1.print("mfr;");
     Serial1.print(currFormID);
     Serial1.println(";\n");
+	
+	// to computer
+    Serial.print("mfr;");
+    Serial.print(currFormID);
+    Serial.println(";\n");
 }
 
 

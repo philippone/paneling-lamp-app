@@ -14,7 +14,6 @@ public class PanelingLampContract {
     }
 
 
-
     public static abstract class FormEntry implements BaseColumns {
         public static final String TABLE_NAME = "forms";
         public static final String COLUMN_NAME_NULLABLE = "";
@@ -40,7 +39,7 @@ public class PanelingLampContract {
         public static final String COLUMN_IS_STANDARD = "is_standard";
         public static final String COLUMN_STANDARD_OWN_POS = "standard_position";
 
-        public static ContentValues createContentValues(String name, String thumbnail, float pos0, float pos1, float pos2, float pos3, float pos4, int led0, float led1, float led2, float led3, boolean active, boolean inFavs, int favPos, boolean isStandard, int standardOwnPos) {
+        public static ContentValues createContentValues(String name, String thumbnail, float pos0, float pos1, float pos2, float pos3, float pos4, int led0, int led1, int led2, int led3, boolean active, boolean inFavs, int favPos, boolean isStandard, int standardOwnPos) {
             ContentValues values = new ContentValues();
 
             //values.put(FormEntry.COLUMN_NAME_ENTRY_ID, id);
@@ -56,7 +55,7 @@ public class PanelingLampContract {
             values.put(FormEntry.COLUMN_LED_2, led2);
             values.put(FormEntry.COLUMN_LED_3, led3);
             values.put(FormEntry.COLUMN_ACTIVE, active ? 1 : 0);
-            values.put(FormEntry.COLUMN_FAV, inFavs ? 1: 0);
+            values.put(FormEntry.COLUMN_FAV, inFavs ? 1 : 0);
             values.put(FormEntry.COLUMN_FAV_POS, favPos);
             values.put(COLUMN_IS_STANDARD, isStandard ? 1 : 0);
             values.put(COLUMN_STANDARD_OWN_POS, standardOwnPos);
@@ -83,26 +82,39 @@ public class PanelingLampContract {
                         FormEntry.COLUMN_LED_1 + INT_TYPE + COMMA_SEP +
                         FormEntry.COLUMN_LED_2 + INT_TYPE + COMMA_SEP +
                         FormEntry.COLUMN_LED_3 + INT_TYPE + COMMA_SEP +
-                        FormEntry.COLUMN_ACTIVE + INT_TYPE  + COMMA_SEP +
-                        FormEntry.COLUMN_FAV + INT_TYPE  + COMMA_SEP +
-                        FormEntry.COLUMN_FAV_POS + INT_TYPE  + COMMA_SEP +
-                        FormEntry.COLUMN_IS_STANDARD + INT_TYPE  + COMMA_SEP +
-                        FormEntry.COLUMN_STANDARD_OWN_POS + INT_TYPE   +
+                        FormEntry.COLUMN_ACTIVE + INT_TYPE + COMMA_SEP +
+                        FormEntry.COLUMN_FAV + INT_TYPE + COMMA_SEP +
+                        FormEntry.COLUMN_FAV_POS + INT_TYPE + COMMA_SEP +
+                        FormEntry.COLUMN_IS_STANDARD + INT_TYPE + COMMA_SEP +
+                        FormEntry.COLUMN_STANDARD_OWN_POS + INT_TYPE +
                         " )";
+
 
     }
 
+
+    public static long saveOwnForm(SQLiteDatabase db, String newFormName, String newFormThumbPath, float[] m, int[] l) {
+        return db.insert(
+                PanelingLampContract.FormEntry.TABLE_NAME,
+                null,
+                FormEntry.createContentValues(newFormName,
+                        newFormThumbPath,
+                        m[0], m[1], m[2], m[3], m[4],
+                        l[0], l[1], l[2], l[3],
+                        false, false, 0 /*TODO*/, false, 0/*todo*/));
+
+    }
 
     public static int updateStatus(SQLiteDatabase db, long id, int status) {
         unsetStatusAll(db);
 
         // New value for one column
         ContentValues values = new ContentValues();
-        values.put( FormEntry.COLUMN_ACTIVE, status);
+        values.put(FormEntry.COLUMN_ACTIVE, status);
 
         // Which row to update, based on the ID
         String selection = FormEntry._ID + " = ?";
-        String[] selectionArgs = { String.valueOf(id) };
+        String[] selectionArgs = {String.valueOf(id)};
 
         int count = db.update(
                 FormEntry.TABLE_NAME,
@@ -116,11 +128,11 @@ public class PanelingLampContract {
     public static int unsetStatusAll(SQLiteDatabase db) {
         // New value for one column
         ContentValues values = new ContentValues();
-        values.put( FormEntry.COLUMN_ACTIVE, 0);
+        values.put(FormEntry.COLUMN_ACTIVE, 0);
 
         // Which row to update, based on the ID
         String selection = FormEntry.COLUMN_ACTIVE + " != ?";
-        String[] selectionArgs = { String.valueOf(0) };
+        String[] selectionArgs = {String.valueOf(0)};
 
         int count = db.update(
                 FormEntry.TABLE_NAME,
@@ -136,11 +148,11 @@ public class PanelingLampContract {
 
         // New value for one column
         ContentValues values = new ContentValues();
-        values.put( FormEntry.COLUMN_FAV, isFav ? 1 : 0);
+        values.put(FormEntry.COLUMN_FAV, isFav ? 1 : 0);
 
         // Which row to update, based on the ID
         String selection = FormEntry._ID + " = ?";
-        String[] selectionArgs = { String.valueOf(id) };
+        String[] selectionArgs = {String.valueOf(id)};
 
         int count = db.update(
                 FormEntry.TABLE_NAME,
@@ -154,21 +166,21 @@ public class PanelingLampContract {
     public static int updateCardMotorLED(SQLiteDatabase db, long id, String name, String thumb, float[] m, int[] l) {
         // New value for one column
         ContentValues values = new ContentValues();
-        values.put( FormEntry.COLUMN_NAME_TITLE, name);
+        values.put(FormEntry.COLUMN_NAME_TITLE, name);
         values.put(FormEntry.COLUMN_PATH_THUMBNAIL, thumb);
-        values.put( FormEntry.COLUMN_POS_MOTOR_0, m[0]);
-        values.put( FormEntry.COLUMN_POS_MOTOR_1, m[1]);
-        values.put( FormEntry.COLUMN_POS_MOTOR_2, m[2]);
-        values.put( FormEntry.COLUMN_POS_MOTOR_3, m[3]);
-        values.put( FormEntry.COLUMN_POS_MOTOR_4, m[4]);
-        values.put( FormEntry.COLUMN_LED_0, l[0]);
-        values.put( FormEntry.COLUMN_LED_1, l[1]);
-        values.put( FormEntry.COLUMN_LED_2, l[2]);
-        values.put( FormEntry.COLUMN_LED_3, l[3]);
+        values.put(FormEntry.COLUMN_POS_MOTOR_0, m[0]);
+        values.put(FormEntry.COLUMN_POS_MOTOR_1, m[1]);
+        values.put(FormEntry.COLUMN_POS_MOTOR_2, m[2]);
+        values.put(FormEntry.COLUMN_POS_MOTOR_3, m[3]);
+        values.put(FormEntry.COLUMN_POS_MOTOR_4, m[4]);
+        values.put(FormEntry.COLUMN_LED_0, l[0]);
+        values.put(FormEntry.COLUMN_LED_1, l[1]);
+        values.put(FormEntry.COLUMN_LED_2, l[2]);
+        values.put(FormEntry.COLUMN_LED_3, l[3]);
 
         // Which row to update, based on the ID
         String selection = FormEntry._ID + " = ?";
-        String[] selectionArgs = { String.valueOf(id) };
+        String[] selectionArgs = {String.valueOf(id)};
 
         int count = db.update(
                 FormEntry.TABLE_NAME,
@@ -184,7 +196,7 @@ public class PanelingLampContract {
         // Define 'where' part of query.
         String selection = FormEntry._ID + " LIKE ?";
         // Specify arguments in placeholder order.
-        String[] selectionArgs = { String.valueOf(id) };
+        String[] selectionArgs = {String.valueOf(id)};
         // Issue SQL statement.
         mDB.delete(FormEntry.TABLE_NAME, selection, selectionArgs);
     }

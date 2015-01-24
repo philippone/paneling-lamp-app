@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package Util;
+package util;
 
 import android.content.Context;
 import android.graphics.Typeface;

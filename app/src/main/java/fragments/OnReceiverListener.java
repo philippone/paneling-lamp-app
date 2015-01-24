@@ -5,4 +5,5 @@ public interface OnReceiverListener {
     //public void updateActiveStatus(long formID);
 
     public void notifyAdapters();
+
 }

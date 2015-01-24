@@ -38,8 +38,8 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import Util.Motor;
-import Util.MsgCreator;
+import util.Motor;
+import util.MsgCreator;
 
 
 public class MainActivity extends ActionBarActivity  {

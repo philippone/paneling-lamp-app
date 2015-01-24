@@ -56,12 +56,9 @@
             android:layout_height="wrap_content"
             fab:fab_colorNormal="@color/floatingButtonNormal"
             fab:fab_colorPressed="@color/floatingButtonPressed"
-
             fab:fab_icon="@drawable/ic_action_save"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-
-
             android:layout_alignParentStart="false"
             android:layout_marginEnd="15dp"
             android:layout_alignParentTop="false"
@@ -70,7 +67,6 @@
             android:layout_marginBottom="16dp"
             android:fillViewport="false"
          />
-
 
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/edit_motors_floating_buttn_moveToForm"

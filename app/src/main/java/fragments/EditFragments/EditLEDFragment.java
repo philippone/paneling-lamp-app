@@ -12,7 +12,7 @@ import net.philippschardt.panelinglamp.R;
 
 import java.util.ArrayList;
 
-import Util.LedItemView;
+import util.LedItemView;
 import fragments.OnFragmentInteractionListener;
 import fragments.OnReceiverListener;
 

@@ -6,8 +6,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -30,10 +33,6 @@ import com.getbase.floatingactionbutton.FloatingActionButton;
 import java.util.ArrayList;
 import java.util.List;
 
-import Util.LedItemView;
-import Util.Motor;
-import Util.MotorItemView;
-import Util.MsgCreator;
 import database.PanelingLampContract;
 import database.PanelingLampDBHelper;
 import fragments.EditFragments.EditLEDFragment;
@@ -41,6 +40,12 @@ import fragments.EditFragments.EditMotorsFragment;
 import fragments.OnFragmentInteractionListener;
 import fragments.OnReceiverListener;
 import fragments.forms.OnHandleMessageListener;
+import util.AddNewFormDialog;
+import util.LedItemView;
+import util.Motor;
+import util.MotorItemView;
+import util.MsgCreator;
+import util.UtilPL;
 
 public class EditFormActivity extends ActionBarActivity implements OnFragmentInteractionListener, OnHandleMessageListener {
 
@@ -143,6 +148,8 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
             thumb = dataIntent.getStringExtra(EXTRA_THUMBNAIL);
             thumbView = (ImageView) findViewById(R.id.edit_form_thumbnail);
 
+            UtilPL.setPic(thumbView, thumb);
+
             setEnterSharedElementCallback(new android.support.v4.app.SharedElementCallback() {
                 @Override
                 public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
@@ -176,6 +183,14 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
         mEditMotorsFragment = EditMotorsFragment.newInstance(motorV);
         mEditLEDFragment = EditLEDFragment.newInstance(ledV);
 
+
+
+        thumbView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dispatchTakePictureIntent();
+            }
+        });
 
         // save button
          saveButton = (FloatingActionButton) findViewById(R.id.edit_motors_floating_buttn_save);
@@ -306,16 +321,7 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
      * */
     private void handleMoveToFormReply(String message) {
         // TODO nothing to do
-        /*String[] splitted = message.split(";");
 
-        long id = Long.parseLong(splitted[1]);
-
-        // update DB
-        setFormActiveInDB(id);
-
-        // notify view
-        ((OnReceiverListener)currentFragment).updateActiveStatus(id);
-*/
     }
 
     @Override
@@ -363,6 +369,22 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
     }
 
 
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    @Override
+    public void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    @Override
+    public void showAddNewFormDialog(float[] motorV, int[] ledV) {
+        DialogFragment newFragment = new AddNewFormDialog();
+        newFragment.show(getSupportFragmentManager(), "newformdialog");
+    }
+
+
 
     class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
@@ -395,6 +417,15 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
             return titles[position];
         }
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            thumbView.setImageBitmap(imageBitmap);
+        }
     }
 
 

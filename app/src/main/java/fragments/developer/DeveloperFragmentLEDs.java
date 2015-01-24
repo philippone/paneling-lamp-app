@@ -10,7 +10,7 @@ import android.widget.SeekBar;
 
 import net.philippschardt.panelinglamp.R;
 
-import Util.MsgCreator;
+import util.MsgCreator;
 import fragments.OnFragmentInteractionListener;
 
 

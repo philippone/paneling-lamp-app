@@ -1,4 +1,4 @@
-package Util;
+package util;
 
 /*
  * Copyright (C) 2015 Vincent Mi

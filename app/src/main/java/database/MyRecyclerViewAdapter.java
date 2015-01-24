@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.PopupMenu;
@@ -29,8 +27,9 @@ import net.philippschardt.panelinglamp.R;
 
 import java.util.List;
 
-import Util.DragSortAdapter;
-import Util.MsgCreator;
+import util.DragSortAdapter;
+import util.MsgCreator;
+import util.UtilPL;
 import fragments.OnFragmentInteractionListener;
 
 /**
@@ -48,9 +47,12 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
     private final String mPos;
     private Cursor mCursor;
     private int mOptionsLayout;
+    private boolean mCategoryValue;
 
     // which card is active
     private int mCurrentActiveCard;
+
+
 
 
     class MainViewHolder extends DragSortAdapter.ViewHolder implements
@@ -195,7 +197,7 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
     }
 
 
-    public MyRecyclerViewAdapter(Context ctx, OnFragmentInteractionListener listener, RecyclerView recyclerView, SQLiteDatabase db, String column_Category, String column_Position, int optionsLayout) {
+    public MyRecyclerViewAdapter(Context ctx, OnFragmentInteractionListener listener, RecyclerView recyclerView, SQLiteDatabase db, String column_Category, String column_Position, boolean categoryValue, int optionsLayout) {
         super(recyclerView);
 
         mListener = listener;
@@ -205,6 +207,7 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
         mCategory = column_Category;
         mPos = column_Position;
         mOptionsLayout = optionsLayout;
+        mCategoryValue = categoryValue;
         AndUpdateCards();
 
     }
@@ -238,7 +241,8 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
         // Which row to update, based on the ID
         String selection = mCategory + " LIKE ?";
         // is true
-        String[] selectionArgs = {String.valueOf(1)};
+        String v = mCategoryValue ? "1" : "0";
+        String[] selectionArgs = {v};
 
 
         mCursor = mDB.query(
@@ -287,9 +291,9 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
         if (card.isStandard()) {
             holder.thumbnail.setImageDrawable(mContext.getResources().getDrawable(Integer.parseInt(mCards.get(position).getThumbnail())));
         } else {
-            // TODO load from path
-            Bitmap bmp = BitmapFactory.decodeFile(mCards.get(position).getThumbnail());
-            holder.thumbnail.setImageBitmap(bmp);
+
+            UtilPL.setPic(holder.thumbnail, mCards.get(position).getThumbnail());
+
         }
 
 
@@ -318,6 +322,8 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
         holder.container.postInvalidate();
 
     }
+
+
 
     @Override
     public int getItemCount() {

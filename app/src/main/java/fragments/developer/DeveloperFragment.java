@@ -23,8 +23,8 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import net.philippschardt.panelinglamp.PanelingLamp;
 import net.philippschardt.panelinglamp.R;
 
-import Util.MotorItemView;
-import Util.MsgCreator;
+import util.MotorItemView;
+import util.MsgCreator;
 import fragments.EditFragments.EditLEDFragment;
 import fragments.EditFragments.EditMotorsFragment;
 import fragments.OnFragmentInteractionListener;
@@ -50,7 +50,6 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
     private OnFragmentInteractionListener mListener;
     private ViewPager mViewPager;
     private ViewPagerAdapter pagerAdapter;
-    private DeveloperFragmentMotors motorFragment;
 
     private EditLEDFragment mEditLEDFragment;
     private EditMotorsFragment mEditMotorsFragment;
@@ -88,10 +87,6 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
             mSectionNr = getArguments().getInt(DEV_ARG_PARAM1);
         }
 
-
-        motorFragment = DeveloperFragmentMotors.newInstance();
-        // todo set last value/ currentvalue
-        // TODO besser wert an lampe abfragen
         mEditMotorsFragment = EditMotorsFragment.newInstance();
         mEditLEDFragment = EditLEDFragment.newInstance(new int[]{0, 0, 0, 0});
 
@@ -165,6 +160,26 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
         floatingButton_moveMotors = (FloatingActionButton) v.findViewById(R.id.manual_control_floating_bttn_move_motors);
         floatingButton_saveForm = (FloatingActionButton) v.findViewById(R.id.manual_control_floating_bttn_save_as_form);
 
+
+        floatingButton_saveForm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                floatingMenu.toggle();
+                float[] m = new float[5];
+                int[] l = new int[4];
+
+                for (int i = 0; i < m.length; i++) {
+                    m[i] = mEditMotorsFragment.getMotorItem().get(i).getmPos();
+                }
+                for (int f = 0; f < l.length; f++) {
+                    l[f] = mEditLEDFragment.getLedItem().get(f).getValue();
+                }
+                mListener.showAddNewFormDialog(m, l);
+
+            }
+        });
+
+
         floatingButton_moveMotors.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -212,7 +227,7 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
 
     @Override
     public void updateMotorPosinGUI(int motorNr, float motorPos) {
-        motorFragment.updateMotorPosinGUI(motorNr, motorPos);
+
         mEditMotorsFragment.updateMotorPosinGUI(motorNr, motorPos);
     }
 
@@ -225,7 +240,7 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
 
     class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
-        private String[] titles = new String[]{getString(R.string.motorTab), getString(R.string.ledTab), "tmpMotors"};
+        private String[] titles = new String[]{getString(R.string.motorTab), getString(R.string.ledTab)};
 
         public ViewPagerAdapter(FragmentManager fm) {
             super(fm);
@@ -238,8 +253,7 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
                     return mEditMotorsFragment;
                 case 1:
                     return mEditLEDFragment;
-                case 2:
-                    return motorFragment;
+
             }
             return PanelingLamp.PlaceholderFragment.newInstance(num + 1);
         }

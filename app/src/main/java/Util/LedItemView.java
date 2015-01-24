@@ -1,4 +1,4 @@
-package Util;
+package util;
 
 import android.content.Context;
 import android.widget.RelativeLayout;

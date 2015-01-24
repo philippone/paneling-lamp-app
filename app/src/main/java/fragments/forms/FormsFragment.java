@@ -16,7 +16,7 @@ import com.astuetz.PagerSlidingTabStrip;
 import net.philippschardt.panelinglamp.PanelingLamp;
 import net.philippschardt.panelinglamp.R;
 
-import Util.SlidingTabLayout;
+import util.SlidingTabLayout;
 import fragments.OnFragmentInteractionListener;
 import fragments.OnReceiverListener;
 
@@ -44,7 +44,7 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
     private SlidingTabLayout mSlidingTabLayout;
     private FormsFragmentFavs mFavsFrag;
     private FormsStandardFragment mStandardFrag;
-
+    private FormsStandardFragment mOwnFrag;
 
 
     /**
@@ -74,7 +74,8 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
         }
 
         mFavsFrag = FormsFragmentFavs.newInstance("test", "test");
-        mStandardFrag = FormsStandardFragment.newInstance("nix", "nix");
+        mStandardFrag = FormsStandardFragment.newInstance(true);
+        mOwnFrag = FormsStandardFragment.newInstance(false);
     }
 
     @Override
@@ -110,6 +111,8 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
                     return mFavsFrag;
                 case 1:
                     return mStandardFrag;
+                case 2:
+                    return mOwnFrag;
                 default:
                     return PanelingLamp.PlaceholderFragment.newInstance(num + 1);
             }
@@ -188,5 +191,6 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
     public void notifyAdapters() {
         ((OnReceiverListener) mFavsFrag).notifyAdapters();
         ((OnReceiverListener) mStandardFrag).notifyAdapters();
+        ((OnReceiverListener) mOwnFrag).notifyAdapters();
     }
 }

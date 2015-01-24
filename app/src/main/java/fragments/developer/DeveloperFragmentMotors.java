@@ -17,7 +17,7 @@ import net.philippschardt.panelinglamp.R;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import Util.MsgCreator;
+import util.MsgCreator;
 import fragments.OnFragmentInteractionListener;
 import fragments.OnReceiverListener;
 

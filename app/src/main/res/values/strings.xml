@@ -41,5 +41,9 @@
     <string name="edit_picture">Edit Picture</string>
     <string name="save">Save</string>
     <string name="add_new_form">Add New Form</string>
+    <string name="name">Name</string>
+    <string name="dialog_new_form_title">Save New Form</string>
+    <string name="dialog_new_form_take_pic_and_save">Take Picture And Save</string>
+    <string name="hint_name">Please Add a Name</string>
 
 </resources>

@@ -24,15 +24,15 @@
         <ImageView
             android:id="@+id/card_from_thumbnail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="150dp"
             android:src="@drawable/paneling_lamp"
             android:background="#000000"
-            android:scaleType="centerInside"
+            android:scaleType="centerCrop"
             android:adjustViewBounds="true"
 
-            android:minHeight="50dp"
+            android:minHeight="200dp"
             android:transitionName="thumbnail_shared"
-            />
+            android:maxHeight="250dp" />
 
         <RelativeLayout
             android:layout_width="match_parent"

@@ -23,6 +23,7 @@ public interface OnFragmentInteractionListener {
 */
     public void updateAdatpers();
     public PanelingLampDBHelper getDBHelper();
-
+    public void dispatchTakePictureIntent();
+    public void showAddNewFormDialog(float[] motorV, int[] ledV);
 
 }

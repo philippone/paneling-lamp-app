@@ -32,12 +32,9 @@ import fragments.OnReceiverListener;
 public class FormsStandardFragment extends Fragment implements OnReceiverListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM_IS_STANDARD = "FormsStandardFragment_is_standard";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private boolean isStandard;
 
     private OnFragmentInteractionListener mListener;
     private RecyclerView mRecyclerView;
@@ -48,16 +45,15 @@ public class FormsStandardFragment extends Fragment implements OnReceiverListene
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param isStandard Parameter 2.
      * @return A new instance of fragment FormsPreInstalled.
      */
     // TODO: Rename and change types and number of parameters
-    public static FormsStandardFragment newInstance(String param1, String param2) {
+    public static FormsStandardFragment newInstance(boolean isStandard) {
         FormsStandardFragment fragment = new FormsStandardFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putBoolean(ARG_PARAM_IS_STANDARD, isStandard);
+
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,8 +66,7 @@ public class FormsStandardFragment extends Fragment implements OnReceiverListene
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            isStandard = getArguments().getBoolean(ARG_PARAM_IS_STANDARD);
         }
     }
 
@@ -97,7 +92,7 @@ public class FormsStandardFragment extends Fragment implements OnReceiverListene
         SQLiteDatabase sqLiteDatabase = mListener.getDBHelper().getWritableDatabase();
 
 
-        mAdapter = new MyRecyclerViewAdapter(getActivity(), mListener, mRecyclerView, sqLiteDatabase, PanelingLampContract.FormEntry.COLUMN_IS_STANDARD,  PanelingLampContract.FormEntry.COLUMN_STANDARD_OWN_POS, R.menu.menu_card_options_standard);
+        mAdapter = new MyRecyclerViewAdapter(getActivity(), mListener, mRecyclerView, sqLiteDatabase, PanelingLampContract.FormEntry.COLUMN_IS_STANDARD,  PanelingLampContract.FormEntry.COLUMN_STANDARD_OWN_POS, isStandard ,R.menu.menu_card_options_standard);
 
         int dataSize = 100;
         List<Integer> data = new ArrayList<>(dataSize);

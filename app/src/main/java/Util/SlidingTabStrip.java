@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package Util;
+package util;
 
 import android.R;
 import android.content.Context;

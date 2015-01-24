@@ -6,7 +6,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -19,7 +22,13 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import Util.Motor;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import util.AddNewFormDialog;
+import util.Motor;
 import database.PanelingLampContract;
 import database.PanelingLampDBHelper;
 import fragments.OnFragmentInteractionListener;
@@ -32,7 +41,7 @@ import fragments.settings.SettingsFragment;
 
 public class PanelingLamp extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,
-        OnFragmentInteractionListener, OnHandleMessageListener {
+        OnFragmentInteractionListener, OnHandleMessageListener, AddNewFormDialog.OnAddNewFormDialogListener {
 
 
     private String TAG = getClass().getName();
@@ -51,6 +60,9 @@ public class PanelingLamp extends ActionBarActivity
 
     private CharSequence mTitle;
     private PanelingLampDBHelper mDbHelper;
+    private String newFormName;
+    private float[] newFormMotorV;
+    private int[] newFormledV;
 
     public Toolbar getToolbar() {
         return toolbar;
@@ -247,6 +259,11 @@ public class PanelingLamp extends ActionBarActivity
         return mDbHelper;
     }
 
+    @Override
+    public void confirmName(String name) {
+         newFormName = name;
+    }
+
 /*
     public void resetAllMotors() {
         // TODO test if motors are running
@@ -424,7 +441,74 @@ public class PanelingLamp extends ActionBarActivity
     }
 
 
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    @Override
+    public void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
 
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                        Uri.fromFile(photoFile));
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            } else {
+                Log.d(TAG, "photo == null");
+            }
+        }
+    }
+
+    @Override
+    public void showAddNewFormDialog(float[] motorV, int[] ledV) {
+        DialogFragment newFragment = new AddNewFormDialog();
+
+        // save user values
+        newFormMotorV = motorV;
+        newFormledV = ledV;
+
+        // show dialog to get name and picture
+        newFragment.show(getSupportFragmentManager(), "newformdialog");
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        Log.d(TAG, "onActivtyResutl " + newFormName);
+
+
+        // save new form
+        PanelingLampContract.saveOwnForm(mDbHelper.getWritableDatabase(), newFormName, newFormThumbPath, newFormMotorV, newFormledV);
+
+        // TODO set this form as active
+    }
+
+    String newFormThumbPath;
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        //File storageDir = Environment.getExternalStoragePublicDirectory(
+          //      Environment.DIRECTORY_PICTURES);
+        File storageDir = getExternalFilesDir("img");
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents "file:" +
+        newFormThumbPath =  image.getAbsolutePath();
+        return image;
+    }
 
 
 }
