@@ -384,6 +384,15 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
         newFragment.show(getSupportFragmentManager(), "newformdialog");
     }
 
+    @Override
+    public void onScrollUp() {
+
+    }
+
+    @Override
+    public void onScrollDown() {
+
+    }
 
 
     class ViewPagerAdapter extends FragmentStatePagerAdapter {

@@ -102,8 +102,23 @@ public class FormsStandardFragment extends Fragment implements OnReceiverListene
 
         //ExampleAdapter example = new ExampleAdapter(getActivity(), mRecyclerView, data);
         mRecyclerView.setAdapter(mAdapter);
-
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                //super.onScrolled(recyclerView, dx, dy);
+
+                float y = recyclerView.getY();
+                super.onScrolled(recyclerView, dx, dy);
+                if (y <= dy ) {
+                    mListener.onScrollUp();
+                } else {
+                    mListener.onScrollDown();
+                }
+
+            }
+        });
         return v;
     }
 
@@ -142,5 +157,15 @@ public class FormsStandardFragment extends Fragment implements OnReceiverListene
     public void notifyAdapters() {
         if (mAdapter != null)
             mAdapter.AndUpdateCards();
+    }
+
+    @Override
+    public void onScrollUp() {
+        // nothing to do
+    }
+
+    @Override
+    public void onScrollDown() {
+        // nothing to do
     }
 }

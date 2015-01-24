@@ -24,6 +24,7 @@ repositories {
     maven {
         url 'https://oss.sonatype.org/content/repositories/snapshots/'
     }
+    mavenCentral()
 }
 
 dependencies {
@@ -31,6 +32,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile 'com.makeramen:dragsortadapter:0.9.0-SNAPSHOT'
     compile 'com.getbase:floatingactionbutton:1.6.0'
+    compile 'com.github.ksoichiro:android-observablescrollview:1.4.0'
 
     compile "com.android.support:support-v4:21.+"
     compile "com.android.support:gridlayout-v7:21.+"

@@ -105,8 +105,23 @@ public class FormsFragmentFavs extends Fragment implements OnReceiverListener {
         mAdapter = new MyRecyclerViewAdapter(getActivity(), mListener, mRecyclerView, sqLiteDatabase, PanelingLampContract.FormEntry.COLUMN_FAV,  PanelingLampContract.FormEntry.COLUMN_FAV_POS, true, R.menu.menu_card_options_fav);
 
         mRecyclerView.setAdapter(mAdapter);
-
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                //super.onScrolled(recyclerView, dx, dy);
+
+                float y = recyclerView.getY();
+                super.onScrolled(recyclerView, dx, dy);
+                if (y <= dy ) {
+                    mListener.onScrollUp();
+                } else {
+                   mListener.onScrollDown();
+                }
+
+            }
+        });
 
 
         return v;
@@ -151,5 +166,15 @@ public class FormsFragmentFavs extends Fragment implements OnReceiverListener {
     @Override
     public void notifyAdapters() {
         mAdapter.AndUpdateCards();
+    }
+
+    @Override
+    public void onScrollUp() {
+        // nothing to do
+    }
+
+    @Override
+    public void onScrollDown() {
+        // nothing to do
     }
 }

@@ -4,21 +4,23 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 
 import net.philippschardt.panelinglamp.PanelingLamp;
 import net.philippschardt.panelinglamp.R;
 
-import util.SlidingTabLayout;
 import fragments.OnFragmentInteractionListener;
 import fragments.OnReceiverListener;
+import util.SlidingTabLayout;
 
 
 /**
@@ -45,6 +47,7 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
     private FormsFragmentFavs mFavsFrag;
     private FormsStandardFragment mStandardFrag;
     private FormsStandardFragment mOwnFrag;
+    private FloatingActionButton floatingButton_Add_Form;
 
 
     /**
@@ -93,6 +96,11 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
         // Bind the tabs to the ViewPager
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) v.findViewById(R.id.frag_forms_tabs);
         tabs.setViewPager(mViewPager);
+
+
+        floatingButton_Add_Form = (FloatingActionButton) v.findViewById(R.id.forms_frag_floating_add_form);
+        // TODO add onClickListener
+
         return v;
     }
 
@@ -106,6 +114,9 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
         }
 
         public Fragment getItem(int num) {
+            // show button on side change
+            showFloatingButton();
+
             switch (num) {
                 case 0:
                     return mFavsFrag;
@@ -133,24 +144,7 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
 
 
 
-    public class MyFormsPagerAdapter extends FragmentPagerAdapter {
 
-        private int pages = 2;
-
-        public MyFormsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            return PanelingLamp.PlaceholderFragment.newInstance(position + 1);
-        }
-
-        @Override
-        public int getCount() {
-            return pages;
-        }
-    }
 
 
     @Override
@@ -189,8 +183,38 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
 
     @Override
     public void notifyAdapters() {
-        ((OnReceiverListener) mFavsFrag).notifyAdapters();
-        ((OnReceiverListener) mStandardFrag).notifyAdapters();
-        ((OnReceiverListener) mOwnFrag).notifyAdapters();
+        mFavsFrag.notifyAdapters();
+        mStandardFrag.notifyAdapters();
+        mOwnFrag.notifyAdapters();
     }
+
+    @Override
+    public void onScrollUp() {
+        hideFloatingButton();
+    }
+
+    @Override
+    public void onScrollDown() {
+        showFloatingButton();
+    }
+
+
+    private void hideFloatingButton() {
+        if (floatingButton_Add_Form.getVisibility() == View.VISIBLE) {
+            Animation slide = AnimationUtils.loadAnimation(getActivity(), R.anim.floating_action_button_hide);
+            floatingButton_Add_Form.startAnimation(slide);
+            floatingButton_Add_Form.setVisibility(View.GONE);
+        }
+    }
+
+    private void showFloatingButton() {
+        if (floatingButton_Add_Form.getVisibility() == View.GONE) {
+            Animation slide = AnimationUtils.loadAnimation(getActivity(), R.anim.floating_action_button_show);
+            floatingButton_Add_Form.startAnimation(slide);
+            floatingButton_Add_Form.setVisibility(View.VISIBLE);
+        }
+    }
+
+
+
 }

@@ -6,4 +6,7 @@ public interface OnReceiverListener {
 
     public void notifyAdapters();
 
+
+    public void onScrollUp();
+    public void onScrollDown();
 }

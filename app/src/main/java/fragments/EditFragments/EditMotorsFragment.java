@@ -158,6 +158,15 @@ public class EditMotorsFragment extends Fragment implements OnReceiverListener{
         // has no adapters
     }
 
+    @Override
+    public void onScrollUp() {
+        // nothing to do
+    }
+
+    @Override
+    public void onScrollDown() {
+        // nothing to do
+    }
 
     public ArrayList<MotorItemView> getMotorItem() {
         return motorItem;

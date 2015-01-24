@@ -35,7 +35,7 @@
             android:layout_alignParentStart="true" />
 
         <com.getbase.floatingactionbutton.AddFloatingActionButton
-            android:id="@+id/floating_add_form"
+            android:id="@+id/forms_frag_floating_add_form"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 

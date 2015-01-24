@@ -82,5 +82,15 @@ public class SettingsFragment extends Fragment implements OnReceiverListener {
         // nothing to do
     }
 
+    @Override
+    public void onScrollUp() {
+        // nothing to do
+    }
+
+    @Override
+    public void onScrollDown() {
+        // nothing to do
+    }
+
 
 }

@@ -303,5 +303,15 @@ public class DeveloperFragmentMotors extends Fragment implements OnReceiverListe
         // has no adapters
     }
 
+    @Override
+    public void onScrollUp() {
+        // nothing to do
+    }
+
+    @Override
+    public void onScrollDown() {
+        // nothing to do
+    }
+
 
 }

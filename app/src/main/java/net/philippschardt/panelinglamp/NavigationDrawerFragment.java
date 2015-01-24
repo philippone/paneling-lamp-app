@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -274,8 +275,6 @@ public class NavigationDrawerFragment extends Fragment {
             return true;
         }
 
-        // TODO
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -305,7 +304,8 @@ public class NavigationDrawerFragment extends Fragment {
         if (!isStandard) {
             UtilPL.setPic(mCurrentFormThumb, thumb);
         } else {
-            mCurrentFormThumb.setImageDrawable(getActivity().getResources().getDrawable(Integer.parseInt(thumb)));
+            mCurrentFormThumb.setImageBitmap(BitmapFactory.decodeResource(getActivity().getResources(), Integer.parseInt(thumb)));
+            //mCurrentFormThumb.setImageDrawable(getActivity().getResources().getDrawable(Integer.parseInt(thumb)));
         }
     }
 

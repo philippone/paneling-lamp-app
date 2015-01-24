@@ -26,4 +26,7 @@ public interface OnFragmentInteractionListener {
     public void dispatchTakePictureIntent();
     public void showAddNewFormDialog(float[] motorV, int[] ledV);
 
+    public void onScrollUp();
+    public void onScrollDown();
+
 }

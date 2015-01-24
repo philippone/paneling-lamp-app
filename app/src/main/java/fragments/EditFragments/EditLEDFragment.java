@@ -124,6 +124,17 @@ public class EditLEDFragment extends Fragment implements OnReceiverListener{
         // has no adapters
     }
 
+    @Override
+    public void onScrollUp() {
+        // nothing to do
+    }
+
+    @Override
+    public void onScrollDown() {
+        // nothing to do
+    }
+
+
     public ArrayList<LedItemView> getLedItem() {
         return ledItem;
     }

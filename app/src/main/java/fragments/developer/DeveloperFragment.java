@@ -237,6 +237,15 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
         // has no adapters
     }
 
+    @Override
+    public void onScrollUp() {
+        // nothing to do
+    }
+
+    @Override
+    public void onScrollDown() {
+        // nothing to do
+    }
 
     class ViewPagerAdapter extends FragmentStatePagerAdapter {
 

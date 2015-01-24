@@ -488,10 +488,25 @@ public class PanelingLamp extends ActionBarActivity
         newFragment.show(getSupportFragmentManager(), "newformdialog");
     }
 
+    @Override
+    public void onScrollUp() {
+        OnReceiverListener frag = (OnReceiverListener) currentFragment;
+        frag.onScrollUp();
+    }
+
+    @Override
+    public void onScrollDown() {
+        OnReceiverListener frag = (OnReceiverListener) currentFragment;
+        frag.onScrollDown();
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        // TODO if abort
+
+        // if image was taken
         Log.d(TAG, "onActivtyResutl " + newFormName);
 
         // save new in DB form
