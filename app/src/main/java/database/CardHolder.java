@@ -2,6 +2,8 @@ package database;
 
 import android.database.Cursor;
 
+import net.philippschardt.panelinglamp.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -136,4 +138,5 @@ public class CardHolder {
         return list;
 
     }
+
 }

@@ -12,7 +12,7 @@ public class UtilPL {
 
     public static void setPic(ImageView mImageView, String mCurrentPhotoPath) {
         // Get the dimensions of the View
-        int targetW = 300;//mImageView.getWidth();
+        /*int targetW = 300;//mImageView.getWidth();
         int targetH = 300;//mImageView.getHeight();
 
         // Get the dimensions of the bitmap
@@ -22,12 +22,15 @@ public class UtilPL {
         int photoW = bmOptions.outWidth;
         int photoH = bmOptions.outHeight;
 
+        Log.d("UtilPL", "file " + photoW  + " x " + photoH);
+
         // Determine how much to scale down the image
         int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
-
+*/
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         // Decode the image file into a Bitmap sized to fill the View
         bmOptions.inJustDecodeBounds = false;
-        bmOptions.inSampleSize = scaleFactor;
+        //bmOptions.inSampleSize = scaleFactor;
         bmOptions.inPurgeable = true;
 
         Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);

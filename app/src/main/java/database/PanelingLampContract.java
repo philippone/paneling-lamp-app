@@ -1,8 +1,11 @@
 package database;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
+
+import java.io.File;
 
 /**
  * Created by philipp on 19.01.15.
@@ -192,13 +195,61 @@ public class PanelingLampContract {
     }
 
 
-    public static void deleteForm(SQLiteDatabase mDB, long id) {
-        // Define 'where' part of query.
-        String selection = FormEntry._ID + " LIKE ?";
-        // Specify arguments in placeholder order.
+    public static Cursor getForm(SQLiteDatabase db, long id) {
+
+        // Define a projection that specifies which columns from the database
+        // you will actually use after this query.
+        String[] projection = {
+                FormEntry._ID,
+                FormEntry.COLUMN_NAME_ENTRY_ID,
+                FormEntry.COLUMN_NAME_TITLE,
+                FormEntry.COLUMN_PATH_THUMBNAIL,
+                FormEntry.COLUMN_POS_MOTOR_0,
+                FormEntry.COLUMN_POS_MOTOR_1,
+                FormEntry.COLUMN_POS_MOTOR_2,
+                FormEntry.COLUMN_POS_MOTOR_3,
+                FormEntry.COLUMN_POS_MOTOR_4,
+                FormEntry.COLUMN_LED_0,
+                FormEntry.COLUMN_LED_1,
+                FormEntry.COLUMN_LED_2,
+                FormEntry.COLUMN_LED_3,
+                FormEntry.COLUMN_ACTIVE,
+                FormEntry.COLUMN_FAV,
+                FormEntry.COLUMN_FAV_POS,
+                FormEntry.COLUMN_IS_STANDARD,
+                FormEntry.COLUMN_STANDARD_OWN_POS
+        };
+
+        // Which row to update, based on the ID
+        String selection = FormEntry._ID + " = ?";
         String[] selectionArgs = {String.valueOf(id)};
-        // Issue SQL statement.
+
+
+        Cursor c = db.query(
+                FormEntry.TABLE_NAME,                     // The table to query
+                projection,                               // The columns to return
+                selection,                                // The columns for the WHERE clause
+                selectionArgs,                            // The values for the WHERE clause
+                null,                                     // don't group the rows
+                null,                                     // don't filter by row groups
+                null                                      // The sort order
+        );
+
+        return c;
+    }
+
+    public static void deleteForm(SQLiteDatabase mDB, CardHolder card) {
+
+        String selection = FormEntry._ID + " LIKE ?";
+        String[] selectionArgs = {String.valueOf(card.getId())};
         mDB.delete(FormEntry.TABLE_NAME, selection, selectionArgs);
+
+        // delete image thumbnail in filesystem
+        if (!card.isStandard()) {
+            File f = new File(card.getThumbnail());
+            if (f.exists())
+                f.delete();
+        }
     }
 
 }

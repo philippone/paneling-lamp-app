@@ -3,6 +3,8 @@ package net.philippschardt.panelinglamp;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -20,7 +22,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+
+import database.PanelingLampContract;
+import util.UtilPL;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -58,6 +64,7 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
     private Toolbar toolbar;
+    private ImageView mCurrentFormThumb;
 
     public NavigationDrawerFragment() {
     }
@@ -115,6 +122,8 @@ public class NavigationDrawerFragment extends Fragment {
 
         mDrawerListView.setAdapter(adapter);
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
+
+        mCurrentFormThumb = (ImageView) v.findViewById(R.id.drawer_thumbview);
         return v;
     }
 
@@ -283,6 +292,21 @@ public class NavigationDrawerFragment extends Fragment {
 
     private ActionBar getActionBar() {
         return ((ActionBarActivity) getActivity()).getSupportActionBar();
+    }
+
+    public void updateCurrentForm(SQLiteDatabase db, long id) {
+
+       Cursor c = PanelingLampContract.getForm(db, id);
+
+        c.moveToFirst();
+        String thumb = c.getString(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_PATH_THUMBNAIL));
+        boolean isStandard = c.getInt(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_IS_STANDARD)) == 1 ? true : false;
+
+        if (!isStandard) {
+            UtilPL.setPic(mCurrentFormThumb, thumb);
+        } else {
+            mCurrentFormThumb.setImageDrawable(getActivity().getResources().getDrawable(Integer.parseInt(thumb)));
+        }
     }
 
     /**

@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -23,12 +25,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import util.AddNewFormDialog;
-import util.Motor;
 import database.PanelingLampContract;
 import database.PanelingLampDBHelper;
 import fragments.OnFragmentInteractionListener;
@@ -37,6 +38,8 @@ import fragments.developer.DeveloperFragment;
 import fragments.forms.FormsFragment;
 import fragments.forms.OnHandleMessageListener;
 import fragments.settings.SettingsFragment;
+import util.AddNewFormDialog;
+import util.Motor;
 
 
 public class PanelingLamp extends ActionBarActivity
@@ -63,6 +66,7 @@ public class PanelingLamp extends ActionBarActivity
     private String newFormName;
     private float[] newFormMotorV;
     private int[] newFormledV;
+    private File photoFile;
 
     public Toolbar getToolbar() {
         return toolbar;
@@ -121,7 +125,7 @@ public class PanelingLamp extends ActionBarActivity
                 null,
                 PanelingLampContract.FormEntry.createContentValues("Form 2", R.drawable.paneling_lamp2 + "", 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 255, 255, 0, 0, false, true, 1, true, 1));
 
-         for (int i = 2; i < 15; i++) {
+         for (int i = 2; i < 10; i++) {
             // Insert the new row, returning the primary key value of the new row
             db.insert(
                     PanelingLampContract.FormEntry.TABLE_NAME,
@@ -129,6 +133,7 @@ public class PanelingLamp extends ActionBarActivity
                     PanelingLampContract.FormEntry.createContentValues("Form " + i, R.drawable.paneling_lamp + "", 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 255, 255, 0, 0, false, false, i, true, 0));
         }
 */
+
         Intent i = new Intent(this, MySocketService.class);
         startService(i);
     }
@@ -403,6 +408,9 @@ public class PanelingLamp extends ActionBarActivity
             // notify view
             // todo notify all listviews
             ((OnReceiverListener) currentFragment).notifyAdapters();
+
+            // notify drawer
+            mNavigationDrawerFragment.updateCurrentForm(mDbHelper.getReadableDatabase(), id);
         }
     }
 
@@ -447,7 +455,7 @@ public class PanelingLamp extends ActionBarActivity
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
-            File photoFile = null;
+            photoFile = null;
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
@@ -459,6 +467,9 @@ public class PanelingLamp extends ActionBarActivity
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
                         Uri.fromFile(photoFile));
                 startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+
+
+
             } else {
                 Log.d(TAG, "photo == null");
             }
@@ -483,11 +494,49 @@ public class PanelingLamp extends ActionBarActivity
 
         Log.d(TAG, "onActivtyResutl " + newFormName);
 
-
-        // save new form
+        // save new in DB form
         PanelingLampContract.saveOwnForm(mDbHelper.getWritableDatabase(), newFormName, newFormThumbPath, newFormMotorV, newFormledV);
 
-        // TODO set this form as active
+
+        /**
+         * scale image down and overwrite
+         * */
+        // Get the dimensions of the View
+        int targetW = 500;//mImageView.getWidth();
+        int targetH = 500;//mImageView.getHeight();
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(newFormThumbPath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        Log.d(TAG, "file " + photoW  + " x " + photoH);
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+        Bitmap bitmap = BitmapFactory.decodeFile(newFormThumbPath, bmOptions);
+
+
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(photoFile);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        photoFile = null;
+
     }
 
     String newFormThumbPath;

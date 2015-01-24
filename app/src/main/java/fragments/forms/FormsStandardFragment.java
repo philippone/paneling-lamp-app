@@ -92,7 +92,7 @@ public class FormsStandardFragment extends Fragment implements OnReceiverListene
         SQLiteDatabase sqLiteDatabase = mListener.getDBHelper().getWritableDatabase();
 
 
-        mAdapter = new MyRecyclerViewAdapter(getActivity(), mListener, mRecyclerView, sqLiteDatabase, PanelingLampContract.FormEntry.COLUMN_IS_STANDARD,  PanelingLampContract.FormEntry.COLUMN_STANDARD_OWN_POS, isStandard ,R.menu.menu_card_options_standard);
+        mAdapter = new MyRecyclerViewAdapter(getActivity(), mListener, mRecyclerView, sqLiteDatabase, PanelingLampContract.FormEntry.COLUMN_IS_STANDARD, PanelingLampContract.FormEntry.COLUMN_STANDARD_OWN_POS, isStandard, R.menu.menu_card_options_standard);
 
         int dataSize = 100;
         List<Integer> data = new ArrayList<>(dataSize);
@@ -140,6 +140,7 @@ public class FormsStandardFragment extends Fragment implements OnReceiverListene
 
     @Override
     public void notifyAdapters() {
-        mAdapter.AndUpdateCards();
+        if (mAdapter != null)
+            mAdapter.AndUpdateCards();
     }
 }

@@ -27,10 +27,10 @@ import net.philippschardt.panelinglamp.R;
 
 import java.util.List;
 
+import fragments.OnFragmentInteractionListener;
 import util.DragSortAdapter;
 import util.MsgCreator;
 import util.UtilPL;
-import fragments.OnFragmentInteractionListener;
 
 /**
  * Created by philipp on 20.01.15.
@@ -147,7 +147,7 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
                         mListener.updateAdatpers();
                         break;
                     case R.id.delete_form:
-                        PanelingLampContract.deleteForm(mDB, cCard.getId());
+                        PanelingLampContract.deleteForm(mDB, cCard);
                         mListener.updateAdatpers();
                         break;
 
@@ -286,6 +286,8 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
     @Override
     public void onBindViewHolder(MyRecyclerViewAdapter.MainViewHolder holder, int position) {
 
+
+        Log.d(TAG, "onBindViewHolder called");
         CardHolder card = mCards.get(position);
 
         if (card.isStandard()) {
