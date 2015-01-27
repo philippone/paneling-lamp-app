@@ -28,19 +28,19 @@
 
         <EditText
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:layout_height="?attr/actionBarSize"
+            android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Form Name"
             android:id="@+id/edit_motors_name"
             android:layout_marginLeft="0dp"
             android:padding="10dp"
             android:textColor="#FFFFFFFF"
-            android:background="#88000000"
+            android:background="#55009688"
             android:layout_above="@+id/edit_motors_tabs"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
             android:transitionName="name_shared"
-            android:visibility="gone"/>
+            android:visibility="visible"/>
 
         <com.astuetz.PagerSlidingTabStrip
             android:id="@+id/edit_motors_tabs"

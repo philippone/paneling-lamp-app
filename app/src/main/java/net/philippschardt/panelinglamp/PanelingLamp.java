@@ -112,7 +112,7 @@ public class PanelingLamp extends ActionBarActivity
 
 
 
-/*
+/*c
         // Insert the new row, returning the primary key value of the new row
         db.insert(
                 PanelingLampContract.FormEntry.TABLE_NAME,

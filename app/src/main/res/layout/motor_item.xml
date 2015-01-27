@@ -65,17 +65,22 @@
 
             <ImageButton
                 style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:id="@+id/motor_item_button_up"
-                android:src="@android:drawable/arrow_up_float" />
+                android:src="@drawable/ic_action_up"
+                android:scaleType="fitXY"
+                android:background="@color/primary"
+                android:layout_marginRight="5dp" />
 
             <ImageButton
                 style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:id="@+id/motor_item_button_down"
-                android:src="@android:drawable/arrow_down_float" />
+                android:src="@drawable/ic_action_down"
+                android:scaleType="fitXY"
+                android:background="@color/primary" />
         </LinearLayout>
 
         <TextView

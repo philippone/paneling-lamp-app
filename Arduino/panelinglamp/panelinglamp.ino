@@ -530,8 +530,8 @@ void sendFormReachedReply(long currFormID) {
 void initStepper() {
   // init all steppers
   for (int i=0; i < sizeof(motors); i++) {
-    motors[i]->setMaxSpeed(1000);
-    motors[i]->setAcceleration(800);
+    motors[i]->setMaxSpeed(2000);
+    motors[i]->setAcceleration(1000);
   } 
 }
 
