@@ -100,7 +100,7 @@ void loop() {
       //Serial.println(msg);
     } 
   }
-
+  /*
   // check that motor never reach position -1
   for (int i = 0; i < motorCount; i++) {
     if(motors[i]->currentPosition() >= 0)  {
@@ -110,10 +110,10 @@ void loop() {
     	motors[i]->setCurrentPosition(0);
     }
   }
-
-
-  
-
+*/
+for (int i = 0; i < motorCount; i++) {
+  motors[i]->run();
+}
 
   // send rely to phone when motor has reached his position
   for (int i = 0; i < motorCount; i++) {

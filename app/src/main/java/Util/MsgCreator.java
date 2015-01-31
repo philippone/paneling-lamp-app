@@ -54,10 +54,10 @@ public class MsgCreator {
         return "sa;" + stepper + ";" + rotations + ";\n";
     }
 
-    public static String moveToForm(long id, float m0, float m1, float m2, float m3, float m4, int l0, int l1, int l2, int l3) {
+   /* public static String moveToForm(long id, float m0, float m1, float m2, float m3, float m4, int l0, int l1, int l2, int l3) {
         return "mf;" + id + ";" + m0 + ";" + m1 + ";" + m2 + ";"+ m3 + ";"+ m4 + ";" + l0 + ";" + l1 + ";" + l2 + ";" + l3 + ";\n";
     }
-
+*/
     public static String moveToForm(long id, float[] m, int[] l) {
         String msg = "mf;" + id + ";";
         for(float p : m) {

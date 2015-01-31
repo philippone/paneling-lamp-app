@@ -34,7 +34,7 @@ import database.PanelingLampContract;
 import database.PanelingLampDBHelper;
 import fragments.OnFragmentInteractionListener;
 import fragments.OnReceiverListener;
-import fragments.developer.DeveloperFragment;
+import fragments.EditFragments.ManualControlFragment;
 import fragments.forms.FormsFragment;
 import fragments.forms.OnHandleMessageListener;
 import fragments.settings.SettingsFragment;
@@ -183,7 +183,7 @@ public class PanelingLamp extends ActionBarActivity
                 currentFragment = FormsFragment.newInstance(position + 1);
                 break;
             case 1:
-                currentFragment = DeveloperFragment.newInstance(position + 1);
+                currentFragment = ManualControlFragment.newInstance(position + 1);
                 break;
             case 2:
                 currentFragment = SettingsFragment.newInstance(position + 1);

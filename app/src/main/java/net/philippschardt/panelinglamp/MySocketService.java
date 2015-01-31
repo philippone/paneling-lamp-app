@@ -122,9 +122,10 @@ public class MySocketService extends Service {
 
         try {
 
-            //Log.d(TAG,getSystemService(BLUETOOTH_SERVICE).getClass().getName());
-            bluetoothManager = (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
-
+            if (Build.VERSION.SDK_INT > 18) {
+                //Log.d(TAG,getSystemService(BLUETOOTH_SERVICE).getClass().getName());
+                bluetoothManager = (BluetoothManager) getSystemService(BLUETOOTH_SERVICE);
+            }
             if (Build.VERSION.SDK_INT < 18) {
                 bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
             } else {

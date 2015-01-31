@@ -16,6 +16,7 @@ import util.MotorItemView;
 import util.MsgCreator;
 import fragments.OnFragmentInteractionListener;
 import fragments.OnReceiverListener;
+import util.MyObservableScrollView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -114,6 +115,8 @@ public class EditMotorsFragment extends Fragment implements OnReceiverListener{
             cont.addView(mv);
         }
 
+        MyObservableScrollView mScrollView = (MyObservableScrollView) v.findViewById(R.id.frag_edit_motor_scrollView);
+        mScrollView.setFragInteractionListener(mListener);
 
 
         return v;
@@ -160,12 +163,12 @@ public class EditMotorsFragment extends Fragment implements OnReceiverListener{
 
     @Override
     public void onScrollUp() {
-        // nothing to do
+        mListener.onScrollUp();
     }
 
     @Override
     public void onScrollDown() {
-        // nothing to do
+        mListener.onScrollDown();
     }
 
     public ArrayList<MotorItemView> getMotorItem() {

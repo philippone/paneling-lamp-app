@@ -1,4 +1,4 @@
-package fragments.developer;
+package fragments.EditFragments;
 
 import android.animation.Animator;
 import android.annotation.TargetApi;
@@ -14,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
 import com.astuetz.PagerSlidingTabStrip;
@@ -23,22 +25,20 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 import net.philippschardt.panelinglamp.PanelingLamp;
 import net.philippschardt.panelinglamp.R;
 
-import util.MotorItemView;
-import util.MsgCreator;
-import fragments.EditFragments.EditLEDFragment;
-import fragments.EditFragments.EditMotorsFragment;
 import fragments.OnFragmentInteractionListener;
 import fragments.OnReceiverListener;
+import util.MotorItemView;
+import util.MsgCreator;
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
  * {@link fragments.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link DeveloperFragment#newInstance} factory method to
+ * Use the {@link ManualControlFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DeveloperFragment extends Fragment implements OnReceiverListener {
+public class ManualControlFragment extends Fragment implements OnReceiverListener {
 
     private final String TAG = getClass().getName();
 
@@ -68,15 +68,15 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
      * @return A new instance of fragment Forms.
      */
     // TODO: Rename and change types and number of parameters
-    public static DeveloperFragment newInstance(int sectionNr) {
-        DeveloperFragment fragment = new DeveloperFragment();
+    public static ManualControlFragment newInstance(int sectionNr) {
+        ManualControlFragment fragment = new ManualControlFragment();
         Bundle args = new Bundle();
         args.putInt(DEV_ARG_PARAM1, sectionNr);
         fragment.setArguments(args);
         return fragment;
     }
 
-    public DeveloperFragment() {
+    public ManualControlFragment() {
         // Required empty public constructor
     }
 
@@ -88,7 +88,7 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
         }
 
         mEditMotorsFragment = EditMotorsFragment.newInstance();
-        mEditLEDFragment = EditLEDFragment.newInstance(new int[]{0, 0, 0, 0});
+        mEditLEDFragment = EditLEDFragment.newInstance(new int[]{0, 0, 0, 0,0,0,0});
 
 
     }
@@ -104,9 +104,21 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
         pagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
         mViewPager.setAdapter(pagerAdapter);
 
+        ViewPager.SimpleOnPageChangeListener pageListener =
+         new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+
+                showFloatingMenu();
+
+            }
+        };
+
         // Bind the tabs to the ViewPager
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) v.findViewById(R.id.frag_forms_tabs);
         tabs.setViewPager(mViewPager);
+        tabs.setOnPageChangeListener(pageListener);
 
 
         alphaView = (ImageView) v.findViewById(R.id.manual_control_apha_view);
@@ -239,12 +251,33 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
 
     @Override
     public void onScrollUp() {
-        // nothing to do
+        hideFloatingMenu();
     }
+
+
 
     @Override
     public void onScrollDown() {
-        // nothing to do
+        showFloatingMenu();
+    }
+
+
+
+    private void hideFloatingMenu() {
+        if (floatingMenu.getVisibility() == View.VISIBLE) {
+            Animation slide = AnimationUtils.loadAnimation(getActivity(), R.anim.floating_action_button_hide);
+            floatingMenu.startAnimation(slide);
+            floatingMenu.setVisibility(View.GONE);
+        }
+    }
+
+    private void showFloatingMenu() {
+        Log.d(TAG, "showFloatingMenu");
+        if (floatingMenu.getVisibility() == View.GONE) {
+            Animation slide = AnimationUtils.loadAnimation(getActivity(), R.anim.floating_action_button_show);
+            floatingMenu.startAnimation(slide);
+            floatingMenu.setVisibility(View.VISIBLE);
+        }
     }
 
     class ViewPagerAdapter extends FragmentStatePagerAdapter {
@@ -256,6 +289,9 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
 
         }
 
+
+
+
         public Fragment getItem(int num) {
             switch (num) {
                 case 0:
@@ -266,6 +302,8 @@ public class DeveloperFragment extends Fragment implements OnReceiverListener {
             }
             return PanelingLamp.PlaceholderFragment.newInstance(num + 1);
         }
+
+
 
         @Override
         public int getCount() {

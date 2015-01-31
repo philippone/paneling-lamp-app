@@ -92,10 +92,21 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
         mViewPager = (ViewPager) v.findViewById(R.id.frag_forms_viewPager);
         pagerAdapter = new ViewPagerAdapter(getActivity().getSupportFragmentManager());
         mViewPager.setAdapter(pagerAdapter);
+        ViewPager.SimpleOnPageChangeListener pageListener =
+                new ViewPager.SimpleOnPageChangeListener() {
+                    @Override
+                    public void onPageSelected(int position) {
+                        super.onPageSelected(position);
+
+                        showFloatingButton();
+
+                    }
+                };
 
         // Bind the tabs to the ViewPager
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) v.findViewById(R.id.frag_forms_tabs);
         tabs.setViewPager(mViewPager);
+        tabs.setOnPageChangeListener(pageListener);
 
 
         floatingButton_Add_Form = (FloatingActionButton) v.findViewById(R.id.forms_frag_floating_add_form);
@@ -114,9 +125,6 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
         }
 
         public Fragment getItem(int num) {
-            // show button on side change
-            showFloatingButton();
-
             switch (num) {
                 case 0:
                     return mFavsFrag;

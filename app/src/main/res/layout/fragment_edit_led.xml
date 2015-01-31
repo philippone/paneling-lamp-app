@@ -2,10 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent" tools:context="fragments.EditFragments.EditLEDFragment">
 
-    <ScrollView
+    <util.MyObservableScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/scrollView2" >
+        android:id="@+id/frag_edit_led_scrollView" >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -15,6 +15,6 @@
             android:id="@+id/frag_edit_led_container">
 
         </LinearLayout>
-    </ScrollView>
+    </util.MyObservableScrollView>
 
 </FrameLayout>

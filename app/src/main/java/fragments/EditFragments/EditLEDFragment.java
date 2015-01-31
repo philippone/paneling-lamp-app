@@ -12,23 +12,23 @@ import net.philippschardt.panelinglamp.R;
 
 import java.util.ArrayList;
 
-import util.LedItemView;
 import fragments.OnFragmentInteractionListener;
 import fragments.OnReceiverListener;
+import util.LedItemView;
+import util.MyObservableScrollView;
 
 
 public class EditLEDFragment extends Fragment implements OnReceiverListener{
 
+    private static final String ARG_PARAM_LED = "EditLEDFragment_led";
     private static final String ARG_PARAM_LED_0 = "EditLEDFragment_led_0";
     private static final String ARG_PARAM_LED_1 = "EditLEDFragment_led_1";
     private static final String ARG_PARAM_LED_2 = "EditLEDFragment_led_2";
     private static final String ARG_PARAM_LED_3 = "EditLEDFragment_led_3";
 
 
-    private int led0;
-    private int led1;
-    private int led2;
-    private int led3;
+    private int[] led;
+
 
     private OnFragmentInteractionListener mListener;
     private ArrayList<LedItemView> ledItem;
@@ -44,10 +44,7 @@ public class EditLEDFragment extends Fragment implements OnReceiverListener{
     public static EditLEDFragment newInstance(int... l) {
         EditLEDFragment fragment = new EditLEDFragment();
         Bundle args = new Bundle();
-        args.putInt(ARG_PARAM_LED_0, l[0]);
-        args.putInt(ARG_PARAM_LED_1, l[1]);
-        args.putInt(ARG_PARAM_LED_2, l[2]);
-        args.putInt(ARG_PARAM_LED_3, l[3]);
+        args.putIntArray(ARG_PARAM_LED, l);
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,17 +59,23 @@ public class EditLEDFragment extends Fragment implements OnReceiverListener{
         ledItem = new ArrayList<LedItemView>();
 
         if (getArguments() != null) {
-            led0 = getArguments().getInt(ARG_PARAM_LED_0);
-            led1 = getArguments().getInt(ARG_PARAM_LED_1);
-            led2 = getArguments().getInt(ARG_PARAM_LED_2);
-            led3 = getArguments().getInt(ARG_PARAM_LED_3);
+            led = getArguments().getIntArray(ARG_PARAM_LED);
+            ledItem.add(new LedItemView(getActivity(), mListener, -1, "All", getMax(led)));
 
+            for (int i = 0; i < led.length; i++) {
+                ledItem.add(new LedItemView(getActivity(), mListener, i, i+1 +"", led[i]));
+            }
 
-            ledItem.add(new LedItemView(getActivity(), mListener, 0, "1", led0));
-            ledItem.add(new LedItemView(getActivity(), mListener, 1, "2", led1));
-            ledItem.add(new LedItemView(getActivity(), mListener, 2, "3", led2));
-            ledItem.add(new LedItemView(getActivity(), mListener, 3, "4", led3));
         }
+    }
+
+    private int getMax(int[] led) {
+        int max = 0;
+        for (int i = 0; i < led.length; i++) {
+            if (led[i] > max)
+                max = led[i];
+        }
+        return max;
     }
 
     @Override
@@ -87,7 +90,8 @@ public class EditLEDFragment extends Fragment implements OnReceiverListener{
         }
 
 
-
+        MyObservableScrollView mScrollView = (MyObservableScrollView) v.findViewById(R.id.frag_edit_led_scrollView);
+        mScrollView.setFragInteractionListener(mListener);
 
         return v;
     }
@@ -126,12 +130,12 @@ public class EditLEDFragment extends Fragment implements OnReceiverListener{
 
     @Override
     public void onScrollUp() {
-        // nothing to do
+        mListener.onScrollUp();
     }
 
     @Override
     public void onScrollDown() {
-        // nothing to do
+        mListener.onScrollDown();
     }
 
 
