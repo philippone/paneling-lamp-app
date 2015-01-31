@@ -36,11 +36,11 @@
             android:layout_below="@+id/frag_forms_tabs"
             android:layout_alignParentStart="true" />
 
-        <com.getbase.floatingactionbutton.AddFloatingActionButton
+        <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/forms_frag_floating_add_form"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
+            fab:fab_icon="@drawable/ic_action_new_label"
             fab:fab_plusIconColor="@color/white"
             fab:fab_colorNormal="@color/floatingButtonNormal"
             fab:fab_colorPressed="@color/floatingButtonPressed"

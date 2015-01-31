@@ -22,6 +22,7 @@
     <color name="black">#000</color>
     <color name="black_semi_transparent">#DD000000</color>
     <color name="white_semi_transparent">#CCFFFFFF</color>
+    <color name="black_rly_transparent">#66000000</color>
 
     <color name="primary">#009688</color>
     <color name="primary_dark">#00695c</color>
@@ -30,5 +31,9 @@
     <color name="floatingButtonNormal">#ff9800</color>
     <color name="floatingButtonPressed">#fff3e0</color>
 
+    <color name="blue">#3f51b5</color>
+    <color name="red">#f44336</color>
+    <color name="brown">#795548</color>
+    <color name="bluegrey">#607d8b</color>
 
 </resources>
