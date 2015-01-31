@@ -17,6 +17,8 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
+            android:textColor="@color/white"
+            app:pstsIndicatorColor="@color/white"
             />
 
 
@@ -48,11 +50,12 @@
             android:layout_alignParentEnd="true"
             fab:fab_addButtonColorNormal="@color/floatingButtonNormal"
             fab:fab_addButtonColorPressed="@color/floatingButtonPressed"
-            fab:fab_addButtonPlusIconColor="#66000000"
+            fab:fab_addButtonPlusIconColor="@color/white"
             fab:fab_labelStyle="@style/menu_labels_style"
             android:layout_marginBottom="16dp"
-            android:layout_marginRight="16dp"
-            android:layout_marginEnd="16dp">
+            android:layout_marginRight="15dp"
+            android:layout_marginEnd="16dp"
+            android:layout_margin="10dp">
 
 
 

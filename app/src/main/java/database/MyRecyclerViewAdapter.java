@@ -229,7 +229,10 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
                 PanelingLampContract.FormEntry.COLUMN_LED_0,
                 PanelingLampContract.FormEntry.COLUMN_LED_1,
                 PanelingLampContract.FormEntry.COLUMN_LED_2,
-                PanelingLampContract.FormEntry.COLUMN_LED_3
+                PanelingLampContract.FormEntry.COLUMN_LED_3,
+                PanelingLampContract.FormEntry.COLUMN_LED_4,
+                PanelingLampContract.FormEntry.COLUMN_LED_5,
+                PanelingLampContract.FormEntry.COLUMN_LED_6
         };
 
         // How you want the results sorted in the resulting Cursor

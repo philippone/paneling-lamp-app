@@ -177,8 +177,8 @@ public class ManualControlFragment extends Fragment implements OnReceiverListene
             @Override
             public void onClick(View v) {
                 floatingMenu.toggle();
-                float[] m = new float[5];
-                int[] l = new int[4];
+                float[] m = new float[PanelingLamp.MOTOR_NUMBER];
+                int[] l = new int[PanelingLamp.LED_NUMBER];
 
                 for (int i = 0; i < m.length; i++) {
                     m[i] = mEditMotorsFragment.getMotorItem().get(i).getmPos();

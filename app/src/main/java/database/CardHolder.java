@@ -2,8 +2,6 @@ package database;
 
 import android.database.Cursor;
 
-import net.philippschardt.panelinglamp.R;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -125,10 +123,13 @@ public class CardHolder {
             int l1 = c.getInt(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_LED_1));
             int l2 = c.getInt(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_LED_2));
             int l3 = c.getInt(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_LED_3));
+            int l4 = c.getInt(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_LED_4));
+            int l5 = c.getInt(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_LED_5));
+            int l6 = c.getInt(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_LED_6));
 
             boolean isStandard = c.getInt(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_IS_STANDARD)) == 1 ? true : false;
 
-            CardHolder card = new CardHolder(id, cardName, thumb, pos, status, isStandard, new float[] {m0,m1,m2,m3,m4}, new int[] {l0,l1,l2,l3});
+            CardHolder card = new CardHolder(id, cardName, thumb, pos, status, isStandard, new float[] {m0,m1,m2,m3,m4}, new int[] {l0,l1,l2,l3,l4,l5,l6,});
             list.add(card);
 
 

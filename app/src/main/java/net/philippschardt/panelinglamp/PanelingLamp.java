@@ -47,6 +47,8 @@ public class PanelingLamp extends ActionBarActivity
         OnFragmentInteractionListener, OnHandleMessageListener, AddNewFormDialog.OnAddNewFormDialogListener {
 
 
+    public static final int MOTOR_NUMBER = 5;
+    public static final int LED_NUMBER = 7;
     private String TAG = getClass().getName();
 
 
@@ -112,28 +114,28 @@ public class PanelingLamp extends ActionBarActivity
 
 
 
-/*c
+/*
         // Insert the new row, returning the primary key value of the new row
         db.insert(
                 PanelingLampContract.FormEntry.TABLE_NAME,
                 null,
-                PanelingLampContract.FormEntry.createContentValues("Form 1" , R.drawable.paneling_lamp + "", 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 255, 255, 0, 0, false, true, 0, true, 0));
+                PanelingLampContract.FormEntry.createContentValues("Form 1" , R.drawable.paneling_lamp + "", 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 255, 255, 0, 0,0,0, 0, false, true, 0, true, 0));
 
         // Insert the new row, returning the primary key value of the new row
         db.insert(
                 PanelingLampContract.FormEntry.TABLE_NAME,
                 null,
-                PanelingLampContract.FormEntry.createContentValues("Form 2", R.drawable.paneling_lamp2 + "", 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 255, 255, 0, 0, false, true, 1, true, 1));
+                PanelingLampContract.FormEntry.createContentValues("Form 2", R.drawable.paneling_lamp2 + "", 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 255, 255, 0,0,0,0, 0, false, true, 1, true, 1));
 
          for (int i = 2; i < 10; i++) {
             // Insert the new row, returning the primary key value of the new row
             db.insert(
                     PanelingLampContract.FormEntry.TABLE_NAME,
                     null,
-                    PanelingLampContract.FormEntry.createContentValues("Form " + i, R.drawable.paneling_lamp + "", 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 255, 255, 0, 0, false, false, i, true, 0));
+                    PanelingLampContract.FormEntry.createContentValues("Form " + i, R.drawable.paneling_lamp + "", 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 255, 255, 0, 0, 0,0,0, false, false, i, true, 0));
         }
-*/
 
+*/
         Intent i = new Intent(this, MySocketService.class);
         startService(i);
     }

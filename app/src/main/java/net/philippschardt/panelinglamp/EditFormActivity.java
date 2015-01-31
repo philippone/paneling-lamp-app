@@ -209,8 +209,9 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
 
 
 
+
                 float[] mV = new float[]{m.get(0).getmPos(),m.get(1).getmPos(),m.get(2).getmPos(),m.get(3).getmPos(),m.get(4).getmPos()};
-                int[] lV = new int[] {l.get(0).getValue(),l.get(1).getValue(),l.get(2).getValue(),l.get(3).getValue()};
+                int[] lV = new int[] {l.get(0).getValue(),l.get(1).getValue(),l.get(2).getValue(),l.get(3).getValue(), l.get(4).getValue(),l.get(5).getValue(),l.get(6).getValue()};
 
                 //update db
                 PanelingLampContract.updateCardMotorLED(mDbHelper.getWritableDatabase(), cardID, name, thumb, mV, lV);
