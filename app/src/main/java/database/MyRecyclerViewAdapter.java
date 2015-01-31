@@ -123,10 +123,6 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
                         editActivity.putExtra(EditFormActivity.EXTRA_IS_STANDARD, cCard.isStandard());
 
 
-                        MainViewHolder holder = (MainViewHolder) mRecyclerView.findViewHolderForItemId(cCard.getId());
-
-                        ImageView thumbnail = holder.thumbnail;
-
                         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(
                                 (PanelingLamp)mContext,
                                 Pair.create((View)thumbnail, "thumbnail_shared")
@@ -182,7 +178,8 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
                 CardHolder tmpCard = mCards.get(i);
                 if (tmpCard.getStatus() > 0) {
                     tmpCard.setStatus(0);
-                    notifyItemChanged(mRecyclerView.findViewHolderForItemId(tmpCard.getId()).getPosition());
+                    notifyDataSetChanged();
+                    //notifyItemChanged(mRecyclerView.findViewHolderForItemId(tmpCard.getId()).getPosition());
                 }
             }
 
