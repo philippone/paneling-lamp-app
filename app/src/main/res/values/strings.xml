@@ -13,8 +13,9 @@
     <string name="title_activity_paneling_lamp">PanelingLamp</string>
     <string name="title_section1">Shape</string>
     <string name="title_section2">Manual Control</string>
-    <string name="title_section3">Settings</string>
-    <string name="title_section4">About</string>
+    <string name="title_section3">About</string>
+    <string name="title_section4">Impress</string>
+    <string name="title_section5">Settings</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
@@ -45,5 +46,6 @@
     <string name="dialog_new_form_title">Save New Form</string>
     <string name="dialog_new_form_take_pic_and_save">Take Picture And Save</string>
     <string name="hint_name">Please Add a Name</string>
+
 
 </resources>

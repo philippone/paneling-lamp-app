@@ -187,8 +187,10 @@ public class PanelingLamp extends ActionBarActivity
             case 1:
                 currentFragment = ManualControlFragment.newInstance(position + 1);
                 break;
-            case 2:
+
+            case 4:
                 currentFragment = SettingsFragment.newInstance(position + 1);
+
                 break;
             case 3:
             // TODO settings, about
@@ -235,6 +237,8 @@ public class PanelingLamp extends ActionBarActivity
             case 4:
                 mTitle = getString(R.string.title_section4);
                 break;
+            case 5:
+                mTitle = getString(R.string.title_section5);
         }
 
         Log.d(TAG, "set Title" + mTitle);
@@ -270,48 +274,6 @@ public class PanelingLamp extends ActionBarActivity
     public void confirmName(String name) {
          newFormName = name;
     }
-
-/*
-    public void resetAllMotors() {
-        // TODO test if motors are running
-        for(int i = 0; i < motor.length; i++) {
-            sendMsg(MsgCreator.forceReset(i));
-
-        }
-    }
-
-    public int getMotorCount() {
-        return motor.length;
-    }
-
-
-    public void adjustAllMotorToZero() {
-        for(int i = 0; i < motor.length; i++) {
-            sendMsg(MsgCreator.overridePos(i, 0));
-        }
-    }
-
-
-    public boolean liftMotorUp(int index, float rotations) {
-        return sendMsg(MsgCreator.move(index, rotations));
-    }
-
-    public boolean liftMotorDown(int index, float rotations){
-        return sendMsg(MsgCreator.move(index, -rotations));
-
-    }
-
-    public boolean moveMotorToPos(int index, float position) {
-        return sendMsg(MsgCreator.moveTo(index, position));
-    }
-
-    @Override
-    public boolean moveToForm(long id, float[] motorPos, int[] ledValues) {
-        sendMsg(MsgCreator.moveToForm(id, motorPos, ledValues));
-        return false;
-    }
-
-*/
 
 
 

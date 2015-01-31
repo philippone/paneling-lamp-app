@@ -35,5 +35,6 @@
     <color name="red">#f44336</color>
     <color name="brown">#795548</color>
     <color name="bluegrey">#607d8b</color>
+    <color name="drawer_selected_background">#11000000</color>
 
 </resources>

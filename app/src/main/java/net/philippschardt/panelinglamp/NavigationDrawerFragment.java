@@ -22,11 +22,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import database.PanelingLampContract;
+import util.DrawerItem;
+import util.MyDrawerMenuAdapter;
 import util.UtilPL;
 
 /**
@@ -66,6 +68,7 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mUserLearnedDrawer;
     private Toolbar toolbar;
     private ImageView mCurrentFormThumb;
+    private MyDrawerMenuAdapter adapter;
 
     public NavigationDrawerFragment() {
     }
@@ -107,11 +110,16 @@ public class NavigationDrawerFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectItem(position);
+                if (adapter != null) {
+                    adapter.setSelectedItem(position);
+                    adapter.notifyDataSetChanged();
+                }
             }
         });
 
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+      /*  ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
+
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
                 new String[]{
@@ -120,11 +128,41 @@ public class NavigationDrawerFragment extends Fragment {
                         getString(R.string.title_section3),
                         getString(R.string.title_section4)
                 });
+*/
+
+
+        adapter = new MyDrawerMenuAdapter(getActivity(),
+                R.layout.drawer_item_layout,
+                new DrawerItem[] {
+                new DrawerItem(getString(R.string.title_section1), R.drawable.form),
+                new DrawerItem(getString(R.string.title_section2), R.drawable.form),
+                new DrawerItem(getString(R.string.title_section3), R.drawable.impress),
+                new DrawerItem(getString(R.string.title_section4), R.drawable.impress)}
+        );
 
         mDrawerListView.setAdapter(adapter);
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
 
         mCurrentFormThumb = (ImageView) v.findViewById(R.id.drawer_thumbview);
+
+
+        LinearLayout settingsLayout = (LinearLayout) v.findViewById(R.id.frag_drawer_setting_layout);
+        settingsLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mDrawerLayout != null) {
+                    mDrawerLayout.closeDrawer(mFragmentContainerView);
+                }
+                if (mCallbacks != null) {
+                    mCallbacks.onNavigationDrawerItemSelected(4);
+                }
+                if (adapter != null) {
+                    adapter.setSelectedItem(-1);
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
+
         return v;
     }
 
