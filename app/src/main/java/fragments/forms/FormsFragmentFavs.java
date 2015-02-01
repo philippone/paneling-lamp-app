@@ -115,9 +115,9 @@ public class FormsFragmentFavs extends Fragment implements OnReceiverListener {
                 float y = recyclerView.getY();
                 super.onScrolled(recyclerView, dx, dy);
                 if (y <= dy ) {
-                    mListener.onScrollUp();
+                    mListener.onScrollUp(0, 0, dx, dy, 0, 0);
                 } else {
-                   mListener.onScrollDown();
+                   mListener.onScrollDown(0, 0, dx, dy, 0, 0);
                 }
 
             }

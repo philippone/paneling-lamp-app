@@ -112,9 +112,9 @@ public class FormsStandardFragment extends Fragment implements OnReceiverListene
                 float y = recyclerView.getY();
                 super.onScrolled(recyclerView, dx, dy);
                 if (y <= dy ) {
-                    mListener.onScrollUp();
+                    mListener.onScrollUp( 0, 0, dx,dy, 0, 0);
                 } else {
-                    mListener.onScrollDown();
+                    mListener.onScrollDown(0, 0, dx, dy, 0,0);
                 }
 
             }

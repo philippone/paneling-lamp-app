@@ -163,12 +163,12 @@ public class EditMotorsFragment extends Fragment implements OnReceiverListener{
 
     @Override
     public void onScrollUp() {
-        mListener.onScrollUp();
+        //mListener.onScrollUp(0, 0, 0, 0);
     }
 
     @Override
     public void onScrollDown() {
-        mListener.onScrollDown();
+        //mListener.onScrollDown(0, 0, dx, dy);
     }
 
     public ArrayList<MotorItemView> getMotorItem() {

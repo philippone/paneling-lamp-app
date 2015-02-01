@@ -453,13 +453,13 @@ public class PanelingLamp extends ActionBarActivity
     }
 
     @Override
-    public void onScrollUp() {
+    public void onScrollUp(int l, int t, int x, int y, int dx, int dy) {
         OnReceiverListener frag = (OnReceiverListener) currentFragment;
         frag.onScrollUp();
     }
 
     @Override
-    public void onScrollDown() {
+    public void onScrollDown(int l, int t, int x, int y, int dx, int dy) {
         OnReceiverListener frag = (OnReceiverListener) currentFragment;
         frag.onScrollDown();
     }
@@ -471,48 +471,54 @@ public class PanelingLamp extends ActionBarActivity
         // TODO if abort
 
 
-        if (resultCode == REQUEST_IMAGE_CAPTURE) {
-            // if image was taken
-            Log.d(TAG, "onActivtyResutl " + newFormName);
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                // if image was taken
+                Log.d(TAG, "onActivtyResutl " + newFormName);
 
-            // save new in DB form
-            PanelingLampContract.saveOwnForm(mDbHelper.getWritableDatabase(), newFormName, newFormThumbPath, newFormMotorV, newFormledV);
-
-
-            /**
-             * scale image down and overwrite
-             * */
-            // Get the dimensions of the View
-            int targetW = 500;//mImageView.getWidth();
-            int targetH = 500;//mImageView.getHeight();
-
-            // Get the dimensions of the bitmap
-            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
-            bmOptions.inJustDecodeBounds = true;
-            BitmapFactory.decodeFile(newFormThumbPath, bmOptions);
-            int photoW = bmOptions.outWidth;
-            int photoH = bmOptions.outHeight;
-
-            Log.d(TAG, "file " + photoW + " x " + photoH);
-
-            // Determine how much to scale down the image
-            int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
-
-            // Decode the image file into a Bitmap sized to fill the View
-            bmOptions.inJustDecodeBounds = false;
-            bmOptions.inSampleSize = scaleFactor;
-            bmOptions.inPurgeable = true;
-            Bitmap bitmap = BitmapFactory.decodeFile(newFormThumbPath, bmOptions);
+                // save new in DB form
+                PanelingLampContract.saveOwnForm(mDbHelper.getWritableDatabase(), newFormName, newFormThumbPath, newFormMotorV, newFormledV);
 
 
-            FileOutputStream out = null;
-            try {
-                out = new FileOutputStream(photoFile);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
-                out.flush();
-                out.close();
-            } catch (Exception e) {
-                e.printStackTrace();
+                /**
+                 * scale image down and overwrite
+                 * */
+                // Get the dimensions of the View
+                int targetW = 500;//mImageView.getWidth();
+                int targetH = 500;//mImageView.getHeight();
+
+                // Get the dimensions of the bitmap
+                BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+                bmOptions.inJustDecodeBounds = true;
+                BitmapFactory.decodeFile(newFormThumbPath, bmOptions);
+                int photoW = bmOptions.outWidth;
+                int photoH = bmOptions.outHeight;
+
+                Log.d(TAG, "file " + photoW + " x " + photoH);
+
+                // Determine how much to scale down the image
+                int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
+
+                // Decode the image file into a Bitmap sized to fill the View
+                bmOptions.inJustDecodeBounds = false;
+                bmOptions.inSampleSize = scaleFactor;
+                bmOptions.inPurgeable = true;
+                Bitmap bitmap = BitmapFactory.decodeFile(newFormThumbPath, bmOptions);
+
+
+                FileOutputStream out = null;
+                try {
+                    out = new FileOutputStream(photoFile);
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                    out.flush();
+                    out.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                photoFile = null;
+
             }
 
         }

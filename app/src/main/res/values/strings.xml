@@ -46,6 +46,8 @@
     <string name="dialog_new_form_title">Save New Form</string>
     <string name="dialog_new_form_take_pic_and_save">Take Picture And Save</string>
     <string name="hint_name">Please Add a Name</string>
-
+    <string name="title_activity_new_form">NewFormActivity</string>
+    <string name="take_shape_as_template">Take Shape As Template</string>
+    <string name="please_change_Photo">Please Change Photo</string>
 
 </resources>

@@ -7,13 +7,12 @@
         />
 
     <item
-        android:id="@+id/fav_editform_as_template"
-        android:title="@string/take_shape_as_template"
+        android:id="@+id/fav_editform"
+        android:title="@string/editform"
         />
-
     <item
-        android:id="@+id/add_form_to_favs"
-        android:title="@string/add_form_to_favs" />
+        android:id="@+id/fav_removeform_fav"
+        android:title="@string/removeform" />
     <item
         android:id="@+id/delete_form"
         android:title="@string/deleteform" />

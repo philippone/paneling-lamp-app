@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -30,7 +32,12 @@ import android.widget.ImageView;
 import com.astuetz.PagerSlidingTabStrip;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import database.PanelingLampContract;
@@ -53,15 +60,13 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
     public static final String EXTRA_ID = "editFormActivy_extra_ID";
     public static final String EXTRA_IS_STANDARD = "editFormActivy_extra_is_standard";
     public static final String EXTRA_IS_NEW_FORM =  "editFormActivy_extra_is_new_form";;
-    private final String TAG = getClass().getName();
-
     public static final String EXTRA_NAME = "editFormActivy_extra_name";
     public static final String EXTRA_THUMBNAIL = "editFormActivy_extra_thumbnail";
     public static final String EXTRA_m = "editFormActivy_extra_m";
     public static final String EXTRA_l = "editFormActivy_extra_l";
-
-
-
+    static final int REQUEST_IMAGE_CAPTURE_EDIT = 2;
+    private final String TAG = getClass().getName();
+    String newFormThumbPath;
     // init motors
     private Motor[] motor;
     private Toolbar toolbar;
@@ -79,7 +84,25 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
     private boolean isStandard;
     private FloatingActionButton saveButton;
     private FloatingActionButton moveToButton;
+    private PagerSlidingTabStrip mTabStrip;
+    private File photoFile;
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
 
+        @Override
+        public void onReceive(Context context, Intent intent) {
+
+            if (intent != null) {
+                String msg = intent.getStringExtra(MySocketService.EXTRA_MESSAGE_FORWARD);
+                handleInput(msg);
+            }
+        }
+    };
+    private float lastTopValueAssigned = -1;
+    private boolean newThumb = false;
+    private boolean takePhotoAndSaveNewShape;
+    private float[] mV;
+    private int[] lV;
+    private String name;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -122,12 +145,13 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
 
 
         // Viewpager + Tabs
+        mTabStrip = (PagerSlidingTabStrip) findViewById(R.id.edit_shape_tabs);
         mViewPager = (ViewPager) findViewById(R.id.edit_form_viewPager);
         pagerAdapter = new ViewPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(pagerAdapter);
 
         // Bind the tabs to the ViewPager
-        PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.edit_motors_tabs);
+        PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.edit_shape_tabs);
         tabs.setViewPager(mViewPager);
 
         editName = (EditText) findViewById(R.id.edit_motors_name);
@@ -216,18 +240,34 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
             @Override
             public void onClick(View v) {
                 // get new values
-                String name = editName.getText().toString();
+                name = editName.getText().toString();
                 ArrayList<MotorItemView> m = mEditMotorsFragment.getMotorItem();
                 ArrayList<LedItemView> l = mEditLEDFragment.getLedItem();
 
 
 
 
-                float[] mV = new float[]{m.get(0).getmPos(),m.get(1).getmPos(),m.get(2).getmPos(),m.get(3).getmPos(),m.get(4).getmPos()};
-                int[] lV = new int[] {l.get(0).getValue(),l.get(1).getValue(),l.get(2).getValue(),l.get(3).getValue(), l.get(4).getValue(),l.get(5).getValue(),l.get(6).getValue()};
+                 mV = new float[]{m.get(0).getmPos(),m.get(1).getmPos(),m.get(2).getmPos(),m.get(3).getmPos(),m.get(4).getmPos()};
+                lV = new int[] {l.get(0).getValue(),l.get(1).getValue(),l.get(2).getValue(),l.get(3).getValue(), l.get(4).getValue(),l.get(5).getValue(),l.get(6).getValue()};
 
-                //update db
-                PanelingLampContract.updateCardMotorLED(mDbHelper.getWritableDatabase(), cardID, name, thumb, mV, lV);
+                // if is Standard create a new shape in as own
+                if (isStandard ) {
+                    if (newThumb)
+                        PanelingLampContract.saveOwnForm(mDbHelper.getWritableDatabase(), name, newFormThumbPath, mV, lV);
+                    else {
+                        dispatchTakePictureIntent();
+                        takePhotoAndSaveNewShape = true;
+                    }
+                } else {
+                    // update Shape
+                    if (newThumb) {
+                        PanelingLampContract.updateCardMotorLED(mDbHelper.getWritableDatabase(), cardID, name, newFormThumbPath, mV, lV);
+
+                    } else {
+                        //update db
+                        PanelingLampContract.updateCardMotorLED(mDbHelper.getWritableDatabase(), cardID, name, thumb, mV, lV);
+                    }
+                }
             }
         });
 
@@ -243,9 +283,6 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
 
 
     }
-
-
-
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private void revealView(View myView) {
@@ -274,21 +311,6 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
                 new Motor(3),
                 new Motor(4)};
     }
-
-
-    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            if (intent != null) {
-                String msg = intent.getStringExtra(MySocketService.EXTRA_MESSAGE_FORWARD);
-                handleInput(msg);
-            }
-        }
-    };
-
-
 
     @Override
     public void handleInput(String message) {
@@ -330,7 +352,6 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
         }
     }
 
-
     /**
      * move form reply
      * " mfr; formID; "
@@ -347,7 +368,6 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
         // register Reciever
         registerReceiver(mMessageReceiver, new IntentFilter(MySocketService.BROADCAST_ACTION));
     }
-
 
     @Override
     protected void onPause() {
@@ -371,8 +391,6 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
         return false;
     }
 
-
-
     @Override
     public void updateAdatpers() {
         // nothing do do
@@ -385,16 +403,6 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
         return null;
     }
 
-
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    @Override
-    public void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        }
-    }
-
     @Override
     public void showAddNewFormDialog(float[] motorV, int[] ledV) {
         DialogFragment newFragment = new AddNewFormDialog();
@@ -402,15 +410,141 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
     }
 
     @Override
-    public void onScrollUp() {
+    public void onScrollUp(int l, int t, int x, int y, int scrollX, int scrollY) {
+        /*
 
+            mTabStrip.setTranslationY(-scrollY * 0.5f);
+            editName.setTranslationY(-scrollY * 0.5f);
+            moveToButton.setTranslationY(-scrollY * 0.5f);
+            saveButton.setTranslationY(-scrollY * 0.5f);
+            thumbView.setTranslationY(-scrollY * 0.5f);
+            mViewPager.setTranslationY(-scrollY * 0.5f);
+
+
+*/
     }
 
     @Override
-    public void onScrollDown() {
+    public void onScrollDown(int l, int t, int x, int y, int scrollX, int scrollY) {
+        /*
+
+        mTabStrip.setTranslationY(-scrollY * 0.5f);
+        editName.setTranslationY(-scrollY * 0.5f);
+        moveToButton.setTranslationY(-scrollY * 0.5f);
+        saveButton.setTranslationY(-scrollY * 0.5f);
+        thumbView.setTranslationY(-scrollY * 0.5f);
+        mViewPager.setTranslationY(-scrollY * 0.5f);
+        */
+    }
+
+    @Override
+    public void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                        Uri.fromFile(photoFile));
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE_EDIT);
+
+
+
+            } else {
+                Log.d(TAG, "photo == null");
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        Log.d(TAG, "onActivityResult " + resultCode);
+
+
+        if (requestCode == REQUEST_IMAGE_CAPTURE_EDIT) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+
+            // save new in DB form
+            //PanelingLampContract.updateThumbnail(mDbHelper.getWritableDatabase(),cardID, newFormThumbPath);
+            // done in onClick of saveButton
+
+                // if standard shape as template
+                // then you have to take a new photo to save
+                // the new shape
+                if (takePhotoAndSaveNewShape) {
+                    PanelingLampContract.saveOwnForm(mDbHelper.getWritableDatabase(), name, newFormThumbPath, mV, lV);
+                }
+
+            /**
+             * scale image down and overwrite
+             * */
+            // Get the dimensions of the View
+            int targetW = 500;//mImageView.getWidth();
+            int targetH = 500;//mImageView.getHeight();
+
+            // Get the dimensions of the bitmap
+            BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+            bmOptions.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(newFormThumbPath, bmOptions);
+            int photoW = bmOptions.outWidth;
+            int photoH = bmOptions.outHeight;
+
+            Log.d(TAG, "file " + photoW + " x " + photoH);
+
+            // Determine how much to scale down the image
+            int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
+
+            // Decode the image file into a Bitmap sized to fill the View
+            bmOptions.inJustDecodeBounds = false;
+            bmOptions.inSampleSize = scaleFactor;
+            bmOptions.inPurgeable = true;
+            Bitmap bitmap = BitmapFactory.decodeFile(newFormThumbPath, bmOptions);
+            thumbView.setImageBitmap(bitmap);
+
+            FileOutputStream out = null;
+            try {
+                out = new FileOutputStream(photoFile);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+                out.flush();
+                out.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            newThumb = true;
+
+        }
+        }
+        photoFile = null;
 
     }
 
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        //File storageDir = Environment.getExternalStoragePublicDirectory(
+        //      Environment.DIRECTORY_PICTURES);
+        File storageDir = getExternalFilesDir("img");
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents "file:" +
+        newFormThumbPath =  image.getAbsolutePath();
+        return image;
+    }
 
     class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
@@ -444,15 +578,5 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
         }
 
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            thumbView.setImageBitmap(imageBitmap);
-        }
-    }
-
 
 }

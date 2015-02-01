@@ -86,7 +86,20 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
 
                     popup.setOnMenuItemClickListener(optionItemListener);
                     MenuInflater inflater = popup.getMenuInflater();
-                    inflater.inflate(mOptionsLayout, popup.getMenu());
+                    CardHolder card = mCards.get(getPosition());
+                    if (card.isStandard()) {
+                        if (card.isFavorite())
+                            inflater.inflate(R.menu.menu_card_options_standard_and_fav, popup.getMenu());
+                        else
+                            inflater.inflate(R.menu.menu_card_options_standard, popup.getMenu());
+                    } else {
+                        if (card.isFavorite())
+                            inflater.inflate(R.menu.menu_card_options_own_and_fav, popup.getMenu());
+                        else
+                            inflater.inflate(R.menu.menu_card_options_own, popup.getMenu());
+                    }
+
+                    //inflater.inflate(mOptionsLayout, popup.getMenu());
                     popup.show();
                 }
             });
@@ -102,16 +115,19 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
                 CardHolder cCard = mCards.get(getPosition());
 
                 switch (item.getItemId()) {
+
                     case R.id.fav_removeform_fav:
                         PanelingLampContract.setFavStatus(mDB, cCard.getId(), false);
-                        mCards.remove(getPosition());
+                        //mCards.remove(getPosition());
                         notifyDataSetChanged();
+                        mListener.updateAdatpers();
                         break;
                     case R.id.fav_moveinform:
                         moveToForm(cCard);
 
 
                         break;
+                    case R.id.fav_editform_as_template:
                     case R.id.fav_editform:
 
                         Intent editActivity = new Intent(mContext, EditFormActivity.class);
@@ -220,6 +236,7 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
                 mPos,
                 PanelingLampContract.FormEntry.COLUMN_ACTIVE,
                 PanelingLampContract.FormEntry.COLUMN_IS_STANDARD,
+                PanelingLampContract.FormEntry.COLUMN_FAV,
                 PanelingLampContract.FormEntry.COLUMN_PATH_THUMBNAIL,
                 PanelingLampContract.FormEntry.COLUMN_POS_MOTOR_0,
                 PanelingLampContract.FormEntry.COLUMN_POS_MOTOR_1,

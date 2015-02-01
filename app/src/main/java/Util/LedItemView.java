@@ -1,6 +1,7 @@
 package util;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -23,6 +24,8 @@ public class LedItemView extends RelativeLayout{
     private TextView mIndicatorView;
     protected SeekBar mSeekBar;
 
+
+
     public LedItemView(Context context) {
         super(context);
 
@@ -42,7 +45,6 @@ public class LedItemView extends RelativeLayout{
 
     private void init() {
         inflate(getContext(), R.layout.led_item, this);
-
 
 
         mSeekBar = (SeekBar) findViewById(R.id.led_item_seekBalr);

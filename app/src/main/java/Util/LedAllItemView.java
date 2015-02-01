@@ -16,7 +16,8 @@ import fragments.OnFragmentInteractionListener;
 public class LedAllItemView extends LedItemView{
 
 
-    private final CardView mCardView;
+    private CardView mCardView;
+    private final Context mContext;
     private  ArrayList<LedItemView> ledListener;
 
 
@@ -31,9 +32,8 @@ public class LedAllItemView extends LedItemView{
         super(context, l, index, name, value);
         ledListener = listener;
 
+        mContext = context;
 
-        mCardView = (CardView) findViewById(R.id.card_form_card_view);
-        mCardView.setCardBackgroundColor(context.getResources().getColor(R.color.floatingButtonNormal) );
 
         mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -53,7 +53,12 @@ public class LedAllItemView extends LedItemView{
 
             }
         });
+
+        mCardView = (CardView) findViewById(R.id.card_form_card_view);
+        mCardView.setCardBackgroundColor(mContext.getResources().getColor(R.color.floatingButtonNormal) );
     }
+
+
 
 
 

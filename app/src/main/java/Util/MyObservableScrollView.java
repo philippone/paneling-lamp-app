@@ -40,11 +40,13 @@ public class MyObservableScrollView extends ScrollView {
         if (mListener != null) {
 
 
+
+
             if (t > dy) {
                 // scrolling up
-                mListener.onScrollUp();
+                mListener.onScrollUp(l, t, dx, dy, getScrollX(), getScrollY());
             } else
-                mListener.onScrollDown();
+                mListener.onScrollDown(l,t,dx,dy, getScrollX(), getScrollY());
         }
     }
 }

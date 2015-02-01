@@ -12,9 +12,7 @@
         />
 
     <item
-        android:id="@+id/add_form_to_favs"
-        android:title="@string/add_form_to_favs" />
-    <item
-        android:id="@+id/delete_form"
-        android:title="@string/deleteform" />
+        android:id="@+id/fav_removeform_fav"
+        android:title="@string/removeform" />
+
 </menu>

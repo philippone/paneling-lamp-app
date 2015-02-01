@@ -3,9 +3,12 @@
     package="net.philippschardt.panelinglamp" >
 
     <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18"/>
-    <uses-feature android:name="android.hardware.camera"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
+
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
 
     <application
@@ -29,8 +32,8 @@
 
         <activity
             android:name=".PanelingLamp"
-            android:screenOrientation="portrait"
-            android:label="@string/title_activity_paneling_lamp" >
+            android:label="@string/title_activity_paneling_lamp"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -40,12 +43,16 @@
         <activity
             android:name=".EditFormActivity"
             android:label="@string/title_activity_edit_form"
-            android:screenOrientation="portrait"
             android:parentActivityName=".PanelingLamp"
-            android:windowSoftInputMode="stateHidden">
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="net.philippschardt.panelinglamp.PanelingLamp" />
+        </activity>
+        <activity
+            android:name=".NewFormActivity"
+            android:label="@string/title_activity_new_form" >
         </activity>
     </application>
 

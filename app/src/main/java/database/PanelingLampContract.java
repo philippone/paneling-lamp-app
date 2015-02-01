@@ -17,6 +17,8 @@ public class PanelingLampContract {
     }
 
 
+
+
     public static abstract class FormEntry implements BaseColumns {
         public static final String TABLE_NAME = "forms";
         public static final String COLUMN_NAME_NULLABLE = "";
@@ -123,6 +125,25 @@ public class PanelingLampContract {
         // New value for one column
         ContentValues values = new ContentValues();
         values.put(FormEntry.COLUMN_ACTIVE, status);
+
+        // Which row to update, based on the ID
+        String selection = FormEntry._ID + " = ?";
+        String[] selectionArgs = {String.valueOf(id)};
+
+        int count = db.update(
+                FormEntry.TABLE_NAME,
+                values,
+                selection,
+                selectionArgs);
+
+        return count;
+    }
+
+
+    public static int updateThumbnail(SQLiteDatabase db, long id, String newFormThumbPath) {
+        // New value for one column
+        ContentValues values = new ContentValues();
+        values.put(FormEntry.COLUMN_PATH_THUMBNAIL, newFormThumbPath);
 
         // Which row to update, based on the ID
         String selection = FormEntry._ID + " = ?";

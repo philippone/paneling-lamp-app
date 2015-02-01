@@ -19,9 +19,10 @@ public class CardHolder {
     private float[] motorPos;
     private int[] ledValues;
     private boolean standard;
+    private boolean favorite;
 
 
-    public CardHolder(long id, String cardName, String thumb, int posinCategory, int status, boolean isStandard, float[] motorPos, int[] ledValues) {
+    public CardHolder(long id, String cardName, String thumb, int posinCategory, int status, boolean isStandard, boolean isFav, float[] motorPos, int[] ledValues) {
         this.id = id;
         this.name = cardName;
         this.thumbnail = thumb;
@@ -30,7 +31,15 @@ public class CardHolder {
         this.ledValues = ledValues;
         this.status = status;
         this.standard = isStandard;
+        this.favorite = isFav;
+    }
 
+    public boolean isFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
     }
 
     public boolean isStandard() {
@@ -128,8 +137,9 @@ public class CardHolder {
             int l6 = c.getInt(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_LED_6));
 
             boolean isStandard = c.getInt(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_IS_STANDARD)) == 1 ? true : false;
+            boolean isFav = c.getInt(c.getColumnIndex(PanelingLampContract.FormEntry.COLUMN_FAV)) == 1 ? true : false;
 
-            CardHolder card = new CardHolder(id, cardName, thumb, pos, status, isStandard, new float[] {m0,m1,m2,m3,m4}, new int[] {l0,l1,l2,l3,l4,l5,l6,});
+            CardHolder card = new CardHolder(id, cardName, thumb, pos, status, isStandard, isFav, new float[] {m0,m1,m2,m3,m4}, new int[] {l0,l1,l2,l3,l4,l5,l6,});
             list.add(card);
 
 
