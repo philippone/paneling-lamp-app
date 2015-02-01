@@ -1,6 +1,7 @@
 package util;
 
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.CardView;
 import android.widget.SeekBar;
 
@@ -53,6 +54,8 @@ public class LedAllItemView extends LedItemView{
 
             }
         });
+
+        
 
         mCardView = (CardView) findViewById(R.id.card_form_card_view);
         mCardView.setCardBackgroundColor(mContext.getResources().getColor(R.color.floatingButtonNormal) );
