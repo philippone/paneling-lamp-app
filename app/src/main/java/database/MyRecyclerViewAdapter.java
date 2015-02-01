@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import net.philippschardt.panelinglamp.EditFormActivity;
 import net.philippschardt.panelinglamp.PanelingLamp;
@@ -64,6 +65,8 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
         public TextView name;
         public ImageView thumbnail;
         public ImageView options;
+        public ImageView favView;
+
 
         public MainViewHolder(View v) {
             super(v);
@@ -76,13 +79,19 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
             options = (ImageView) v.findViewById(R.id.card_form_options);
             progressBar = (ProgressBar) v.findViewById(R.id.card_form_progressBar);
             activeIndic = (ImageView) v.findViewById(R.id.card_form_active_indicator);
+            favView = (ImageView) v.findViewById(R.id.card_form_fav_icon);
+
+
 
             options.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
+
+
                     Log.d(TAG, "OnClick Popup");
                     PopupMenu popup = new PopupMenu(mContext, v);
+
 
                     popup.setOnMenuItemClickListener(optionItemListener);
                     MenuInflater inflater = popup.getMenuInflater();
@@ -313,6 +322,12 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
 
             UtilPL.setPic(holder.thumbnail, mCards.get(position).getThumbnail());
 
+        }
+
+        if (card.isFavorite() && mCategory != PanelingLampContract.FormEntry.COLUMN_FAV) {
+            holder.favView.setVisibility(View.VISIBLE);
+        } else {
+            holder.favView.setVisibility(View.GONE);
         }
 
 

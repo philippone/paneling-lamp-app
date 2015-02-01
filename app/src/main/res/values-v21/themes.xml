@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="AppThemePanelingLamp" parent="AppTheme.Base"/>
 
     <style name="AppTheme.Base" parent="Theme.AppCompat.Light">
         <item name="android:windowNoTitle">true</item>
@@ -20,6 +19,4 @@
         <!--<item name="android:textColorPrimary">#FFFFFF</item>-->
 
     </style>
-
-
 </resources>
