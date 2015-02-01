@@ -2,6 +2,9 @@
 #include <SoftwareSerial.h>
 
 // stepper
+int motorCount = 5;
+int ledNumber = 7;
+
 
 AccelStepper* stepper0 = new AccelStepper(1, 23, 22);
 AccelStepper* stepper1 = new AccelStepper(1, 25, 24);
@@ -12,16 +15,17 @@ AccelStepper* motors[5] = {
   stepper0, stepper1, stepper2, stepper3, stepper4};
 boolean motorRunning[5] = {
   false, false, false, false, false};
-int motorCount = 5;
+
 float oneRotation = 1600;
 // min/max Position in Rotations (x * oneRotation)
 int motorMinPos = 0 * oneRotation;
 int motorMaxPos = 100 * oneRotation;
 
 //LED stuff
-int led[4] = {
-  13, 14, 15, 16};
-int ledValue[4] = {0,0,0,0}; 
+int led[7] = {
+  13, 14, 15, 16, 17, 18, 19 };
+int ledValue[7] = {0,0,0,0,0,0,0}; 
+
 
 String message;
 int msg = 0;
@@ -474,7 +478,7 @@ void handleStepperOverridePos(String message) {
 void handleLEDMsg(String message) {
   Serial.println("led message");
 
-  int ledP   = -1;
+  int ledP   = -2;
   int value = -1;
 
   int counter = 0;
@@ -507,7 +511,12 @@ void handleLEDMsg(String message) {
 * 0 is off
 */
 void setLEDto(int ledP, int value) {
-    if (ledP >= 0 && value >= 0 && value <= 255) {
+	if (ledP == -1 && value >= 0 && value <= 255) {
+		for(int i = 0; i < ledNumber; i++) {
+			ledValue[i] = value;
+			analogWrite(led[i], value);
+		}
+	} else if (ledP >= 0 && value >= 0 && value <= 255) {
 		ledValue[ledP] = value;
       	analogWrite(led[ledP], value);
     }

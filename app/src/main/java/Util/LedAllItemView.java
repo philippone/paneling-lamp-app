@@ -55,7 +55,7 @@ public class LedAllItemView extends LedItemView{
             }
         });
 
-        
+
 
         mCardView = (CardView) findViewById(R.id.card_form_card_view);
         mCardView.setCardBackgroundColor(mContext.getResources().getColor(R.color.floatingButtonNormal) );

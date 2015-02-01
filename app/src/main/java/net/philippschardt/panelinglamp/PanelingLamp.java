@@ -186,6 +186,7 @@ public class PanelingLamp extends ActionBarActivity
                 break;
             case 1:
                 currentFragment = ManualControlFragment.newInstance(position + 1);
+                
                 break;
 
             case 4:
