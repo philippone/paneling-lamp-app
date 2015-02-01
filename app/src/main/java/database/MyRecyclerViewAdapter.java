@@ -168,7 +168,7 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
 
         @Override
         public boolean onLongClick(@NonNull View v) {
-            startDrag();
+            //startDrag();
             return true;
         }
 

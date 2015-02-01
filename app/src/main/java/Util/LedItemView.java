@@ -15,13 +15,13 @@ import fragments.OnFragmentInteractionListener;
 public class LedItemView extends RelativeLayout{
 
 
-    private OnFragmentInteractionListener mListener;
-    private int index;
-    private String indicator;
-    private  int value;
+    protected OnFragmentInteractionListener mListener;
+    protected int index;
+    protected String indicator;
+    protected int value;
 
     private TextView mIndicatorView;
-    private SeekBar mSeekBar;
+    protected SeekBar mSeekBar;
 
     public LedItemView(Context context) {
         super(context);
@@ -44,28 +44,31 @@ public class LedItemView extends RelativeLayout{
         inflate(getContext(), R.layout.led_item, this);
 
 
+
         mSeekBar = (SeekBar) findViewById(R.id.led_item_seekBalr);
         mSeekBar.setProgress(value);
         mIndicatorView = (TextView) findViewById(R.id.led_item_v_index);
         mIndicatorView.setText(indicator);
 
-        mSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                value = progress;
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                mListener.sendMsg(MsgCreator.setLED(index, value));
-            }
-        });
+        mSeekBar.setOnSeekBarChangeListener(seekBarListener);
     }
+
+    protected SeekBar.OnSeekBarChangeListener seekBarListener = new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            value = progress;
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+            mListener.sendMsg(MsgCreator.setLED(index, value));
+        }
+    };
 
     public int getValue() {
         return value;
@@ -73,6 +76,7 @@ public class LedItemView extends RelativeLayout{
 
     public void setValue(int value) {
         this.value = value;
+        mSeekBar.setProgress(value);
     }
 
     public int getIndex() {

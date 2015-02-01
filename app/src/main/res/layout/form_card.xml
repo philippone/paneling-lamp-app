@@ -80,7 +80,7 @@
                 android:id="@+id/card_form_active_indicator"
                 android:layout_toStartOf="@+id/card_form_options"
                 android:layout_centerVertical="true"
-                android:src="@drawable/ic_action_settings"
+                android:src="@drawable/finished"
                 android:visibility="gone"
                 />
 

@@ -52,6 +52,7 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
 
     public static final String EXTRA_ID = "editFormActivy_extra_ID";
     public static final String EXTRA_IS_STANDARD = "editFormActivy_extra_is_standard";
+    public static final String EXTRA_IS_NEW_FORM =  "editFormActivy_extra_is_new_form";;
     private final String TAG = getClass().getName();
 
     public static final String EXTRA_NAME = "editFormActivy_extra_name";
@@ -129,52 +130,64 @@ public class EditFormActivity extends ActionBarActivity implements OnFragmentInt
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) findViewById(R.id.edit_motors_tabs);
         tabs.setViewPager(mViewPager);
 
+        editName = (EditText) findViewById(R.id.edit_motors_name);
+        thumbView = (ImageView) findViewById(R.id.edit_form_thumbnail);
 
         // receive values
         Intent dataIntent = getIntent();
         if (dataIntent != null) {
 
-            cardID = dataIntent.getLongExtra(EXTRA_ID, -1);
+            boolean createNewForm = dataIntent.getBooleanExtra(EXTRA_IS_NEW_FORM, false);
 
-            String name = dataIntent.getStringExtra(EXTRA_NAME);
+            if (createNewForm) {
+                getSupportActionBar().setTitle(R.string.add_new_form);
 
-            // set values
-            editName = (EditText) findViewById(R.id.edit_motors_name);
-            editName.setText(name);
-            editName.setSelection(editName.getText().length());
+                motorV = new float[PanelingLamp.MOTOR_NUMBER];
+                ledV = new int[PanelingLamp.LED_NUMBER];
 
-
-            // set Thumbnail
-            thumb = dataIntent.getStringExtra(EXTRA_THUMBNAIL);
-            thumbView = (ImageView) findViewById(R.id.edit_form_thumbnail);
-
-            UtilPL.setPic(thumbView, thumb);
-
-            setEnterSharedElementCallback(new android.support.v4.app.SharedElementCallback() {
-                @Override
-                public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
-                    super.onSharedElementEnd(sharedElementNames, sharedElements, sharedElementSnapshots);
-                    editName.setVisibility(View.VISIBLE);
-
-                    revealView(saveButton);
-                    revealView(moveToButton);
-
-
-                }
-
-
-            });
-
-            isStandard = dataIntent.getBooleanExtra(EXTRA_IS_STANDARD, true);
-
-            if (isStandard) {
-                thumbView.setImageDrawable(getResources().getDrawable(Integer.parseInt(thumb)));
             } else {
-                // TODO
+
+                cardID = dataIntent.getLongExtra(EXTRA_ID, -1);
+                String name = dataIntent.getStringExtra(EXTRA_NAME);
+
+                // set values
+
+                editName.setText(name);
+                editName.setSelection(editName.getText().length());
+
+
+                // set Thumbnail
+                thumb = dataIntent.getStringExtra(EXTRA_THUMBNAIL);
+
+
+                UtilPL.setPic(thumbView, thumb);
+
+                setEnterSharedElementCallback(new android.support.v4.app.SharedElementCallback() {
+                    @Override
+                    public void onSharedElementEnd(List<String> sharedElementNames, List<View> sharedElements, List<View> sharedElementSnapshots) {
+                        super.onSharedElementEnd(sharedElementNames, sharedElements, sharedElementSnapshots);
+                        editName.setVisibility(View.VISIBLE);
+
+                        revealView(saveButton);
+                        revealView(moveToButton);
+
+
+                    }
+
+
+                });
+
+                isStandard = dataIntent.getBooleanExtra(EXTRA_IS_STANDARD, true);
+
+                if (isStandard) {
+                    thumbView.setImageDrawable(getResources().getDrawable(Integer.parseInt(thumb)));
+                } else {
+                    // TODO
+                }
+                // get motor and led valus to pass to fragments
+                motorV = dataIntent.getFloatArrayExtra(EXTRA_m);
+                ledV = dataIntent.getIntArrayExtra(EXTRA_l);
             }
-            // get motor and led valus to pass to fragments
-            motorV = dataIntent.getFloatArrayExtra(EXTRA_m);
-            ledV = dataIntent.getIntArrayExtra(EXTRA_l);
 
         }
 

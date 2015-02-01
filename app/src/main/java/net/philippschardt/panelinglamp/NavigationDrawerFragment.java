@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -69,6 +70,7 @@ public class NavigationDrawerFragment extends Fragment {
     private Toolbar toolbar;
     private ImageView mCurrentFormThumb;
     private MyDrawerMenuAdapter adapter;
+    private ImageView settingsIcon;
 
     public NavigationDrawerFragment() {
     }
@@ -114,6 +116,7 @@ public class NavigationDrawerFragment extends Fragment {
                     adapter.setSelectedItem(position);
                     adapter.notifyDataSetChanged();
                 }
+                settingsIcon.clearColorFilter();
             }
         });
 
@@ -135,8 +138,8 @@ public class NavigationDrawerFragment extends Fragment {
                 R.layout.drawer_item_layout,
                 new DrawerItem[] {
                 new DrawerItem(getString(R.string.title_section1), R.drawable.form),
-                new DrawerItem(getString(R.string.title_section2), R.drawable.form),
-                new DrawerItem(getString(R.string.title_section3), R.drawable.impress),
+                new DrawerItem(getString(R.string.title_section2), R.drawable.manual_control),
+                new DrawerItem(getString(R.string.title_section3), R.drawable.about),
                 new DrawerItem(getString(R.string.title_section4), R.drawable.impress)}
         );
 
@@ -145,7 +148,7 @@ public class NavigationDrawerFragment extends Fragment {
 
         mCurrentFormThumb = (ImageView) v.findViewById(R.id.drawer_thumbview);
 
-
+        settingsIcon = (ImageView) v.findViewById(R.id.frag_drawer_imageView_settings);
         LinearLayout settingsLayout = (LinearLayout) v.findViewById(R.id.frag_drawer_setting_layout);
         settingsLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,6 +163,7 @@ public class NavigationDrawerFragment extends Fragment {
                     adapter.setSelectedItem(-1);
                     adapter.notifyDataSetChanged();
                 }
+                settingsIcon.setColorFilter(getActivity().getResources().getColor(R.color.floatingButtonNormal), PorterDuff.Mode.SRC_ATOP);
             }
         });
 

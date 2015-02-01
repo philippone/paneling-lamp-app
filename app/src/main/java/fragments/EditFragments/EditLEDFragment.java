@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import fragments.OnFragmentInteractionListener;
 import fragments.OnReceiverListener;
+import util.LedAllItemView;
 import util.LedItemView;
 import util.MyObservableScrollView;
 
@@ -60,7 +61,7 @@ public class EditLEDFragment extends Fragment implements OnReceiverListener{
 
         if (getArguments() != null) {
             led = getArguments().getIntArray(ARG_PARAM_LED);
-            ledItem.add(new LedItemView(getActivity(), mListener, -1, "All", getMax(led)));
+
 
             for (int i = 0; i < led.length; i++) {
                 ledItem.add(new LedItemView(getActivity(), mListener, i, i+1 +"", led[i]));
@@ -85,6 +86,8 @@ public class EditLEDFragment extends Fragment implements OnReceiverListener{
         View v = inflater.inflate(R.layout.fragment_edit_led, container, false);
         LinearLayout cont = (LinearLayout) v.findViewById(R.id.frag_edit_led_container);
 
+
+        cont.addView(new LedAllItemView(getActivity(), mListener, -1, "All", getMax(led), ledItem));
         for(LedItemView lv : ledItem) {
             cont.addView(lv);
         }

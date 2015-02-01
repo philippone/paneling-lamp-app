@@ -1,6 +1,10 @@
 package fragments.forms;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.ActivityOptions;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,6 +19,7 @@ import android.view.animation.AnimationUtils;
 import com.astuetz.PagerSlidingTabStrip;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
+import net.philippschardt.panelinglamp.EditFormActivity;
 import net.philippschardt.panelinglamp.PanelingLamp;
 import net.philippschardt.panelinglamp.R;
 
@@ -110,7 +115,17 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
 
 
         floatingButton_Add_Form = (FloatingActionButton) v.findViewById(R.id.forms_frag_floating_add_form);
-        // TODO add onClickListener
+
+        floatingButton_Add_Form.setOnClickListener(new View.OnClickListener() {
+            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void onClick(View v) {
+                Intent startActivity = new Intent(getActivity(), EditFormActivity.class);
+                startActivity.putExtra(EditFormActivity.EXTRA_IS_NEW_FORM, true);
+                //getActivity().startActivity(startActivity);
+                getActivity().startActivity(startActivity, ActivityOptions.makeSceneTransitionAnimation(((PanelingLamp) mListener)).toBundle());
+            }
+        });
 
         return v;
     }
