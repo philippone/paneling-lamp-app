@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.getbase.floatingactionbutton.FloatingActionButton;
@@ -24,6 +25,8 @@ import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import net.philippschardt.panelinglamp.PanelingLamp;
 import net.philippschardt.panelinglamp.R;
+
+import java.util.ArrayList;
 
 import fragments.OnFragmentInteractionListener;
 import fragments.OnReceiverListener;
@@ -195,8 +198,20 @@ public class ManualControlFragment extends Fragment implements OnReceiverListene
         floatingButton_moveMotors.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+                ArrayList<MotorItemView> motorItems = mEditMotorsFragment.getMotorItem();
+                for (MotorItemView mv : motorItems) {
+                    try {
+                        Float.parseFloat(mv.getePos().toString());
+                    } catch (NumberFormatException e) {
+                        floatingMenu.toggle();
+                        showToast();
+                        return;
+                    }
+                }
                 mEditMotorsFragment.activateProgress(0, 1, 2, 3, 4);
-                mListener.sendMsg(MsgCreator.moveToForm(-1,mEditMotorsFragment.getMotorItem(), mEditLEDFragment.getLedItem()));
+                mListener.sendMsg(MsgCreator.moveToForm(-1, motorItems, mEditLEDFragment.getLedItem()));
                 floatingMenu.toggle();
             }
         });
@@ -237,6 +252,12 @@ public class ManualControlFragment extends Fragment implements OnReceiverListene
         return v;
     }
 
+
+    private void showToast() {
+        Toast toast =  Toast.makeText(getActivity(), R.string.enter_valid_number,Toast.LENGTH_LONG);
+        toast.show();
+    }
+    
     @Override
     public void updateMotorPosinGUI(int motorNr, float motorPos) {
 

@@ -1,6 +1,8 @@
 package util;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -8,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import net.philippschardt.panelinglamp.R;
 
@@ -99,8 +102,35 @@ public class MotorItemView extends RelativeLayout {
                 return true;
             }
         });
+
+
+        ePos.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                try {
+                    Float.parseFloat(s.toString());
+                } catch (NumberFormatException e) {
+                    showToast();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
     }
 
+
+    private void showToast() {
+        Toast toast =  Toast.makeText((Context)mListener, R.string.enter_valid_number,Toast.LENGTH_SHORT);
+        toast.show();
+    }
 
     public int getmIndex() {
         return mIndex;
@@ -108,6 +138,14 @@ public class MotorItemView extends RelativeLayout {
 
     public void setmIndex(int mIndex) {
         this.mIndex = mIndex;
+    }
+
+    public EditText getePos() {
+        return ePos;
+    }
+
+    public void setePos(EditText ePos) {
+        this.ePos = ePos;
     }
 
     public float getmPos() {
@@ -118,7 +156,8 @@ public class MotorItemView extends RelativeLayout {
             f = Float.parseFloat(s);
         } catch (Exception e) {
             f = mPos;
-            ePos.setText(mPos + "");
+            //ePos.setText(String.valueOf(mPos));
+            showToast();
         }
         return f;
 
