@@ -3,6 +3,8 @@ package fragments.settings;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import net.philippschardt.panelinglamp.R;
 
@@ -19,6 +22,8 @@ import util.MsgCreator;
 
 
 public class SettingsFragment extends Fragment implements OnReceiverListener {
+
+    private final String TAG = getClass().getName();
 
     private static final String SETTINGS_ARG_PARAM1 = "settings_section_number";
     private OnFragmentInteractionListener mListener;
@@ -79,10 +84,13 @@ public class SettingsFragment extends Fragment implements OnReceiverListener {
             @Override
             public void onClick(View v) {
 
-                upperBoundCheck.setChecked(!upperBoundCheck.isChecked());
-
-                float value = Float.parseFloat(upperBoundValue.getText().toString());
-                sendBound(true, upperBoundCheck.isChecked(),  value);
+                try {
+                    float value = Float.parseFloat(upperBoundValue.getText().toString());
+                    sendBound(true, upperBoundCheck.isChecked(),  value);
+                    upperBoundCheck.setChecked(!upperBoundCheck.isChecked());
+                } catch (NumberFormatException e) {
+                    showToast();
+                }
             }
         });
 
@@ -91,10 +99,14 @@ public class SettingsFragment extends Fragment implements OnReceiverListener {
             @Override
             public void onClick(View v) {
 
-                lowerBoundCheck.setChecked(!lowerBoundCheck.isChecked());
 
-                float value = Float.parseFloat(lowerBoundValue.getText().toString());
-                sendBound(false, lowerBoundCheck.isChecked(),  value);
+                try {
+                    float value = Float.parseFloat(lowerBoundValue.getText().toString());
+                    sendBound(false, lowerBoundCheck.isChecked(),  value);
+                    lowerBoundCheck.setChecked(!lowerBoundCheck.isChecked());
+                } catch (NumberFormatException e) {
+                    showToast();
+                }
             }
         });
 
@@ -102,20 +114,88 @@ public class SettingsFragment extends Fragment implements OnReceiverListener {
         upperBoundCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                float value = Float.parseFloat(upperBoundValue.getText().toString());
-                sendBound(true, isChecked,  value);
+                try {
+                    float value = Float.parseFloat(upperBoundValue.getText().toString());
+                    sendBound(true, isChecked,  value);
+                } catch (NumberFormatException e) {
+                    showToast();
+                    upperBoundCheck.setChecked(!isChecked);
+                }
             }
         });
 
         lowerBoundCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                float value = Float.parseFloat(lowerBoundValue.getText().toString());
-                sendBound(false, isChecked,  value);
+                try {
+                    float value = Float.parseFloat(lowerBoundValue.getText().toString());
+                    sendBound(false, isChecked,  value);
+                } catch (NumberFormatException e) {
+                    showToast();
+                    lowerBoundCheck.setChecked(!isChecked);
+                }
+            }
+        });
+
+
+        upperBoundValue.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//                Log.d(TAG, "before Text Changed " + s + ", start " + start + ", count " + count + " after " + after) ;
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                Log.d(TAG, "on Text Changed " + s + ", start " + start + ", count " + count + " before " + before);
+
+                if (s.length() > 0) {
+                    try {
+                        float value = Float.parseFloat(s.toString());
+                        sendBound(true, upperBoundCheck.isChecked() ,value);
+                    } catch (Exception e) {
+                        Toast toast =  Toast.makeText(getActivity(), R.string.enter_valid_number,Toast.LENGTH_LONG);
+                        toast.show();
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+//                Log.d(TAG, "after Text Changed");
+            }
+        });
+
+
+        lowerBoundValue.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.length() > 0) {
+                    try {
+                        float value = Float.parseFloat(s.toString());
+                        sendBound(false, lowerBoundCheck.isChecked() ,value);
+                    } catch (Exception e) {
+                        showToast();
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
 
         return v;
+    }
+
+    private void showToast() {
+        Toast toast =  Toast.makeText(getActivity(), R.string.enter_valid_number,Toast.LENGTH_LONG);
+        toast.show();
     }
 
 

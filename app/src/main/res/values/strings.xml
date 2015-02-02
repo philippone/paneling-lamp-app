@@ -54,5 +54,6 @@
     <string name="reset_database_description">Delete all own shapes and restore all standard shapes.</string>
     <string name="lower_bound_description">Set a lower bound to stop the motors at this position.</string>
     <string name="upper_bound_description">Set a upper bound to stop the motors at this position</string>
+    <string name="enter_valid_number">Enter a valid number</string>
 
 </resources>
