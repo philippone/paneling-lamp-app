@@ -48,5 +48,11 @@
     <string name="title_activity_new_form">NewFormActivity</string>
     <string name="take_shape_as_template">Take Shape As Template</string>
     <string name="please_change_Photo">Please Change Photo</string>
+    <string name="upper_bound">Upper Bound</string>
+    <string name="lower_bound">Lower Bound</string>
+    <string name="reset_database">Reset Database</string>
+    <string name="reset_database_description">Delete all own shapes and restore all standard shapes.</string>
+    <string name="lower_bound_description">Set a lower bound to stop the motors at this position.</string>
+    <string name="upper_bound_description">Set a upper bound to stop the motors at this position</string>
 
 </resources>

@@ -74,7 +74,7 @@ public class MotorItemView extends RelativeLayout {
                     case MotionEvent.ACTION_MOVE:
                         ePos.setVisibility(View.GONE);
                         progressBar.setVisibility(View.VISIBLE);
-                        mListener.sendMsg(MsgCreator.moveDown(mIndex, 100));
+                        mListener.sendMsg(MsgCreator.moveUp(mIndex, 100));
                         break;
                 }
                 return true;
@@ -93,7 +93,7 @@ public class MotorItemView extends RelativeLayout {
                     case MotionEvent.ACTION_MOVE:
                         ePos.setVisibility(View.GONE);
                         progressBar.setVisibility(View.VISIBLE);
-                        mListener.sendMsg(MsgCreator.moveUp(mIndex, 100));
+                        mListener.sendMsg(MsgCreator.moveDown(mIndex, 100));
                         break;
                 }
                 return true;

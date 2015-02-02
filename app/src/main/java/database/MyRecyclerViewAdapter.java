@@ -20,7 +20,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toolbar;
 
 import net.philippschardt.panelinglamp.EditFormActivity;
 import net.philippschardt.panelinglamp.PanelingLamp;
@@ -87,12 +86,8 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
                 @Override
                 public void onClick(View v) {
 
-
-
                     Log.d(TAG, "OnClick Popup");
                     PopupMenu popup = new PopupMenu(mContext, v);
-
-
                     popup.setOnMenuItemClickListener(optionItemListener);
                     MenuInflater inflater = popup.getMenuInflater();
                     CardHolder card = mCards.get(getPosition());

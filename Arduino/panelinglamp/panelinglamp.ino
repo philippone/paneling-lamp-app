@@ -23,8 +23,14 @@ int motorMaxPos = 100 * oneRotation;
 
 //LED stuff
 int led[7] = {
-  13, 14, 15, 16, 17, 18, 19 };
+  13, 12, 11,10, 9, 8, 7 };
 int ledValue[7] = {0,0,0,0,0,0,0}; 
+
+// bound stuff
+boolean upperBoundActive = true;
+boolean lowerBoundActive = true;
+float upperBound = 0;
+float lowerBound = 1600;
 
 
 String message;
@@ -104,20 +110,46 @@ void loop() {
       //Serial.println(msg);
     } 
   }
-  /*
+  
   // check that motor never reach position -1
   for (int i = 0; i < motorCount; i++) {
-    if(motors[i]->currentPosition() >= 0)  {
-		// run motor if all is correct
+	boolean run = true;  
+	int error = -1;
+	  
+    if(upperBoundActive) {
+    	
+		
+    	if (motors[i]->currentPosition() < upperBound)  {
+			
+    		run = false;
+			error = 0;
+		}
+    }
+    	
+	if (lowerBoundActive) {
+		if (motors[i]->currentPosition() > lowerBound) {
+			run = false;
+			error = 1;
+		}
+	}
+		
+	if (run){
+		// run motor if motor is in bound correct
       	motors[i]->run();
-    } else if (motors[i]->currentPosition() < 0) {
-    	motors[i]->setCurrentPosition(0);
+	} else {
+		if (error == 0)
+    		motors[i]->setCurrentPosition(upperBound);
+		else if (error == 1)
+			motors[i]->setCurrentPosition(lowerBound);
     }
   }
-*/
+  
+  
+  /*
 for (int i = 0; i < motorCount; i++) {
   motors[i]->run();
 }
+  */
 
   // send rely to phone when motor has reached his position
   for (int i = 0; i < motorCount; i++) {
@@ -183,7 +215,25 @@ void handle(String message) {
 	  	handleStepperOverridePos(message.substring(3));
   	else if (message.startsWith("l;")) 
     	handleLEDMsg(message.substring(2));
+	else if (message.startsWith("b;"))
+		handleBoundsMsg(message.substring(2));
+	else if (message.startsWith("rb;"))
+		handleRequestBounds();
 }
+
+void handleRequestBounds() {
+	Serial1.print("br;");
+	Serial1.print(upperBoundActive);
+	Serial1.print(";");
+	Serial1.print(upperBound);
+	Serial1.print(";");
+	Serial1.print(lowerBoundActive);
+	Serial1.print(";");
+	Serial1.print(lowerBound);
+	Serial1.println(";");
+}
+
+
 
 /*
 * When phone connects, send all motor positions as reply
@@ -408,6 +458,60 @@ void handleStepperForceReset(String message) {
 
 }
 
+
+void handleBoundsMsg(String message) {
+	int bound = -1;
+	int boundValue = -1;
+	int counter = 0;
+	float value = 0;
+	String tmp = "";
+	
+    for (int i = 0; i < message.length(); i++) {
+      if(message.charAt(i) != ';') {
+        tmp += message.charAt(i);
+      } 
+      else {
+        if (counter == 0) {
+          // parse bound (upper or lower) #
+          bound = tmp.toInt();
+        } 
+		else if (counter == 1) {
+			// parse boundValue (true, false)
+			boundValue = tmp.toInt();
+		}
+        else if (counter == 2) {
+          // parse value
+          char buffer[10];
+          tmp.toCharArray(buffer, 10);
+          value = atof(buffer);
+		  setBound(bound, boundValue, value);
+        }
+        tmp = "";
+        counter++;
+      }
+    }
+}
+
+
+void setBound(int bound, int boundValue, float value) {
+	// upperbound -> bound == 1
+	
+	boolean bV = boundValue == 1 ? true : false;
+	
+	Serial.print("set bound ");
+	Serial.print(bound);
+	Serial.print(", ");
+	Serial.print(bV);
+	Serial.print(", ");
+	Serial.println(value);
+	if (bound == 1) {
+		upperBoundActive = bV;
+		upperBound = value;
+	} else if (bound == 0) {
+		lowerBoundActive = bV;
+		lowerBound = value;
+	}
+}
 
 /**
 * override the currentPosition of the motor

@@ -19,6 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
+
         >
 
 
@@ -31,9 +32,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:src="@drawable/paneling_lamp"
-                android:background="#000000"
                 android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
+
+
 
                 android:minHeight="200dp"
                 android:transitionName="thumbnail_shared"
@@ -76,7 +78,7 @@
                 android:paddingRight="5dp"
                 android:layout_marginRight="5dp"
 
-                android:background="?android:selectableItemBackgroundBorderless"
+                android:background="?android:selectableItemBackground"
                 android:clickable="true"
                 android:cropToPadding="false"
                 android:padding="5dp" />

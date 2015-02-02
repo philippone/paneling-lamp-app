@@ -114,5 +114,15 @@ public class MsgCreator {
     }
 
 
+    public static String setBound(boolean isUpperBound, boolean boundValue, float value) {
+        int t = isUpperBound ? 1 : 0;
+        int v = boundValue ? 1 : 0;
+        value = value * 1600;
+        return "b;" + t  + ";" + v + ";" + value + ";\n";
+    }
 
+
+    public static String requestCurrentBounds() {
+        return "rb;\n";
+    }
 }

@@ -335,6 +335,26 @@ public class PanelingLamp extends ActionBarActivity
             handleConnectionReply(message);
         else if (message.startsWith("mfr;"))
             handleMoveToFormReply(message);
+        else if (message.startsWith("br;"))
+            handleBoundReply(message);
+    }
+
+
+    /**
+     * br; upperBoundActive ; upperBoundValue ; lowerBoundActive; lowerBoundValue ; \n
+     * */
+    private void handleBoundReply(String message) {
+        String[] splitted = message.substring(3).split(";");
+
+        boolean upperBActive = Integer.parseInt(splitted[0]) == 1 ? true : false;
+        float upperBValue = Float.parseFloat(splitted[1]);
+        boolean lowerBActive = Integer.parseInt(splitted[2]) == 1 ? true : false;
+        float lowerBValue = Float.parseFloat(splitted[3]);
+
+        if (currentFragment instanceof SettingsFragment) {
+            ((SettingsFragment) currentFragment).
+                    updateBoundInGui(upperBActive, upperBValue, lowerBActive, lowerBValue);
+        }
     }
 
 

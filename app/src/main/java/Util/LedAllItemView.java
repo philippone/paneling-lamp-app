@@ -1,7 +1,6 @@
 package util;
 
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.CardView;
 import android.widget.SeekBar;
 
