@@ -15,99 +15,100 @@
         android:background="?android:attr/selectableItemBackground"
         card_view:cardBackgroundColor="#FFFFFF">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-
-        >
-
-
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent">
-
-            <ImageView
-                android:id="@+id/card_from_thumbnail"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:src="@drawable/paneling_lamp"
-                android:scaleType="centerCrop"
-                android:adjustViewBounds="true"
-
-
-
-                android:minHeight="200dp"
-                android:transitionName="thumbnail_shared"
-                android:maxHeight="250dp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/card_form_fav_icon"
-                android:src="@drawable/ic_action_favorite"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentEnd="true"
-                android:visibility="gone" />
-        </RelativeLayout>
-
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-        <TextView
-            android:id="@+id/card_form_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Name"
-            android:transitionName="name_shared"
-            android:layout_margin="10dp" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:id="@+id/card_form_card_view_layout"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?android:selectableItemBackground"
+            >
 
 
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent">
 
-            <ImageButton
-                android:layout_width="40dp"
-                android:layout_height="30dp"
-                android:id="@+id/card_form_options"
-                android:src="@drawable/ic_action_overflow"
-                android:scaleType="fitEnd"
-                android:adjustViewBounds="true"
-                android:layout_centerVertical="true"
-                android:layout_alignParentEnd="true"
-                android:paddingRight="5dp"
-                android:layout_marginRight="5dp"
+                <ImageView
+                    android:id="@+id/card_from_thumbnail"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:src="@drawable/paneling_lamp"
 
-                android:background="?android:selectableItemBackground"
-                android:clickable="true"
-                android:cropToPadding="false"
-                android:padding="5dp" />
+                    android:scaleType="centerCrop"
+                    android:adjustViewBounds="true"
 
-            <ProgressBar
-                style="?android:attr/progressBarStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/card_form_progressBar"
-                android:indeterminate="false"
-                android:layout_centerVertical="true"
-                android:layout_toStartOf="@+id/card_form_options"
-                android:visibility="gone"/>
+                    android:minHeight="200dp"
+                    android:transitionName="thumbnail_shared"
+                    android:maxHeight="250dp" />
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="20dp"
-                android:scaleType="fitEnd"
-                android:id="@+id/card_form_active_indicator"
-                android:layout_toStartOf="@+id/card_form_options"
-                android:layout_centerVertical="true"
-                android:src="@drawable/finished"
-                android:visibility="gone"
-                />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/card_form_fav_icon"
+                    android:src="@drawable/ic_action_favorite"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/card_form_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:text="Name"
+                    android:transitionName="name_shared"
+                    android:layout_margin="10dp" />
 
 
-        </RelativeLayout>
 
-    </LinearLayout>
+                <ImageButton
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"
+                    android:id="@+id/card_form_options"
+                    android:src="@drawable/ic_action_overflow"
+                    android:scaleType="fitEnd"
+                    android:adjustViewBounds="true"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"
+                    android:paddingRight="5dp"
+                    android:layout_marginRight="5dp"
+                    android:background="?android:selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:cropToPadding="false"
+                    android:padding="5dp" />
+
+                <ProgressBar
+                    style="?android:attr/progressBarStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/card_form_progressBar"
+                    android:indeterminate="false"
+                    android:layout_centerVertical="true"
+                    android:layout_toStartOf="@+id/card_form_options"
+                    android:visibility="gone"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:scaleType="fitEnd"
+                    android:id="@+id/card_form_active_indicator"
+                    android:layout_toStartOf="@+id/card_form_options"
+                    android:layout_centerVertical="true"
+                    android:src="@drawable/finished"
+                    android:visibility="gone"
+                    />
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
 
 
 

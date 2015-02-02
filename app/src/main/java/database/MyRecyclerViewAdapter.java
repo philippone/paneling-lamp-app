@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -65,6 +66,7 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
         public ImageView thumbnail;
         public ImageView options;
         public ImageView favView;
+        public LinearLayout cardLayout;
 
 
         public MainViewHolder(View v) {
@@ -73,6 +75,7 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
 
 
             container = (ViewGroup) v.findViewById(R.id.card_form_card_view);
+            cardLayout = (LinearLayout) v.findViewById(R.id.card_form_card_view_layout);
             name = (TextView) v.findViewById(R.id.card_form_name);
             thumbnail = (ImageView) v.findViewById(R.id.card_from_thumbnail);
             options = (ImageView) v.findViewById(R.id.card_form_options);
@@ -107,8 +110,8 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
                     popup.show();
                 }
             });
-            container.setOnClickListener(this);
-            container.setOnLongClickListener(this);
+            cardLayout.setOnClickListener(this);
+            cardLayout.setOnLongClickListener(this);
         }
 
 

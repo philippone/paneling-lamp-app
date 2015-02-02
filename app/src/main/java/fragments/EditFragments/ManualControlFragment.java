@@ -257,7 +257,7 @@ public class ManualControlFragment extends Fragment implements OnReceiverListene
         Toast toast =  Toast.makeText(getActivity(), R.string.enter_valid_number,Toast.LENGTH_LONG);
         toast.show();
     }
-    
+
     @Override
     public void updateMotorPosinGUI(int motorNr, float motorPos) {
 
