@@ -23,7 +23,7 @@ int motorMaxPos = 100 * oneRotation;
 
 //LED stuff
 int led[7] = {
-  13, 12, 11,10, 9, 8, 7 };
+  13, 12, 11,3, 2, 8, 7 };
 int ledValue[7] = {0,0,0,0,0,0,0}; 
 
 // bound stuff
