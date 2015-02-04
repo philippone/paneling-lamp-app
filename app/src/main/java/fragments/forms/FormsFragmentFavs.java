@@ -164,6 +164,11 @@ public class FormsFragmentFavs extends Fragment implements OnReceiverListener {
     }
 
     @Override
+    public void updateLEDInGUI(int index, int value) {
+        // nothing to do
+    }
+
+    @Override
     public void notifyAdapters() {
         mAdapter.AndUpdateCards();
     }

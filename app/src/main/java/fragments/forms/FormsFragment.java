@@ -203,6 +203,11 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
         //((OnReceiverListener) mStandardFrag).updateMotorPosinGUI(motorNr, motorPos);
     }
 
+    @Override
+    public void updateLEDInGUI(int index, int value) {
+        //nothing to do
+    }
+
 
     @Override
     public void notifyAdapters() {

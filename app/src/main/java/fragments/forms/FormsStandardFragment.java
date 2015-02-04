@@ -152,6 +152,11 @@ public class FormsStandardFragment extends Fragment implements OnReceiverListene
         // nothing to do
     }
 
+    @Override
+    public void updateLEDInGUI(int index, int value) {
+        // nothing to do
+    }
+
 
     @Override
     public void notifyAdapters() {

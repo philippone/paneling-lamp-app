@@ -1,4 +1,4 @@
-package fragments.forms;
+package fragments;
 
 /**
  * Created by philipp on 21.01.15.

@@ -126,6 +126,11 @@ public class EditLEDFragment extends Fragment implements OnReceiverListener{
     }
 
     @Override
+    public void updateLEDInGUI(int index, int value) {
+        ledItem.get(index).setValue(value);
+    }
+
+    @Override
     public void notifyAdapters() {
         // do nothing
         // has no adapters

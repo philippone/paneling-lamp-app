@@ -240,6 +240,9 @@ void handleRequestBounds() {
 */
 void handleConnectedPhone(String message) {
 	Serial1.print("r;");
+	Serial1.print(currFormID);
+	Serial1.print(";");
+	
 	for (int i = 0; i < motorCount; i++) {
 		float position = motors[i]->currentPosition() / oneRotation;
 		Serial1.print(position);

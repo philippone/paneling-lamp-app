@@ -313,5 +313,8 @@ public class DeveloperFragmentMotors extends Fragment implements OnReceiverListe
         // nothing to do
     }
 
-
+    @Override
+    public void updateLEDInGUI(int index, int value) {
+        // nothing to do
+    }
 }

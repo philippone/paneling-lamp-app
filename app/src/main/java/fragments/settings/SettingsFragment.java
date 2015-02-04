@@ -226,7 +226,12 @@ public class SettingsFragment extends Fragment implements OnReceiverListener {
 
     @Override
     public void updateMotorPosinGUI(int motorNr, float motorPos) {
+        // nothing to do
+    }
 
+    @Override
+    public void updateLEDInGUI(int index, int value) {
+        // nothing to do
     }
 
     @Override

@@ -93,6 +93,8 @@ public class ManualControlFragment extends Fragment implements OnReceiverListene
         mEditMotorsFragment = EditMotorsFragment.newInstance();
         mEditLEDFragment = EditLEDFragment.newInstance(new int[]{0, 0, 0, 0,0,0,0});
 
+        mListener.sendMsg(MsgCreator.requestCurrentStatus());
+
 
     }
 
@@ -262,6 +264,11 @@ public class ManualControlFragment extends Fragment implements OnReceiverListene
     public void updateMotorPosinGUI(int motorNr, float motorPos) {
 
         mEditMotorsFragment.updateMotorPosinGUI(motorNr, motorPos);
+    }
+
+    @Override
+    public void updateLEDInGUI(int index, int value) {
+        mEditLEDFragment.updateLEDInGUI(index, value);
     }
 
     @Override

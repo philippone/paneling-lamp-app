@@ -156,6 +156,11 @@ public class EditMotorsFragment extends Fragment implements OnReceiverListener{
     }
 
     @Override
+    public void updateLEDInGUI(int index, int value) {
+        //nothingToDo
+    }
+
+    @Override
     public void notifyAdapters() {
         // do nothing
         // has no adapters

@@ -36,7 +36,9 @@ import fragments.OnFragmentInteractionListener;
 import fragments.OnReceiverListener;
 import fragments.EditFragments.ManualControlFragment;
 import fragments.forms.FormsFragment;
-import fragments.forms.OnHandleMessageListener;
+import fragments.OnHandleMessageListener;
+import fragments.settings.AboutFragment;
+import fragments.settings.ImpressFragment;
 import fragments.settings.SettingsFragment;
 import util.AddNewFormDialog;
 import util.Motor;
@@ -188,13 +190,16 @@ public class PanelingLamp extends ActionBarActivity
                 currentFragment = ManualControlFragment.newInstance(position + 1);
 
                 break;
-
-            case 4:
-                currentFragment = SettingsFragment.newInstance(position + 1);
-
+            case 2:
+                currentFragment = AboutFragment.newInstance(position + 1);
                 break;
             case 3:
-            // TODO settings, about
+                currentFragment = ImpressFragment.newInstance(position + 1);
+                break;
+            case 4:
+                currentFragment = SettingsFragment.newInstance(position + 1);
+                break;
+
             default:
                 currentFragment = PlaceholderFragment.newInstance(position + 1);
                 break;
@@ -365,7 +370,21 @@ public class PanelingLamp extends ActionBarActivity
     private void handleConnectionReply(String message) {
         String[] splitted = message.substring(2).split(";");
 
-        for(int i = 0; i < motor.length; i++) {
+        int activeFormID = Integer.parseInt(splitted[0]);
+        if (activeFormID > 0) {
+            // update DB
+            setFormActiveInDB(activeFormID);
+
+            // notify view
+            ((OnReceiverListener) currentFragment).notifyAdapters();
+
+            // notify drawer
+            mNavigationDrawerFragment.updateCurrentForm(mDbHelper.getReadableDatabase(), activeFormID);
+        } else {
+            // TODO unset all forms as active
+        }
+
+        for(int i = 1; i < MOTOR_NUMBER + 1; i++) {
             // update motor (and gui)
             float p = Float.parseFloat(splitted[i]);
             motor[i].setPosition(p);
@@ -373,6 +392,15 @@ public class PanelingLamp extends ActionBarActivity
             // update GUI
             updateMotorPosInGUI(i, p);
         }
+
+        for (int j = MOTOR_NUMBER + 1; j < LED_NUMBER + MOTOR_NUMBER; j++) {
+            int v = Integer.parseInt(splitted[j]);
+            updateLEDInGUI(j, v);
+        }
+    }
+
+    private void updateLEDInGUI(int index, int value) {
+        ((OnReceiverListener)currentFragment).updateLEDInGUI(index, value);
     }
 
 
@@ -391,7 +419,6 @@ public class PanelingLamp extends ActionBarActivity
             setFormActiveInDB(id);
 
             // notify view
-            // todo notify all listviews
             ((OnReceiverListener) currentFragment).notifyAdapters();
 
             // notify drawer
