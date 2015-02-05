@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,11 @@ public class SettingsFragment extends Fragment implements OnReceiverListener {
     private EditText upperBoundValue;
     private EditText lowerBoundValue;
     private LinearLayout resetDatabaseLayout;
+    private LinearLayout demoModeLayout;
+    private EditText demoModeValue;
+    private CheckBox demoModeCheck;
+    private LinearLayout passProtLayout;
+    private CheckBox passProtCheck;
 
 
     public static SettingsFragment newInstance(int sectionNr) {
@@ -76,21 +82,59 @@ public class SettingsFragment extends Fragment implements OnReceiverListener {
         lowerBoundValue = (EditText)  v.findViewById(R.id.settings_editText_lower_bound);
 
 
+
+        demoModeLayout = (LinearLayout) v.findViewById(R.id.settings_demo_mode_layout);
+        demoModeValue = (EditText) v.findViewById(R.id.settings_editText_demo_mode);
+        demoModeCheck = (CheckBox) v.findViewById(R.id.settings_checkBox_demo_mode);
+
+        passProtLayout = (LinearLayout) v.findViewById(R.id.settings_password_protection_layout);
+        passProtCheck = (CheckBox) v.findViewById(R.id.settings_checkBox_password_protection);
+
         resetDatabaseLayout = (LinearLayout) v.findViewById(R.id.settings_database_reset_layout);
 
+
+
+        demoModeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                demoModeCheck.setChecked(!demoModeCheck.isChecked());
+            }
+        });
+
+        demoModeCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                try {
+                    float value = Float.parseFloat(demoModeValue.getText().toString());
+                    changeDemoMode(isChecked, value);
+                } catch (NumberFormatException e) {
+                    showToast();
+                    demoModeCheck.setChecked(!isChecked);
+                }
+            }
+        });
+
+
+        passProtLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                passProtCheck.setChecked(!passProtCheck.isChecked());
+            }
+        });
+
+        passProtCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // TODO save password protection value in database
+            }
+        });
 
 
         upperBoundLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                upperBoundCheck.setChecked(!upperBoundCheck.isChecked());
 
-                try {
-                    float value = Float.parseFloat(upperBoundValue.getText().toString());
-                    sendBound(true, upperBoundCheck.isChecked(),  value);
-                    upperBoundCheck.setChecked(!upperBoundCheck.isChecked());
-                } catch (NumberFormatException e) {
-                    showToast();
-                }
             }
         });
 
@@ -98,15 +142,7 @@ public class SettingsFragment extends Fragment implements OnReceiverListener {
         lowerBoundLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
-                try {
-                    float value = Float.parseFloat(lowerBoundValue.getText().toString());
-                    sendBound(false, lowerBoundCheck.isChecked(),  value);
-                    lowerBoundCheck.setChecked(!lowerBoundCheck.isChecked());
-                } catch (NumberFormatException e) {
-                    showToast();
-                }
+                lowerBoundCheck.setChecked(!lowerBoundCheck.isChecked());
             }
         });
 
@@ -130,6 +166,7 @@ public class SettingsFragment extends Fragment implements OnReceiverListener {
                 try {
                     float value = Float.parseFloat(lowerBoundValue.getText().toString());
                     sendBound(false, isChecked,  value);
+                    Log.d(TAG, "set lower bound " + isChecked);
                 } catch (NumberFormatException e) {
                     showToast();
                     lowerBoundCheck.setChecked(!isChecked);
@@ -203,6 +240,10 @@ public class SettingsFragment extends Fragment implements OnReceiverListener {
         mListener.sendMsg(MsgCreator.setBound(isUpperBound, boundValue, value));
     }
 
+    private void changeDemoMode(boolean active, float min) {
+        mListener.sendMsg(MsgCreator.changeDemoMode(active, min));
+    }
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -250,11 +291,13 @@ public class SettingsFragment extends Fragment implements OnReceiverListener {
     }
 
 
-    public void updateBoundInGui(boolean upperBActive, float upperBValue, boolean lowerBActive, float lowerBValue) {
+    public void updateBoundInGui(boolean upperBActive, float upperBValue, boolean lowerBActive, float lowerBValue, boolean demoModeActive, float demoModeV) {
         upperBoundValue.setText(upperBValue/1600 + "");
         lowerBoundValue.setText(lowerBValue/1600 + "");
+        demoModeValue.setText(demoModeV + "");
 
         upperBoundCheck.setChecked(upperBActive);
         lowerBoundCheck.setChecked(lowerBActive);
+        demoModeCheck.setChecked(demoModeActive);
     }
 }

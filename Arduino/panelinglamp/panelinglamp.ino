@@ -30,7 +30,11 @@ int ledValue[7] = {0,0,0,0,0,0,0};
 boolean upperBoundActive = true;
 boolean lowerBoundActive = true;
 float upperBound = 0;
-float lowerBound = 1600;
+float lowerBound = 1600*200;
+
+//demoMode
+boolean demoModeActive = false;
+float demoModeMinutes = 5;
 
 
 String message;
@@ -219,7 +223,17 @@ void handle(String message) {
 		handleBoundsMsg(message.substring(2));
 	else if (message.startsWith("rb;"))
 		handleRequestBounds();
+	else if (message.startsWith("dm;"))
+		handleDemoModeChange(message.substring(3)); 
 }
+
+void handleDemoModeChange(String message) {
+	// TODO 
+	
+	// demoModeActive = 
+	// demoModeMinutes = 
+}
+
 
 void handleRequestBounds() {
 	Serial1.print("br;");
@@ -230,6 +244,10 @@ void handleRequestBounds() {
 	Serial1.print(lowerBoundActive);
 	Serial1.print(";");
 	Serial1.print(lowerBound);
+	Serial1.print(";");
+	Serial1.print(demoModeActive);
+	Serial1.print(";");
+	Serial1.print(demoModeMinutes);
 	Serial1.println(";");
 }
 
@@ -248,7 +266,7 @@ void handleConnectedPhone(String message) {
 		Serial1.print(position);
 		Serial1.print(";");
 	}
-	for (int i = 0; i < sizeof(ledValue); i++) {
+	for (int i = 0; i < ledNumber; i++) {
 		Serial1.print(ledValue[i]);
 		Serial1.print(";");
 	}
@@ -645,7 +663,7 @@ void sendFormReachedReply(long currFormID) {
 
 void initStepper() {
   // init all steppers
-  for (int i=0; i < sizeof(motors); i++) {
+  for (int i=0; i < motorCount; i++) {
     motors[i]->setMaxSpeed(2000);
     motors[i]->setAcceleration(1000);
   } 
@@ -653,7 +671,7 @@ void initStepper() {
 
 void initLEDs() {
   // set the pins as output
-  for (int i = 0; i < sizeof(led); i++) {
+  for (int i = 0; i < ledNumber; i++) {
     pinMode(led[i], OUTPUT); 
   }
 

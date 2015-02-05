@@ -248,7 +248,9 @@ public class PanelingLamp extends ActionBarActivity
         }
 
         Log.d(TAG, "set Title" + mTitle);
-        getSupportActionBar().setTitle(mTitle);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle(mTitle);
+        }
     }
 
 
@@ -355,10 +357,12 @@ public class PanelingLamp extends ActionBarActivity
         float upperBValue = Float.parseFloat(splitted[1]);
         boolean lowerBActive = Integer.parseInt(splitted[2]) == 1 ? true : false;
         float lowerBValue = Float.parseFloat(splitted[3]);
+        boolean demoModeActive = Integer.parseInt(splitted[4]) == 1 ? true : false;
+        float demoModeValue = Float.parseFloat(splitted[5]);
 
         if (currentFragment instanceof SettingsFragment) {
             ((SettingsFragment) currentFragment).
-                    updateBoundInGui(upperBActive, upperBValue, lowerBActive, lowerBValue);
+                    updateBoundInGui(upperBActive, upperBValue, lowerBActive, lowerBValue, demoModeActive, demoModeValue);
         }
     }
 
@@ -369,6 +373,8 @@ public class PanelingLamp extends ActionBarActivity
      * */
     private void handleConnectionReply(String message) {
         String[] splitted = message.substring(2).split(";");
+
+
 
         int activeFormID = Integer.parseInt(splitted[0]);
         if (activeFormID > 0) {
@@ -384,18 +390,18 @@ public class PanelingLamp extends ActionBarActivity
             // TODO unset all forms as active
         }
 
-        for(int i = 1; i < MOTOR_NUMBER + 1; i++) {
+        for(int i = 1; i <= MOTOR_NUMBER; i++) {
             // update motor (and gui)
             float p = Float.parseFloat(splitted[i]);
-            motor[i].setPosition(p);
+            motor[i-1].setPosition(p);
 
             // update GUI
-            updateMotorPosInGUI(i, p);
+            updateMotorPosInGUI(i-1, p);
         }
 
-        for (int j = MOTOR_NUMBER + 1; j < LED_NUMBER + MOTOR_NUMBER; j++) {
+        for (int j = MOTOR_NUMBER + 1; j <= LED_NUMBER + MOTOR_NUMBER ; j++) {
             int v = Integer.parseInt(splitted[j]);
-            updateLEDInGUI(j, v);
+            updateLEDInGUI(j - MOTOR_NUMBER -1, v);
         }
     }
 

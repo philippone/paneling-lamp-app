@@ -163,7 +163,7 @@ public class NavigationDrawerFragment extends Fragment {
                     adapter.setSelectedItem(-1);
                     adapter.notifyDataSetChanged();
                 }
-                settingsIcon.setColorFilter(getActivity().getResources().getColor(R.color.floatingButtonNormal), PorterDuff.Mode.SRC_ATOP);
+                settingsIcon.setColorFilter(R.color.floatingButtonNormal, PorterDuff.Mode.SRC_ATOP);
             }
         });
 

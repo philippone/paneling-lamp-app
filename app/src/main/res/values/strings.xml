@@ -55,5 +55,10 @@
     <string name="lower_bound_description">Set a lower bound to stop the motors at this position.</string>
     <string name="upper_bound_description">Set a upper bound to stop the motors at this position</string>
     <string name="enter_valid_number">Enter a valid number</string>
+    <string name="demo_mode">Demo Mode</string>
+    <string name="demo_mode_descr">In the demo mode the shape will change all x minutes. If the shape was changed manually then the demo mode will restart itself after x minutes without interaction. </string>
+    <string name="minute_s">Minute(s)</string>
+    <string name="password_protection">Password Protection</string>
+    <string name="password_protection_descr">Activate/Deactivate the password protection for the settings view.</string>
 
 </resources>

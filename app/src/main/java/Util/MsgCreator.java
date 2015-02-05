@@ -125,4 +125,11 @@ public class MsgCreator {
     public static String requestCurrentBounds() {
         return "rb;\n";
     }
+
+
+    public static String changeDemoMode(boolean activated, float minutes) {
+        int on = activated ? 1 : 0;
+        return "dm;" + on + ";" + minutes + ";\n";
+    }
 }
+

@@ -4,13 +4,16 @@
     android:layout_height="match_parent"
     tools:context="fragments.settings.SettingsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-
-        android:layout_margin="8dp"
+        android:layout_margin="5dp"
         android:orientation="vertical">
 
 
@@ -43,8 +46,8 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="20dp"
-                        android:layout_weight="5"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="4"
                         android:orientation="vertical">
 
 
@@ -69,7 +72,7 @@
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_gravity="center_horizontal"
-                        android:layout_weight="1"
+                        android:layout_weight="2"
                         android:gravity="center_vertical|center_horizontal"
                         android:orientation="vertical">
 
@@ -82,9 +85,15 @@
                             android:digits="0123456789-."
                             android:ems="10"
                             android:gravity="center"
-                            android:hint="0"
                             android:text="0"
                             android:inputType="numberDecimal" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="@string/rotation_s"
+                            android:id="@+id/textView4" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -100,8 +109,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical|right"
-
-                            android:layout_marginRight="10dp"
                             android:checked="false"
                             android:gravity="center_vertical|right" />
                     </LinearLayout>
@@ -148,8 +155,8 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="20dp"
-                        android:layout_weight="5"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="4"
                         android:orientation="vertical">
 
 
@@ -174,7 +181,7 @@
                         android:layout_width="0dp"
                         android:layout_height="fill_parent"
                         android:layout_gravity="center_horizontal"
-                        android:layout_weight="1"
+                        android:layout_weight="2"
                         android:gravity="center_vertical|center_horizontal"
                         android:orientation="vertical">
 
@@ -187,9 +194,17 @@
                             android:digits="0123456789-."
                             android:ems="10"
                             android:gravity="center"
-                            android:hint="200"
+
                             android:text="200"
                             android:inputType="numberDecimal" />
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:text="@string/rotation_s"
+                            android:id="@+id/textView5" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -206,7 +221,6 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical|right"
 
-                            android:layout_marginRight="10dp"
                             android:checked="false"
                             android:gravity="center_vertical|right" />
                     </LinearLayout>
@@ -221,30 +235,15 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-<!--
-
         <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/settings_card_upper_bound"
+            android:id="@+id/settings_card_demo_mode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_margin="5dp"
             android:background="?android:attr/selectableItemBackground"
             android:padding="5dp"
             card_view:cardBackgroundColor="#FFFFFF"
             card_view:cardCornerRadius="4dp">
-
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -252,60 +251,165 @@
                 android:background="?android:attr/selectableItemBackground"
                 android:clickable="true"
                 android:focusable="true"
+                android:id="@+id/settings_demo_mode_layout"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="fill_parent"
                     android:layout_height="fill_parent"
                     android:layout_margin="10dp"
-                    android:orientation="vertical">
+                    android:orientation="horizontal">
+
 
                     <LinearLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="fill_parent"
-                        android:layout_gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="4"
+                        android:orientation="vertical">
 
-                        <CheckBox
-                            android:id="@+id/settings_checkBox_lower_bound"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:checked="false" />
 
                         <TextView
-                            android:id="@+id/textView_lower_bound"
+                            android:id="@+id/settings_textView_demo_mode"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:text="@string/lower_bound"
+
+                            android:text="@string/demo_mode"
                             android:textAppearance="?android:attr/textAppearanceLarge" />
 
-                        <EditText
-                            android:id="@+id/editText"
-                            android:layout_width="75dp"
+
+                        <TextView
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignParentTop="true"
-                            android:layout_marginLeft="15dp"
-                            android:layout_toEndOf="@+id/settings_switch_upper_bound"
-                            android:digits="0123456789-."
-                            android:ems="10"
-                            android:gravity="center"
-                            android:hint="200"
-                            android:inputType="numberDecimal" />
+                            android:text="@string/demo_mode_descr"
+                            android:textAppearance="?android:attr/textAppearanceSmall" />
                     </LinearLayout>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/lower_bound_description"
-                        android:textAppearance="?android:attr/textAppearanceSmall" />
 
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_weight="2"
+                        android:gravity="center_vertical|center_horizontal"
+                        android:orientation="vertical">
+
+                        <EditText
+                            android:id="@+id/settings_editText_demo_mode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_toEndOf="@+id/settings_switch_lower_bound"
+                            android:digits="0123456789."
+                            android:ems="10"
+                            android:gravity="center"
+
+                            android:text="5"
+                            android:inputType="numberDecimal" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/minute_s"
+                            android:id="@+id/textView6" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="right"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <CheckBox
+                            android:id="@+id/settings_checkBox_demo_mode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|right"
+
+                            android:checked="false"
+                            android:gravity="center_vertical|right" />
+                    </LinearLayout>
 
                 </LinearLayout>
             </LinearLayout>
-
         </android.support.v7.widget.CardView>
--->
+
+
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/settings_card_password_protection"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:padding="5dp"
+            card_view:cardBackgroundColor="#FFFFFF"
+            card_view:cardCornerRadius="4dp">
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:id="@+id/settings_password_protection_layout"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_margin="10dp"
+                    android:orientation="horizontal">
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:layout_weight="4"
+                        android:orientation="vertical">
+
+
+                        <TextView
+                            android:id="@+id/settings_textView_password_protection"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+
+                            android:text="@string/password_protection"
+                            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/password_protection_descr"
+                            android:textAppearance="?android:attr/textAppearanceSmall" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="fill_parent"
+                        android:layout_gravity="right"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
+
+                        <CheckBox
+                            android:id="@+id/settings_checkBox_password_protection"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical|right"
+                            android:checked="false"
+                            android:gravity="center_vertical|right" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+        </android.support.v7.widget.CardView>
+
 
         <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:id="@+id/settings_card_reset_database"
@@ -354,4 +458,7 @@
 
 
     </LinearLayout>
+
+
+    </ScrollView>
 </FrameLayout>

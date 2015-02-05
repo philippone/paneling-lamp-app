@@ -205,7 +205,7 @@ public class ManualControlFragment extends Fragment implements OnReceiverListene
                 ArrayList<MotorItemView> motorItems = mEditMotorsFragment.getMotorItem();
                 for (MotorItemView mv : motorItems) {
                     try {
-                        Float.parseFloat(mv.getePos().toString());
+                       Float.parseFloat(mv.getePos().getText().toString());
                     } catch (NumberFormatException e) {
                         floatingMenu.toggle();
                         showToast();

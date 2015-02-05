@@ -81,6 +81,7 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
             options = (ImageView) v.findViewById(R.id.card_form_options);
             progressBar = (ProgressBar) v.findViewById(R.id.card_form_progressBar);
             activeIndic = (ImageView) v.findViewById(R.id.card_form_active_indicator);
+           // activeIndic.setColorFilter(R.color.primary, PorterDuff.Mode.SRC_ATOP);
             favView = (ImageView) v.findViewById(R.id.card_form_fav_icon);
 
 
