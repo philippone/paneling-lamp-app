@@ -1,5 +1,6 @@
 #include <AccelStepper.h>
 #include <SoftwareSerial.h>
+#include <Shape.h>
 
 // stepper
 int motorCount = 5;
