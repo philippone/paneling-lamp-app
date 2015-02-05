@@ -35,8 +35,9 @@ float lowerBound = 1600*200;
 //demoMode
 boolean demoModeActive = false;
 float demoModeMinutes = 5;
+long lastDemoChangeTime = 0;
 
-
+// communication
 String message;
 int msg = 0;
 int pos = 0;
@@ -57,6 +58,7 @@ void setup(){
   Serial1.begin(9600);
 
 
+  lastDemoChangeTime = millis();
 
   // TODO
   // request positions of smartphone
@@ -121,8 +123,6 @@ void loop() {
 	int error = -1;
 	  
     if(upperBoundActive) {
-    	
-		
     	if (motors[i]->currentPosition() < upperBound)  {
 			
     		run = false;
@@ -159,7 +159,8 @@ for (int i = 0; i < motorCount; i++) {
   for (int i = 0; i < motorCount; i++) {
     if (motors[i]->distanceToGo() == 0) {
       if(motorRunning[i]) {
-        float stopPosition = motors[i]->currentPosition() / oneRotation;
+		// send stop position to phone
+      	float stopPosition = motors[i]->currentPosition() / oneRotation;
         Serial.print("motor ");
 		Serial.print(i);
 		Serial.print(" stopped at ");
@@ -174,6 +175,17 @@ for (int i = 0; i < motorCount; i++) {
 
         motorRunning[i] = false;
       }
+	  
+	  // if all motors are stopped
+	  // and demoMode is active
+	  // move motors
+	  if (demoModeActive && !tranformToForm) {
+		  // test if x minutes are passed
+		  if ((millis() - lastDemoChangeTime) >= (demoModeMinutes * 60 * 1000)) {
+		  	// TODO change shape
+		  }
+		  
+	  }
     }
   }
 
@@ -202,6 +214,10 @@ for (int i = 0; i < motorCount; i++) {
  * handle incomming messages
  */
 void handle(String message) {
+	// set demoModeTime to current time
+	// so it takes x minutes to change the form
+	// if demoMode is active
+	lastDemoChangeTime = millis();
 
 	if (message.startsWith("c;")) 
 		handleConnectedPhone(message.substring(2));
@@ -209,14 +225,20 @@ void handle(String message) {
 		handleMoveForm(message.substring(3));
   	else if (message.startsWith("sa;"))
     	handleStepperPos(message.substring(3), true);
-  	else if (message.startsWith("sr;"))
+  	else if (message.startsWith("sr;")) {
     	handleStepperPos(message.substring(3), false);
+		currFormID = -1;
+	}
   	else if (message.startsWith("fs;"))
     	handleStepperForceStop(message.substring(3));
-  	else if (message.startsWith("fr;"))
+  	else if (message.startsWith("fr;")) {
     	handleStepperForceReset(message.substring(3));
-  	else if (message.startsWith("op;"))
+		currFormID = -1;
+	}
+  	else if (message.startsWith("op;")) {
 	  	handleStepperOverridePos(message.substring(3));
+		currFormID = -1;
+	}
   	else if (message.startsWith("l;")) 
     	handleLEDMsg(message.substring(2));
 	else if (message.startsWith("b;"))
@@ -227,12 +249,7 @@ void handle(String message) {
 		handleDemoModeChange(message.substring(3)); 
 }
 
-void handleDemoModeChange(String message) {
-	// TODO 
-	
-	// demoModeActive = 
-	// demoModeMinutes = 
-}
+
 
 
 void handleRequestBounds() {
@@ -532,6 +549,53 @@ void setBound(int bound, int boundValue, float value) {
 		lowerBoundActive = bV;
 		lowerBound = value;
 	}
+}
+
+
+/**
+Msg: dm; is active; minutes
+
+*/
+void handleDemoModeChange(String message) {
+	
+	int counter = 0;
+	int active = -1;
+	float minutes = -1;
+	String tmp = "";
+	
+    for (int i = 0; i < message.length(); i++) {
+      if(message.charAt(i) != ';') {
+        tmp += message.charAt(i);
+      } 
+      else {
+        if (counter == 0) {
+          // parse bound (upper or lower) #
+          active = tmp.toInt();
+        } 
+        else if (counter == 1) {
+          // parse value
+          char buffer[10];
+          tmp.toCharArray(buffer, 10);
+          minutes = atof(buffer);
+		  if (active > 0 && minutes > 0)
+		  	setDemoMode(active, minutes);
+        }
+        tmp = "";
+        counter++;
+      }
+    } 
+}
+
+void setDemoMode(int active, float minutes) {
+	boolean b = active == 0 ? false : true;
+	// if minutes == 0 set it to 1 (1 min) as minimum
+	if (minutes == 0) {
+		minutes = 1;
+		// send value to phone
+		handleRequestBounds();
+	}
+	demoModeActive = b;
+	demoModeMinutes = minutes;
 }
 
 /**
