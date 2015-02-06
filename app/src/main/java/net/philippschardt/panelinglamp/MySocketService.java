@@ -9,7 +9,6 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Build;
 import android.os.IBinder;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -26,6 +25,7 @@ public class MySocketService extends Service {
     public static final String EXTRA_MESSAGE = "MySocketService_EXTRA_MSG";
     public static final String EXTRA_MESSAGE_FORWARD = "MySocketService_EXTRA_MSG_forward";
     public static final String BROADCAST_ACTION = "MySocketService_BRODCAST_forward_msg";
+    public static final String EXTRA_RESTART = "MySocketService_RESTART";
     private final String TAG = getClass().getName();
     private BluetoothManager bluetoothManager;
     private BluetoothAdapter bluetoothAdapter;
@@ -35,6 +35,9 @@ public class MySocketService extends Service {
     private static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
     private ArduinoReceiverThread art;
     private ExecutorService es = Executors.newFixedThreadPool(1);
+    private NotificationManager mNotifyMgr;
+    private int mNotificationId;
+    private Thread bluetoothThred;
 
     public MySocketService() {
     }
@@ -48,28 +51,47 @@ public class MySocketService extends Service {
     public void onCreate() {
         super.onCreate();
 
-        NotificationCompat.Builder mBuilder =
+        /*NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.form)
                         .setContentTitle(getResources().getString(R.string.app_name))
-                        .setContentText("Hello World!");
+                        .setContentText("Hello World!")
+                .setOngoing(true);
+
 
 
         // Sets an ID for the notification
-        int mNotificationId = 001;
+        mNotificationId = 001;
         // Gets an instance of the NotificationManager service
-        NotificationManager mNotifyMgr =
+        mNotifyMgr =
                 (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         // Builds the notification and issues it.
+
         mNotifyMgr.notify(mNotificationId, mBuilder.build());
 
 
-        new Thread(new Runnable() {
+
+        Intent notificationIntent = new Intent(this, PanelingLamp.class);
+        PendingIntent pendingIntent=PendingIntent.getActivity(this, 0,
+                notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        Notification notification = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setContentText("Hi")
+                .setContentIntent(pendingIntent).build();
+
+        startForeground(mNotificationId,  notification);
+
+      */
+
+        bluetoothThred = new Thread(new Runnable() {
             @Override
             public void run() {
                 setBTConnection();
             }
-        }).run();
+        });
+
+        bluetoothThred.run();
 
     }
 
@@ -100,11 +122,6 @@ public class MySocketService extends Service {
 
 
             try {
-                /*OutputStreamWriter osw = new OutputStreamWriter(bluetoothSocket.getOutputStream(), getString(R.string.arduino_bt_encoding));
-                osw.write("testtextwithaverylonglength\n");
-                osw.flush();
-                */
-
                 //bluetoothSocket.getOutputStream().write(new byte[]{(byte) 0xFF,(byte) 0xFF, (byte) 0x0a, (byte) 0x0b, 0x00 , 0x00, 0x13, 0x7a});
                 bluetoothSocket.getOutputStream().write(msg.getBytes());
                 bluetoothSocket.getOutputStream().flush();
@@ -128,6 +145,9 @@ public class MySocketService extends Service {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        //stopForeground(true);
+        //mNotifyMgr.cancel(mNotificationId);
     }
 
     /*

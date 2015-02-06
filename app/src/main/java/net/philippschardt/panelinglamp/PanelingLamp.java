@@ -113,32 +113,12 @@ public class PanelingLamp extends ActionBarActivity
 
         // Gets the data repository in write mode
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        // insert standard shapes if not already done
+        PanelingLampDBHelper.setUpShapes(db);
 
 
-
-/*
-        // Insert the new row, returning the primary key value of the new row
-        db.insert(
-                PanelingLampContract.FormEntry.TABLE_NAME,
-                null,
-                PanelingLampContract.FormEntry.createContentValues("Form 1" , R.drawable.paneling_lamp + "", 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 255, 255, 0, 0,0,0, 0, false, true, 0, true, 0));
-
-        // Insert the new row, returning the primary key value of the new row
-        db.insert(
-                PanelingLampContract.FormEntry.TABLE_NAME,
-                null,
-                PanelingLampContract.FormEntry.createContentValues("Form 2", R.drawable.paneling_lamp2 + "", 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 255, 255, 0,0,0,0, 0, false, true, 1, true, 1));
-
-         for (int i = 2; i < 10; i++) {
-            // Insert the new row, returning the primary key value of the new row
-            db.insert(
-                    PanelingLampContract.FormEntry.TABLE_NAME,
-                    null,
-                    PanelingLampContract.FormEntry.createContentValues("Form " + i, R.drawable.paneling_lamp + "", 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 255, 255, 0, 0, 0,0,0, false, false, i, true, 0));
-        }
-
-*/
         Intent i = new Intent(this, MySocketService.class);
+        i.putExtra(MySocketService.EXTRA_RESTART, true);
         startService(i);
     }
 

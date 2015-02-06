@@ -1,6 +1,8 @@
 package fragments.settings;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -90,6 +92,12 @@ public class SettingsFragment extends Fragment implements OnReceiverListener {
         passProtLayout = (LinearLayout) v.findViewById(R.id.settings_password_protection_layout);
         passProtCheck = (CheckBox) v.findViewById(R.id.settings_checkBox_password_protection);
 
+        Context context = getActivity();
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        boolean ppValue = sharedPref.getBoolean(getString(R.string.preference_settings_password_protection), false);
+        passProtCheck.setChecked(ppValue);
+
+
         resetDatabaseLayout = (LinearLayout) v.findViewById(R.id.settings_database_reset_layout);
 
 
@@ -125,7 +133,11 @@ public class SettingsFragment extends Fragment implements OnReceiverListener {
         passProtCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                // TODO save password protection value in database
+
+                SharedPreferences sharedPref = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putBoolean(getString(R.string.preference_settings_password_protection), isChecked);
+                editor.commit();
             }
         });
 

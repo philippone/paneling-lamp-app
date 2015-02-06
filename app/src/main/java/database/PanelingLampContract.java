@@ -228,6 +228,17 @@ public class PanelingLampContract {
     }
 
 
+    public static boolean hasStandardShapes(SQLiteDatabase db) {
+
+        Cursor c = db.rawQuery("Select * from " + FormEntry.TABLE_NAME, null);
+
+        if (c.getCount() > 0)
+            return true;
+        else
+            return false;
+    }
+
+
     public static Cursor getForm(SQLiteDatabase db, long id) {
 
         // Define a projection that specifies which columns from the database

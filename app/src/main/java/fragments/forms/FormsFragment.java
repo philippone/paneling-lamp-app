@@ -2,8 +2,6 @@ package fragments.forms;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.ActivityOptions;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,12 +17,12 @@ import android.view.animation.AnimationUtils;
 import com.astuetz.PagerSlidingTabStrip;
 import com.getbase.floatingactionbutton.FloatingActionButton;
 
-import net.philippschardt.panelinglamp.EditFormActivity;
 import net.philippschardt.panelinglamp.PanelingLamp;
 import net.philippschardt.panelinglamp.R;
 
 import fragments.OnFragmentInteractionListener;
 import fragments.OnReceiverListener;
+import util.MsgCreator;
 import util.SlidingTabLayout;
 
 
@@ -84,6 +82,10 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
         mFavsFrag = FormsFragmentFavs.newInstance("test", "test");
         mStandardFrag = FormsStandardFragment.newInstance(true);
         mOwnFrag = FormsStandardFragment.newInstance(false);
+
+
+        // TODO
+        mListener.sendMsg(MsgCreator.requestCurrentStatus());
     }
 
     @Override
@@ -120,10 +122,17 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
             @TargetApi(Build.VERSION_CODES.LOLLIPOP)
             @Override
             public void onClick(View v) {
-                Intent startActivity = new Intent(getActivity(), EditFormActivity.class);
+                /*Intent startActivity = new Intent(getActivity(), EditFormActivity.class);
                 startActivity.putExtra(EditFormActivity.EXTRA_IS_NEW_FORM, true);
                 //getActivity().startActivity(startActivity);
                 getActivity().startActivity(startActivity, ActivityOptions.makeSceneTransitionAnimation(((PanelingLamp) mListener)).toBundle());
+                */
+
+                // TODO change to new activity??
+                PanelingLamp host = ((PanelingLamp)mListener);
+                host.onNavigationDrawerItemSelected(1);
+
+
             }
         });
 

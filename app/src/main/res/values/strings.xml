@@ -60,5 +60,7 @@
     <string name="minute_s">Minute(s)</string>
     <string name="password_protection">Password Protection</string>
     <string name="password_protection_descr">Activate/Deactivate the password protection for the settings view.</string>
+    <string name="preference_settings_password_protection">pref_passw_protect</string>
+    <string name="preference_file_key">preference_file</string>
 
 </resources>

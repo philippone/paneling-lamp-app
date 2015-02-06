@@ -71,6 +71,7 @@ public class NavigationDrawerFragment extends Fragment {
     private ImageView mCurrentFormThumb;
     private MyDrawerMenuAdapter adapter;
     private ImageView settingsIcon;
+    private LinearLayout settingsLayout;
 
     public NavigationDrawerFragment() {
     }
@@ -117,6 +118,7 @@ public class NavigationDrawerFragment extends Fragment {
                     adapter.notifyDataSetChanged();
                 }
                 settingsIcon.clearColorFilter();
+                //settingsLayout.setBackgroundColor(getResources().getColor(R.color.floatingButtonNormal));
             }
         });
 
@@ -140,7 +142,8 @@ public class NavigationDrawerFragment extends Fragment {
                 new DrawerItem(getString(R.string.title_section1), R.drawable.form),
                 new DrawerItem(getString(R.string.title_section2), R.drawable.manual_control),
                 new DrawerItem(getString(R.string.title_section3), R.drawable.about),
-                new DrawerItem(getString(R.string.title_section4), R.drawable.impress)}
+                new DrawerItem(getString(R.string.title_section4), R.drawable.impress)
+                }
         );
 
         mDrawerListView.setAdapter(adapter);
@@ -149,7 +152,7 @@ public class NavigationDrawerFragment extends Fragment {
         mCurrentFormThumb = (ImageView) v.findViewById(R.id.drawer_thumbview);
 
         settingsIcon = (ImageView) v.findViewById(R.id.frag_drawer_imageView_settings);
-        LinearLayout settingsLayout = (LinearLayout) v.findViewById(R.id.frag_drawer_setting_layout);
+        settingsLayout = (LinearLayout) v.findViewById(R.id.frag_drawer_setting_layout);
         settingsLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -163,7 +166,8 @@ public class NavigationDrawerFragment extends Fragment {
                     adapter.setSelectedItem(-1);
                     adapter.notifyDataSetChanged();
                 }
-                settingsIcon.setColorFilter(R.color.floatingButtonNormal, PorterDuff.Mode.SRC_ATOP);
+                settingsIcon.setColorFilter(R.color.floatingButtonNormal, PorterDuff.Mode.SRC_IN);
+                //settingsLayout.setBackgroundColor(getResources().getColor(R.color.primary));
             }
         });
 

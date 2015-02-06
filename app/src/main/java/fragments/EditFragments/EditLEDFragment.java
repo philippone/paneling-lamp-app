@@ -29,10 +29,12 @@ public class EditLEDFragment extends Fragment implements OnReceiverListener{
 
 
     private int[] led;
+    private int ledMaxValue = 0;
 
 
     private OnFragmentInteractionListener mListener;
     private ArrayList<LedItemView> ledItem;
+    private LedAllItemView allLedView;
 
     /**
      * Use this factory method to create a new instance of
@@ -86,13 +88,15 @@ public class EditLEDFragment extends Fragment implements OnReceiverListener{
         View v = inflater.inflate(R.layout.fragment_edit_led, container, false);
         LinearLayout cont = (LinearLayout) v.findViewById(R.id.frag_edit_led_container);
 
-
-        cont.addView(new LedAllItemView(getActivity(), mListener, -1, "All", getMax(led), ledItem));
+        // all led view
+        allLedView = new LedAllItemView(getActivity(), mListener, -1, "All", getMax(led), ledItem);
+        cont.addView(allLedView);
+        // all other led views
         for(LedItemView lv : ledItem) {
             cont.addView(lv);
         }
 
-
+        // observerable scroll view
         MyObservableScrollView mScrollView = (MyObservableScrollView) v.findViewById(R.id.frag_edit_led_scrollView);
         mScrollView.setFragInteractionListener(mListener);
 
@@ -125,9 +129,18 @@ public class EditLEDFragment extends Fragment implements OnReceiverListener{
         // has no motors
     }
 
+
+
     @Override
     public void updateLEDInGUI(int index, int value) {
+
         ledItem.get(index).setValue(value);
+        if (value > ledMaxValue) {
+            ledMaxValue = value;
+            // update all led view
+            allLedView.setValue(value);
+
+        }
     }
 
     @Override

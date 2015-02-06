@@ -26,7 +26,6 @@
 
         <service
             android:name=".MySocketService"
-            android:enabled="true"
             android:exported="false" >
         </service>
 

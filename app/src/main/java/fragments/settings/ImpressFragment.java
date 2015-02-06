@@ -1,17 +1,24 @@
 package fragments.settings;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import net.philippschardt.panelinglamp.R;
 
+import java.util.ArrayList;
+
 import fragments.OnFragmentInteractionListener;
 import fragments.OnReceiverListener;
+import util.ImpressItem;
+import util.MyImpressArrayAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -66,6 +73,27 @@ public class ImpressFragment extends Fragment implements OnReceiverListener {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_impress, container, false);
+
+
+        ListView listview = (ListView) v.findViewById(R.id.impress_listview);
+
+        listview.setAdapter(new MyImpressArrayAdapter(getActivity(),
+                R.layout.impress_item,
+                new ImpressItem[] {
+                      new ImpressItem(R.drawable.form, "Shape", "created by Roberto Notarangelo from the Noun Project", "http://thenounproject.com/"),
+                      new ImpressItem(R.drawable.manual_control, "Control", "created by useiconic.com from the Noun Project", "http://thenounproject.com/"),
+                      new ImpressItem(R.drawable.power, "Power", "created by useiconic.com from the Noun Project", "http://thenounproject.com/"),
+                      new ImpressItem(R.drawable.finished, "Finished", "created by aguycalledgary from the Noun Project", "http://thenounproject.com/"),
+                      new ImpressItem(R.drawable.about, "About", "created by PJ Souders from the Noun Project", "http://thenounproject.com/"),
+                      new ImpressItem(R.drawable.impress, "Impress", "created by José Campos from the Noun Project", "http://thenounproject.com/"),
+                      new ImpressItem(R.drawable.rotor, "Rotor", "created by Margery M Fabi from the Noun Project", "http://thenounproject.com/"),
+                      new ImpressItem(R.drawable.led, "LED", "created by jon trillana from the Noun Project", "http://thenounproject.com/")
+                }
+
+
+                ));
+
+
 
         return v;
     }

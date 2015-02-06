@@ -33,15 +33,29 @@ boolean lowerBoundActive = true;
 float upperBound = 0;
 float lowerBound = 1600*200;
 
-float b[] = {0,0,0,0,0};
-int c[] = {0,0,0,0,0,0,0};
-Shape* a = new Shape(-1, 0,0,0,0,0,0,0,0,0,0,0,0 );
-Shape* demoShapes[1] = { new Shape(-1, 0,0,0,0,0,0,0,0,0,0,0,0 ) };
+
+
 
 //demoMode
 boolean demoModeActive = false;
 float demoModeMinutes = 5;
 long lastDemoChangeTime = 0;
+int demoIndex = 0;
+Shape* demoShapes[13] = { 
+	new Shape(0, 8,3,0,0,0, 			255, 255, 255, 255, 255, 255, 255 ),
+	new Shape(1, 0,28,0,9,8,			255, 255, 255, 255, 255, 255, 255 ),
+	new Shape(2, 22, 28, 0,0,8,			255, 255, 255, 255, 255, 255, 255 ),
+	new Shape(3, 22, 28, 0, 0, 20,		255, 255, 255, 255, 255, 255, 255 ),
+	new Shape(4, 17, 1, 1, 12, 5,		255, 255, 255, 255, 255, 255, 255 ),
+	new Shape(5, 0, 17, 25.5,0, 15,		255, 255, 255, 255, 255, 255, 255 ),
+	new Shape(6, 0, 35.5, 42,0,20,		255, 255, 255, 255, 255, 255, 255 ),
+	new Shape(7, 0, 7.8, 0,10.5,3,		255, 255, 255, 255, 255, 255, 255 ),
+	new Shape(8, 0,0,0, 21, 3,			255, 255, 255, 255, 255, 255, 255 ),
+	new Shape(9, 0,0,10,21, 12,			255, 255, 255, 255, 255, 255, 255 ),
+	new Shape(10, 3,0,15,0,0,			255, 255, 255, 255, 255, 255, 255 ),
+	new Shape(11, 4,15.5,18.5,0,12,		255, 255, 255, 255, 255, 255, 255 ),
+	new Shape(12, 0,0,6.5,15.5,9.5,		255, 255, 255, 255, 255, 255, 255 ),
+};
 
 // communication
 String message;
@@ -741,10 +755,30 @@ void initStepper() {
 
 void initLEDs() {
   // set the pins as output
-  for (int i = 0; i < ledNumber; i++) {
+  for (int i = 0; i < ledNumber; i++){
     pinMode(led[i], OUTPUT); 
   }
 
 }
+
+
+
+/**
+change the shape if demo mode is acitve
+therefore it takes the next shape out of demoShapes (our 'shape database' on Arduino)
+*/
+void changeDemoShape() {
+	// take next shape and increase index
+	Shape* s = demoShapes[demoIndex++];
+	
+	for (int i = 0; i < motorCount; i++) {
+		moveMotorTo(i, s->getMotorPositions()[i]  * oneRotation);
+	}
+	for (int j = 0; j < ledNumber; j++) {
+		setLEDto(j, s->getLedValues()[j]);
+	}
+	
+}
+
 
 
