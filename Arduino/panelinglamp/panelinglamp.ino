@@ -1,6 +1,6 @@
 #include <AccelStepper.h>
 #include <SoftwareSerial.h>
-#include <Shape.h>
+#include "Shape.h"
 
 // stepper
 int motorCount = 5;
@@ -32,6 +32,11 @@ boolean upperBoundActive = true;
 boolean lowerBoundActive = true;
 float upperBound = 0;
 float lowerBound = 1600*200;
+
+float b[] = {0,0,0,0,0};
+int c[] = {0,0,0,0,0,0,0};
+Shape* a = new Shape(-1, 0,0,0,0,0,0,0,0,0,0,0,0 );
+Shape* demoShapes[1] = { new Shape(-1, 0,0,0,0,0,0,0,0,0,0,0,0 ) };
 
 //demoMode
 boolean demoModeActive = false;
