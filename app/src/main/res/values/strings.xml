@@ -62,5 +62,8 @@
     <string name="password_protection_descr">Activate/Deactivate the password protection for the settings view.</string>
     <string name="preference_settings_password_protection">pref_passw_protect</string>
     <string name="preference_file_key">preference_file</string>
+    <string name="enter">Enter</string>
+    <string name="pwd">1337</string>
+    <string name="wrong_permission">You don\'t have the permissions for this.</string>
 
 </resources>

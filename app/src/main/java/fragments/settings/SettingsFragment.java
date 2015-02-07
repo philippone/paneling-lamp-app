@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -43,6 +44,10 @@ public class SettingsFragment extends Fragment implements OnReceiverListener {
     private CheckBox demoModeCheck;
     private LinearLayout passProtLayout;
     private CheckBox passProtCheck;
+    private LinearLayout cardLayout;
+    private EditText passwField;
+    private Button passwButton;
+    private LinearLayout loginLayout;
 
 
     public static SettingsFragment newInstance(int sectionNr) {
@@ -74,6 +79,8 @@ public class SettingsFragment extends Fragment implements OnReceiverListener {
         View v =inflater.inflate(R.layout.fragment_settings, container, false);
 
 
+        cardLayout = (LinearLayout) v.findViewById(R.id.settings_layout_cards);
+
         upperBoundLayout = (LinearLayout) v.findViewById(R.id.settings_upper_bound_layout);
         lowerBoundLayout = (LinearLayout) v.findViewById(R.id.settings_lower_bound_layout);
 
@@ -89,13 +96,41 @@ public class SettingsFragment extends Fragment implements OnReceiverListener {
         demoModeValue = (EditText) v.findViewById(R.id.settings_editText_demo_mode);
         demoModeCheck = (CheckBox) v.findViewById(R.id.settings_checkBox_demo_mode);
 
+        loginLayout = (LinearLayout) v.findViewById(R.id.settings_password_layout);
         passProtLayout = (LinearLayout) v.findViewById(R.id.settings_password_protection_layout);
         passProtCheck = (CheckBox) v.findViewById(R.id.settings_checkBox_password_protection);
+        passwField = (EditText) v.findViewById(R.id.settings_password_field);
+        passwButton = (Button) v.findViewById(R.id.settings_button_login);
 
         Context context = getActivity();
         SharedPreferences sharedPref = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         boolean ppValue = sharedPref.getBoolean(getString(R.string.preference_settings_password_protection), false);
         passProtCheck.setChecked(ppValue);
+
+
+        // protection is active
+        if (ppValue) {
+            loginLayout.setVisibility(View.VISIBLE);
+            cardLayout.setVisibility(View.GONE);
+        } else {
+            loginLayout.setVisibility(View.GONE);
+            cardLayout.setVisibility(View.VISIBLE);
+        }
+
+
+        passwButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String pwd = passwField.getText().toString();
+
+                Log.d(TAG, "check pwd " + pwd + " == " + getResources().getString(R.string.pwd));
+
+                if ( pwd.equals( getResources().getString(R.string.pwd))) {
+                    loginLayout.setVisibility(View.GONE);
+                    cardLayout.setVisibility(View.VISIBLE);
+               }
+            }
+        });
 
 
         resetDatabaseLayout = (LinearLayout) v.findViewById(R.id.settings_database_reset_layout);

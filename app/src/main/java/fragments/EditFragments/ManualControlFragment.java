@@ -3,6 +3,8 @@ package fragments.EditFragments;
 import android.animation.Animator;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -62,6 +64,7 @@ public class ManualControlFragment extends Fragment implements OnReceiverListene
     private FloatingActionButton floatingButton_set_zero;
     private FloatingActionButton floatingButton_moveMotors;
     private FloatingActionButton floatingButton_saveForm;
+    private boolean ppValue;
 
     /**
      * Use this factory method to create a new instance of
@@ -178,6 +181,12 @@ public class ManualControlFragment extends Fragment implements OnReceiverListene
         floatingButton_saveForm = (FloatingActionButton) v.findViewById(R.id.manual_control_floating_bttn_save_as_form);
 
 
+        SharedPreferences sharedPref = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        ppValue = sharedPref.getBoolean(getString(R.string.preference_settings_password_protection), false);
+
+
+
+
         floatingButton_saveForm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -239,6 +248,11 @@ public class ManualControlFragment extends Fragment implements OnReceiverListene
         floatingButton_set_zero.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                // if password protection is active, deactivete set current as zero button
+                if (!ppValue) {
+
+
                 for(MotorItemView mV : mEditMotorsFragment.getMotorItem()) {
 
                     mV.setCurrAsZero();
@@ -246,6 +260,10 @@ public class ManualControlFragment extends Fragment implements OnReceiverListene
                     mListener.sendMsg(MsgCreator.overridePos(mV.getmIndex(), mV.getmPos()));
                     floatingMenu.toggle();
 
+                }
+                } else {
+                    Toast t = Toast.makeText(getActivity(), R.string.wrong_permission, Toast.LENGTH_SHORT);
+                    t.show();
                 }
 
             }

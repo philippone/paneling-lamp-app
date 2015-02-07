@@ -1,3 +1,4 @@
+
 #include <AccelStepper.h>
 #include <SoftwareSerial.h>
 #include "Shape.h"
@@ -29,16 +30,14 @@ int ledValue[7] = {0,0,0,0,0,0,0};
 
 // bound stuff
 boolean upperBoundActive = true;
-boolean lowerBoundActive = false;
+boolean lowerBoundActive = true;
 float upperBound = 0;
-float lowerBound = 320000;
-
-
+float lowerBound = 320000; // 1600 * 200
 
 
 //demoMode
 boolean demoModeActive = false;
-float demoModeMinutes = 5;
+float demoModeMinutes = 0.1;
 long lastDemoChangeTime = 0;
 int demoIndex = 0;
 Shape* demoShapes[13] = { 
@@ -75,15 +74,11 @@ void setup(){
 
   // Open serial communications and wait for port to open:
   Serial.begin(9600);
-  Serial1.begin(9600);
+  Serial.begin(9600);
 
 
   lastDemoChangeTime = millis();
-
-  // TODO
-  // request positions of smartphone
-  // at the moment all on position 0 at startup
-  // stepper1.setCurrentPosition(...)
+ 
 }
 
 
@@ -91,8 +86,8 @@ void setup(){
 void loop() {
 
   // listen to bluetooth
-  while (Serial1.available() > 0) {
-    char msg = Serial1.read();
+  while (Serial.available() > 0) {
+    char msg = Serial.read();
 
     if (msg == '*' || msg == '\n') {
       message += "\n";
@@ -102,8 +97,8 @@ void loop() {
       Serial.print(message);
 	  
       // send back to phone (test only)
-      //Serial1.print("all: ");
-      //Serial1.println(message);
+      //Serial.print("all: ");
+      //Serial.println(message);
 	  
       handle(message);
 
@@ -117,25 +112,7 @@ void loop() {
     } 
   }
 
-  // normal usb connection
-  while (Serial.available() > 0) {
-    char msg = Serial.read();
 
-    //Serial.print("all: ");
-    //Serial.println(msg);
-
-    if (msg == '*' || msg == '\n') {
-      message += "\n";
-      handle(message);
-      // reset Message
-      message = "";
-    } 
-    else {
-      message += msg  ;
-      //Serial.print("r: ");
-      //Serial.println(msg);
-    } 
-  }
   
   // check that motor never reach position -1
   for (int i = 0; i < motorCount; i++) {
@@ -161,10 +138,17 @@ void loop() {
 		// run motor if motor is in bound correct
       	motors[i]->run();
 	} else {
-		if (error == 0)
+		Serial.print("ERROR: set Bound to ");
+		if (error == 0) {
     		motors[i]->setCurrentPosition(upperBound);
-		else if (error == 1)
+			Serial.print(" upperBound: ");
+			Serial.println(upperBound);
+		}
+		else if (error == 1) {
 			motors[i]->setCurrentPosition(lowerBound);
+			Serial.print(" lowerBound: ");
+			Serial.println(lowerBound);
+		}
     }
   }
   
@@ -174,9 +158,15 @@ for (int i = 0; i < motorCount; i++) {
   motors[i]->run();
 }
   */
-
+  /*
+  Serial.print("target Position 0 ");
+  Serial.print(motors[0]->targetPosition());
+  Serial.print(" - ");
+  Serial.println(motors[0]->targetPosition() / oneRotation);
+*/
   // send rely to phone when motor has reached his position
   for (int i = 0; i < motorCount; i++) {
+	  
     if (motors[i]->distanceToGo() == 0) {
       if(motorRunning[i]) {
 		// send stop position to phone
@@ -187,11 +177,11 @@ for (int i = 0; i < motorCount; i++) {
         Serial.println(stopPosition);
 
         // send msg to phone with current Position of motor
-        Serial1.print("ms;");
-        Serial1.print(i);
-        Serial1.print(";");
-        Serial1.print(stopPosition);
-        Serial1.println(";\n");
+        Serial.print("ms;");
+        Serial.print(i);
+        Serial.print(";");
+        Serial.print(stopPosition);
+        Serial.println(";\n");
 
         motorRunning[i] = false;
       }
@@ -199,7 +189,7 @@ for (int i = 0; i < motorCount; i++) {
 	  // if all motors are stopped
 	  // and demoMode is active
 	  // move motors
-	  if (demoModeActive) {
+	  if (demoModeActive &&  !tranformToForm) {
 		  // test if x minutes are passed
 		  if ((millis() - lastDemoChangeTime) >= (demoModeMinutes * 60 * 1000)) {
 			  lastDemoChangeTime = millis();
@@ -235,10 +225,15 @@ for (int i = 0; i < motorCount; i++) {
  * handle incomming messages
  */
 void handle(String message) {
+	Serial.print("handle message: ");
+	Serial.println(message);
 	// set demoModeTime to current time
 	// so it takes x minutes to change the form
 	// if demoMode is active
 	lastDemoChangeTime = millis();
+	
+	Serial.print("test c; ");
+	Serial.println(message.startsWith("c;"));;
 
 	if (message.startsWith("c;")) 
 		handleConnectedPhone(message.substring(2));
@@ -266,27 +261,32 @@ void handle(String message) {
 		handleBoundsMsg(message.substring(2));
 	else if (message.startsWith("rb;"))
 		handleRequestBounds();
-	else if (message.startsWith("dm;"))
+	else if (message.startsWith("dm;")) {
+		Serial.println("message dm: ");
+		//Serial.print(message.length());
+		//Serial.print(" ");
+		//Serial.println(message.substring(3));
 		handleDemoModeChange(message.substring(3)); 
+	}
 }
 
 
 
 
 void handleRequestBounds() {
-	Serial1.print("br;");
-	Serial1.print(upperBoundActive);
-	Serial1.print(";");
-	Serial1.print(upperBound);
-	Serial1.print(";");
-	Serial1.print(lowerBoundActive);
-	Serial1.print(";");
-	Serial1.print(lowerBound);
-	Serial1.print(";");
-	Serial1.print(demoModeActive);
-	Serial1.print(";");
-	Serial1.print(demoModeMinutes);
-	Serial1.println(";");
+	Serial.print("br;");
+	Serial.print(upperBoundActive);
+	Serial.print(";");
+	Serial.print(upperBound);
+	Serial.print(";");
+	Serial.print(lowerBoundActive);
+	Serial.print(";");
+	Serial.print(lowerBound);
+	Serial.print(";");
+	Serial.print(demoModeActive);
+	Serial.print(";");
+	Serial.print(demoModeMinutes);
+	Serial.println(";");
 }
 
 
@@ -295,20 +295,20 @@ void handleRequestBounds() {
 * When phone connects, send all motor positions as reply
 */
 void handleConnectedPhone(String message) {
-	Serial1.print("r;");
-	Serial1.print(currFormID);
-	Serial1.print(";");
+	Serial.print("r;");
+	Serial.print(currFormID);
+	Serial.print(";");
 	
 	for (int i = 0; i < motorCount; i++) {
 		float position = motors[i]->currentPosition() / oneRotation;
-		Serial1.print(position);
-		Serial1.print(";");
+		Serial.print(position);
+		Serial.print(";");
 	}
 	for (int i = 0; i < ledNumber; i++) {
-		Serial1.print(ledValue[i]);
-		Serial1.print(";");
+		Serial.print(ledValue[i]);
+		Serial.print(";");
 	}
-	Serial1.print("\n");
+	Serial.print("\n");
 }
 
 
@@ -430,11 +430,11 @@ void handleStepperPos(String message, boolean aboslutePosition) {
   if (fail) {
     // send msg to phone with current Position of motor
     float stopPosition = motors[stepper]->currentPosition() / oneRotation;
-    Serial1.print("ms;");
-    Serial1.print(stepper);
-    Serial1.print(";");
-    Serial1.print(stopPosition);
-    Serial1.println(";fail;\n");
+    Serial.print("ms;");
+    Serial.print(stepper);
+    Serial.print(";");
+    Serial.print(stopPosition);
+    Serial.println(";fail;\n");
   } 
 }
 
@@ -456,6 +456,10 @@ void moveMotorTo(int stepper, long position) {
 * @param stepps how many stepps the stepper should run relative from its current pos
 */
 void moveMotorRel(int stepper, long stepps) {
+	Serial.print("moveMotor ");
+	Serial.print(stepper);
+	Serial.print(" relative stepps: ");
+	Serial.println(stepps);
     motorRunning[stepper] = true;
     motors[stepper]->move(stepps);
 }
@@ -508,11 +512,11 @@ void handleStepperForceReset(String message) {
   if (fail) {
     // send msg to phone with current Position of motor
     float stopPosition = motors[stepper]->currentPosition() / oneRotation;
-    Serial1.print("ms;");
-    Serial1.print(stepper);
-    Serial1.print(";");
-    Serial1.print(stopPosition);
-    Serial1.println(";\n");
+    Serial.print("ms;");
+    Serial.print(stepper);
+    Serial.print(";");
+    Serial.print(stopPosition);
+    Serial.println(";\n");
   } 
 
 }
@@ -578,7 +582,8 @@ Msg: dm; is active; minutes
 
 */
 void handleDemoModeChange(String message) {
-	
+	Serial.print("handleDemoModus ");
+	Serial.println(message.length());
 	int counter = 0;
 	int active = -1;
 	float minutes = -1;
@@ -592,12 +597,16 @@ void handleDemoModeChange(String message) {
         if (counter == 0) {
           // parse bound (upper or lower) #
           active = tmp.toInt();
+		  Serial.print("active ");
+		  //Serial.print(active);
         } 
         else if (counter == 1) {
           // parse value
           char buffer[10];
           tmp.toCharArray(buffer, 10);
           minutes = atof(buffer);
+		  //Serial.print(" minutes ");
+		  //Serial.println(minutes);
 		  if (active >= 0 && minutes > 0)
 		  	setDemoMode(active, minutes);
         }
@@ -615,6 +624,9 @@ void setDemoMode(int active, float minutes) {
 		// send value to phone
 		handleRequestBounds();
 	}
+	Serial.print("set Demo Mode to ");
+	Serial.print(b); Serial.print(" and ");
+	Serial.println(minutes);
 	demoModeActive = b;
 	demoModeMinutes = minutes;
 }
@@ -661,11 +673,11 @@ void handleStepperOverridePos(String message) {
 		  // send to phone
 	      // send msg to phone with current Position of motor
 	      	//float stopPosition = motors[stepper]->currentPosition() / oneRotation;
-	      Serial1.print("ms;");
-	      Serial1.print(stepper);
-	      Serial1.print(";");
-	      Serial1.print(newPosition);
-	      Serial1.println(";\n");
+	      Serial.print("ms;");
+	      Serial.print(stepper);
+	      Serial.print(";");
+	      Serial.print(newPosition);
+	      Serial.println(";\n");
       } 
       else fail = true;
     } 
@@ -674,11 +686,11 @@ void handleStepperOverridePos(String message) {
     if (fail) {
       // send msg to phone with current Position of motor
       float stopPosition = motors[stepper]->currentPosition() / oneRotation;
-      Serial1.print("ms;");
-      Serial1.print(stepper);
-      Serial1.print(";");
-      Serial1.print(stopPosition);
-      Serial1.println(";\n");
+      Serial.print("ms;");
+      Serial.print(stepper);
+      Serial.print(";");
+      Serial.print(stopPosition);
+      Serial.println(";\n");
     } 
 	
 	
@@ -735,9 +747,9 @@ void setLEDto(int ledP, int value) {
 
 void sendFormReachedReply(long currFormID) {
     // to phone
-	Serial1.print("mfr;");
-    Serial1.print(currFormID);
-    Serial1.println(";\n");
+	Serial.print("mfr;");
+    Serial.print(currFormID);
+    Serial.println(";\n");
 	
 	// to computer
     Serial.print("mfr;");
@@ -769,22 +781,35 @@ change the shape if demo mode is acitve
 therefore it takes the next shape out of demoShapes (our 'shape database' on Arduino)
 */
 void changeDemoShape() {
-	if (demoIndex == 13)
+	// take next shape and increase index
+	if (demoIndex == 12)
 		demoIndex = 0;
 	
-	
-	// take next shape and increase index
 	Shape* s = demoShapes[demoIndex++];
+	
+	Serial.print("changeDemoShape ");
+	Serial.print(s->m0); Serial.print(", ");
+	Serial.print(s->m1); Serial.print(", ");
+	Serial.print(s->m2); Serial.print(", ");
+	Serial.print(s->m3); Serial.print(", ");
+	Serial.print(s->m4); Serial.print(", LEDS: ");
+	Serial.print(s->l0); Serial.print(", ");
+	Serial.print(s->l1); Serial.print(", ");
+	Serial.print(s->l2); Serial.print(", ");
+	Serial.print(s->l3); Serial.print(", ");
+	Serial.print(s->l4); Serial.print(", ");
+	Serial.print(s->l5); Serial.print(", ");
+	Serial.println(s->l6); 
+	
 	
 	currFormID = s->getIndex();
 	tranformToForm = true;
 	
-	moveMotorTo(0, s->m0  * oneRotation); motorRunning[0] = true;
-	moveMotorTo(1, s->m1  * oneRotation); motorRunning[1] = true;
-	moveMotorTo(2, s->m2  * oneRotation); motorRunning[2] = true;
-	moveMotorTo(3, s->m3  * oneRotation); motorRunning[3] = true;
-	moveMotorTo(4, s->m4  * oneRotation); motorRunning[4] = true;
-	
+	moveMotorTo(0, s->m0  * oneRotation); 
+	moveMotorTo(1, s->m1  * oneRotation); 
+	moveMotorTo(2, s->m2  * oneRotation); 
+	moveMotorTo(3, s->m3  * oneRotation);
+	moveMotorTo(4, s->m4  * oneRotation); 
 	
 	setLEDto(0, s->l0);
 	setLEDto(1, s->l1);
@@ -793,7 +818,6 @@ void changeDemoShape() {
 	setLEDto(4, s->l4);
 	setLEDto(5, s->l5);
 	setLEDto(6, s->l6);
-	
 	
 }
 
