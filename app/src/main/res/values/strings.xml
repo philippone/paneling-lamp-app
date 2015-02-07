@@ -65,5 +65,6 @@
     <string name="enter">Enter</string>
     <string name="pwd">1337</string>
     <string name="wrong_permission">You don\'t have the permissions for this.</string>
+    <string name="about_lamp">Die PanelinLamp ist eine Art Lichtteppich, welche sich in jegliche Richtungen verbiegen und verdrehen kann. Die Idee besteht darin, gleichzeitig atmosphärisches Licht als auch Arbeitslicht zu kombinieren. Die Lampe besteht aus 49 Panel, die mit Cre Leds ausgestattet sind. Die Panel sind in jeweils 7 Stück große Segmente zerteilt, die unabhänig voneinander gedimmt werden können. Zum Verändern der Form kommen 5 Schrittmotoren zum Einsatz, die jeweils an den Ecken und in der Mitte des Teppischs angebracht sind. </string>
 
 </resources>
