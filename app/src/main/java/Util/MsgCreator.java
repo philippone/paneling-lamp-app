@@ -131,5 +131,13 @@ public class MsgCreator {
         int on = activated ? 1 : 0;
         return "dm;" + on + ";" + minutes + ";\n";
     }
+
+    public static String rotateClockwise() {
+        return "rc;\n";
+    }
+
+    public static String rotateCounterClockwise() {
+        return "rcc;\n";
+    }
 }
 

@@ -88,6 +88,8 @@ public class ImpressFragment extends Fragment implements OnReceiverListener {
                       new ImpressItem(R.drawable.impress, "Impress", "created by José Campos from the Noun Project", "http://thenounproject.com/"),
                       new ImpressItem(R.drawable.rotor, "Rotor", "created by Margery M Fabi from the Noun Project", "http://thenounproject.com/"),
                       new ImpressItem(R.drawable.led, "LED", "created by jon trillana from the Noun Project", "http://thenounproject.com/")
+                      , new ImpressItem(R.drawable.clockwise, "Rotation", "created by Stéphanie Rusch from the Noun Project", "http://thenounproject.com/")
+
                 }
 
 

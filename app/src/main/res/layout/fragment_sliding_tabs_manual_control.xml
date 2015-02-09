@@ -69,6 +69,43 @@
                 fab:fab_title="@string/save_as_new_form"
                 fab:fab_size="mini"
                 fab:fab_colorPressed="@color/floatingButtonPressed"/>
+
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/manual_control_floating_90_clockwise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_icon="@drawable/clockwise"
+                fab:fab_plusIconColor="@color/white"
+                fab:fab_colorNormal="@color/green"
+                fab:fab_colorPressed="@color/floatingButtonPressed"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_margin="10dp"
+                fab:fab_title="@string/ninety_clockwise"
+                fab:fab_size="mini"
+                />
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/manual_control_90_counter_clockwise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_icon="@drawable/counter_clockwise"
+                fab:fab_plusIconColor="@color/white"
+                fab:fab_colorNormal="@color/lightGreen"
+                fab:fab_colorPressed="@color/floatingButtonPressed"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_margin="10dp"
+                fab:fab_title="@string/ninety_counter_clockwise"
+                fab:fab_size="mini"
+                />
+
+
+
+
             <com.getbase.floatingactionbutton.FloatingActionButton
                 android:id="@+id/manual_control_floating_bttn_resetMotors"
                 android:layout_width="wrap_content"

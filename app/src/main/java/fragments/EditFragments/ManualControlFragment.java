@@ -65,6 +65,8 @@ public class ManualControlFragment extends Fragment implements OnReceiverListene
     private FloatingActionButton floatingButton_moveMotors;
     private FloatingActionButton floatingButton_saveForm;
     private boolean ppValue;
+    private FloatingActionButton floatingButton_rotate_clockwise;
+    private FloatingActionButton floatingButton_rotate_counter_clockwise;
 
     /**
      * Use this factory method to create a new instance of
@@ -179,11 +181,38 @@ public class ManualControlFragment extends Fragment implements OnReceiverListene
         floatingButton_set_zero = (FloatingActionButton) v.findViewById(R.id.manual_control_floating_bttn_set_as_zero);
         floatingButton_moveMotors = (FloatingActionButton) v.findViewById(R.id.manual_control_floating_bttn_move_motors);
         floatingButton_saveForm = (FloatingActionButton) v.findViewById(R.id.manual_control_floating_bttn_save_as_form);
+        floatingButton_rotate_clockwise = (FloatingActionButton) v.findViewById(R.id.manual_control_floating_90_clockwise);
+        floatingButton_rotate_counter_clockwise = (FloatingActionButton) v.findViewById(R.id.manual_control_90_counter_clockwise);
+
+
+        floatingButton_rotate_clockwise.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEditMotorsFragment.activateProgress(0, 1, 2, 3, 4);
+                mListener.sendMsg(MsgCreator.rotateClockwise());
+
+            }
+        });
+
+        floatingButton_rotate_counter_clockwise.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mEditMotorsFragment.activateProgress(0, 1, 2, 3, 4);
+                mListener.sendMsg(MsgCreator.rotateCounterClockwise());
+
+            }
+        });
 
 
         SharedPreferences sharedPref = getActivity().getSharedPreferences(getString(R.string.preference_file_key), Context.MODE_PRIVATE);
         ppValue = sharedPref.getBoolean(getString(R.string.preference_settings_password_protection), false);
 
+/*
+        if (ppValue) {
+            com.getbase.floatingactionbutton.FloatingActionsMenu$LayoutParams
+            floatingButton_set_zero.setLayoutParams(new ViewGroup.LayoutParams(0,0));
+        }
+*/
 
 
 

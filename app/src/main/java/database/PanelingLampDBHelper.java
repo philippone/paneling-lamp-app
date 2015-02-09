@@ -12,7 +12,7 @@ import net.philippschardt.panelinglamp.R;
 public class PanelingLampDBHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 17;
+    public static final int DATABASE_VERSION = 18;
     public static final String DATABASE_NAME = "PanelingLamp.db";
 
 

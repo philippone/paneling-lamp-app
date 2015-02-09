@@ -221,6 +221,8 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
     public MyRecyclerViewAdapter(Context ctx, OnFragmentInteractionListener listener, RecyclerView recyclerView, SQLiteDatabase db, String column_Category, String column_Position, boolean categoryValue, int optionsLayout) {
         super(recyclerView);
 
+        setHasStableIds(true);
+
         mListener = listener;
         mRecyclerView = recyclerView;
         mContext = ctx;
@@ -368,6 +370,7 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
     public long getItemId(int position) {
 
         return mCards.get(position).getId();
+        //return mCards.indexOf(mCards.get(position));
     }
 
 
@@ -375,12 +378,12 @@ public class MyRecyclerViewAdapter extends DragSortAdapter<MyRecyclerViewAdapter
     public int getPositionForId(long id) {
 
 
-
         for (int i = 0; i < mCards.size(); i++) {
             if (mCards.get(i).getId() == id)
                 return mCards.indexOf(mCards.get(i));
         }
-        return -1;
+        return 0;
+
     }
 
     @Override

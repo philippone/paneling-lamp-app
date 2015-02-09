@@ -1,5 +1,6 @@
 package fragments.forms;
 
+import android.animation.Animator;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.os.Build;
@@ -10,12 +11,15 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.getbase.floatingactionbutton.FloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionsMenu;
 
 import net.philippschardt.panelinglamp.PanelingLamp;
 import net.philippschardt.panelinglamp.R;
@@ -51,6 +55,10 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
     private FormsStandardFragment mStandardFrag;
     private FormsStandardFragment mOwnFrag;
     private FloatingActionButton floatingButton_Add_Form;
+    private ImageView alphaView;
+    private FloatingActionsMenu floatingMenu;
+    private FloatingActionButton floatingButton_rotate_Clockwise;
+    private FloatingActionButton floatingButton_rotate_Counter_Clockwise;
 
 
     /**
@@ -105,7 +113,7 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
                     public void onPageSelected(int position) {
                         super.onPageSelected(position);
 
-                        showFloatingButton();
+                        showFloatingMenu();
 
                     }
                 };
@@ -114,6 +122,69 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
         PagerSlidingTabStrip tabs = (PagerSlidingTabStrip) v.findViewById(R.id.frag_forms_tabs);
         tabs.setViewPager(mViewPager);
         tabs.setOnPageChangeListener(pageListener);
+
+
+        alphaView = (ImageView) v.findViewById(R.id.froms_apha_view);
+        alphaView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                floatingMenu.toggle();
+            }
+        });
+
+        floatingMenu = (FloatingActionsMenu) v.findViewById(R.id.forms_floating_menu_bttn);
+
+        floatingMenu.setOnFloatingActionsMenuUpdateListener(new FloatingActionsMenu.OnFloatingActionsMenuUpdateListener() {
+
+            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void onMenuExpanded() {
+
+
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    // get the center for the clipping circle
+                    int cx = alphaView.getRight() - 200;
+                    int cy = alphaView.getBottom() + 200;
+
+                    // get the final radius for the clipping circle
+                    int finalRadius = Math.max(alphaView.getWidth(), alphaView.getHeight());
+
+                    // create the animator for this view (the start radius is zero)
+                    Animator anim =
+                            ViewAnimationUtils.createCircularReveal(alphaView, cx, cy, 0, finalRadius);
+
+                    // make the view visible and start the animation
+                    alphaView.setVisibility(View.VISIBLE);
+                    anim.start();
+                } else {
+
+                    alphaView.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onMenuCollapsed() {
+                alphaView.setVisibility(View.GONE);
+            }
+        });
+
+        floatingButton_rotate_Clockwise = (FloatingActionButton) v.findViewById(R.id.forms_frag_floating_90_clockwise);
+        floatingButton_rotate_Counter_Clockwise = (FloatingActionButton) v.findViewById(R.id.forms_frag_floating_90_counter_clockwise);
+
+
+        floatingButton_rotate_Clockwise.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.sendMsg(MsgCreator.rotateClockwise());
+            }
+        });
+
+        floatingButton_rotate_Counter_Clockwise.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mListener.sendMsg(MsgCreator.rotateCounterClockwise());
+            }
+        });
 
 
         floatingButton_Add_Form = (FloatingActionButton) v.findViewById(R.id.forms_frag_floating_add_form);
@@ -227,28 +298,31 @@ public class FormsFragment extends Fragment implements OnReceiverListener {
 
     @Override
     public void onScrollUp() {
-        hideFloatingButton();
+        hideFloatingMenu();
     }
+
+
 
     @Override
     public void onScrollDown() {
-        showFloatingButton();
+        showFloatingMenu();
     }
 
 
-    private void hideFloatingButton() {
-        if (floatingButton_Add_Form.getVisibility() == View.VISIBLE) {
+
+    private void hideFloatingMenu() {
+        if (floatingMenu.getVisibility() == View.VISIBLE) {
             Animation slide = AnimationUtils.loadAnimation(getActivity(), R.anim.floating_action_button_hide);
-            floatingButton_Add_Form.startAnimation(slide);
-            floatingButton_Add_Form.setVisibility(View.GONE);
+            floatingMenu.startAnimation(slide);
+            floatingMenu.setVisibility(View.GONE);
         }
     }
 
-    private void showFloatingButton() {
-        if (floatingButton_Add_Form.getVisibility() == View.GONE) {
+    private void showFloatingMenu() {
+        if (floatingMenu.getVisibility() == View.GONE) {
             Animation slide = AnimationUtils.loadAnimation(getActivity(), R.anim.floating_action_button_show);
-            floatingButton_Add_Form.startAnimation(slide);
-            floatingButton_Add_Form.setVisibility(View.VISIBLE);
+            floatingMenu.startAnimation(slide);
+            floatingMenu.setVisibility(View.VISIBLE);
         }
     }
 

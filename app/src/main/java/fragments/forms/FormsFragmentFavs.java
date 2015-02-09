@@ -103,8 +103,10 @@ public class FormsFragmentFavs extends Fragment implements OnReceiverListener {
 
 
         mAdapter = new MyRecyclerViewAdapter(getActivity(), mListener, mRecyclerView, sqLiteDatabase, PanelingLampContract.FormEntry.COLUMN_FAV,  PanelingLampContract.FormEntry.COLUMN_FAV_POS, true, R.menu.menu_card_options_fav);
+        mAdapter.setHasStableIds(true);
 
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.hasFixedSize();
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -122,6 +124,8 @@ public class FormsFragmentFavs extends Fragment implements OnReceiverListener {
 
             }
         });
+
+
 
 
         return v;

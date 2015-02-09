@@ -26,6 +26,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Switch;
 
 import database.PanelingLampContract;
 import util.DrawerItem;
@@ -72,6 +73,8 @@ public class NavigationDrawerFragment extends Fragment {
     private MyDrawerMenuAdapter adapter;
     private ImageView settingsIcon;
     private LinearLayout settingsLayout;
+    private LinearLayout powerLayout;
+    private Switch powerSwitch;
 
     public NavigationDrawerFragment() {
     }
@@ -107,6 +110,18 @@ public class NavigationDrawerFragment extends Fragment {
 
         View v = inflater.inflate(
                 R.layout.fragment_navigation_drawer, container, false);
+
+
+
+         powerLayout = (LinearLayout)v.findViewById(R.id.relativeLayout_power);
+         powerSwitch = (Switch) v.findViewById(R.id.switch_power_drawer);
+
+        powerLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                powerSwitch.setChecked(!powerSwitch.isChecked());
+            }
+        });
 
         mDrawerListView = (ListView) v.findViewById(R.id.drawer_listview);
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

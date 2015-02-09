@@ -36,19 +36,87 @@
             android:layout_below="@+id/frag_forms_tabs"
             android:layout_alignParentStart="true" />
 
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/froms_apha_view"
+            android:layout_below="@+id/frag_forms_tabs"
+            android:layout_alignParentStart="true"
+            android:background="@color/white_semi_transparent"
+            android:focusable="false"
+            android:visibility="gone"/>
+
+
+        <com.getbase.floatingactionbutton.FloatingActionsMenu
+            android:id="@+id/forms_floating_menu_bttn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            fab:fab_addButtonColorNormal="@color/floatingButtonNormal"
+            fab:fab_addButtonColorPressed="@color/floatingButtonPressed"
+            fab:fab_addButtonPlusIconColor="@color/white"
+            fab:fab_labelStyle="@style/menu_labels_style"
+            android:layout_marginBottom="16dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginEnd="16dp"
+            android:layout_margin="10dp">
+
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/forms_frag_floating_90_clockwise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_icon="@drawable/clockwise"
+                fab:fab_plusIconColor="@color/white"
+                fab:fab_colorNormal="@color/green"
+                fab:fab_colorPressed="@color/floatingButtonPressed"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_margin="10dp"
+                fab:fab_title="@string/ninety_clockwise"
+                fab:fab_size="mini"
+                />
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/forms_frag_floating_90_counter_clockwise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_icon="@drawable/counter_clockwise"
+                fab:fab_plusIconColor="@color/white"
+                fab:fab_colorNormal="@color/lightGreen"
+                fab:fab_colorPressed="@color/floatingButtonPressed"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_margin="10dp"
+                fab:fab_title="@string/ninety_counter_clockwise"
+                fab:fab_size="mini"
+                />
+
+
         <com.getbase.floatingactionbutton.FloatingActionButton
             android:id="@+id/forms_frag_floating_add_form"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             fab:fab_icon="@drawable/ic_action_new_label"
             fab:fab_plusIconColor="@color/white"
-            fab:fab_colorNormal="@color/floatingButtonNormal"
+            fab:fab_colorNormal="@color/bluegrey"
             fab:fab_colorPressed="@color/floatingButtonPressed"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_margin="10dp"
+            fab:fab_title="@string/add_new_form"
+            fab:fab_size="mini"
              />
+
+
+        </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
     </RelativeLayout>
 
 

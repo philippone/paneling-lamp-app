@@ -1,7 +1,9 @@
 package util;
 
 import android.content.Context;
-import android.support.v7.widget.CardView;
+import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -23,7 +25,8 @@ public class LedItemView extends RelativeLayout{
 
     private TextView mIndicatorView;
     protected SeekBar mSeekBar;
-
+    private ImageButton brightnessLow;
+    private ImageButton brightnessHigh;
 
 
     public LedItemView(Context context) {
@@ -47,12 +50,33 @@ public class LedItemView extends RelativeLayout{
         inflate(getContext(), R.layout.led_item, this);
 
 
+
         mSeekBar = (SeekBar) findViewById(R.id.led_item_seekBalr);
         mSeekBar.setProgress(value);
         mIndicatorView = (TextView) findViewById(R.id.led_item_v_index);
         mIndicatorView.setText(indicator);
 
         mSeekBar.setOnSeekBarChangeListener(seekBarListener);
+
+        brightnessLow = (ImageButton) findViewById(R.id.led_item_brightness_low);
+        brightnessHigh = (ImageButton) findViewById(R.id.led_item_brightness_high);
+
+
+        brightnessLow.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSeekBar.setProgress(0);
+                mListener.sendMsg(MsgCreator.setLED(index, 0));
+            }
+        });
+
+        brightnessHigh.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mSeekBar.setProgress(255);
+                mListener.sendMsg(MsgCreator.setLED(index, 255));
+            }
+        });
     }
 
     protected SeekBar.OnSeekBarChangeListener seekBarListener = new SeekBar.OnSeekBarChangeListener() {

@@ -269,7 +269,11 @@ void handle(String message) {
 	else if (message.startsWith("rb;"))
 		handleRequestBounds();
 	else if (message.startsWith("dm;"))
-		handleDemoModeChange(message.substring(3)); 
+		handleDemoModeChange(message.substring(3));
+	else if (message.startsWith("rc;"))
+		handleRotationNinety(true);
+	else if (message.startsWith("rcc;"))
+		handleRotationNinety(false); 
 }
 
 
@@ -799,5 +803,30 @@ void changeDemoShape() {
 	
 }
 
+
+/**
+handle clockwise and counter clockwise rotation
+*/
+void handleRotationNinety(boolean clockwise) {
+	
+	long m0 = motors[0]->currentPosition();
+	long m1 = motors[1]->currentPosition();
+	long m2 = motors[2]->currentPosition();
+	long m3 = motors[3]->currentPosition();
+	
+	
+	if (clockwise) {
+		moveMotorTo(0, m3);
+		moveMotorTo(1, m0);
+		moveMotorTo(2, m1);
+		moveMotorTo(3, m2);
+	} else {
+		moveMotorTo(0, m1);
+		moveMotorTo(1, m2);
+		moveMotorTo(2, m3);
+		moveMotorTo(3, m0);
+	}
+	
+}
 
 

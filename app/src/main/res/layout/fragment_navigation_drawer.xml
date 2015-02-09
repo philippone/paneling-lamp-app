@@ -12,40 +12,34 @@
         android:layout_height="170dp"
         android:id="@+id/drawer_thumbview"
         android:background="#000000"
-        android:src="@drawable/paneling_lamp"
+        android:src="@drawable/about_lamp"
         android:cropToPadding="true"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"/>
 
-    <RelativeLayout
+    <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="@dimen/abc_action_button_min_height_material"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:id="@+id/relativeLayout"
-        android:background="@color/white"
+        android:id="@+id/relativeLayout_power"
+        android:background="?android:selectableItemBackground"
         android:layout_below="@+id/drawer_thumbview"
         android:layout_centerHorizontal="true"
         android:gravity="center">
 
-        <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/switch_power_drawer"
-            android:layout_alignTop="@+id/textView2"
-            android:layout_alignParentEnd="true"
-            android:checked="true"
-            android:layout_marginRight="16dp" />
 
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_weight="2">
         <ImageView
             android:layout_width="30dp"
             android:layout_height="wrap_content"
             android:id="@+id/imageView3"
             android:src="@drawable/power"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginLeft="13dp" />
+            android:layout_marginLeft="20dp"
+            android:layout_gravity="center" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -54,10 +48,31 @@
             android:text="@string/power"
             android:id="@+id/textView2"
             android:layout_centerVertical="true"
-            android:layout_toEndOf="@+id/imageView3"
-            android:layout_marginLeft="10dp" />
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center" />
 
-    </RelativeLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_weight="5"
+
+            android:gravity="right">
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/switch_power_drawer"
+                android:checked="true"
+                android:layout_marginRight="16dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="right" />
+
+            </LinearLayout>
+
+    </LinearLayout>
 
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -68,9 +83,9 @@
         android:dividerHeight="0dp"
         tools:context="net.philippschardt.panelinglamp.NavigationDrawerFragment"
         android:id="@+id/drawer_listview"
-        android:layout_below="@+id/relativeLayout"
+        android:layout_below="@+id/relativeLayout_power"
         android:layout_alignParentStart="false"
-        android:layout_marginTop="5dp"
+
         android:paddingTop="8dp" />
 
     <View
@@ -79,7 +94,7 @@
         android:background="@android:color/darker_gray"
         android:layout_alignTop="@+id/drawer_listview"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/relativeLayout" />
+        android:layout_below="@+id/relativeLayout_power" />
 
     <LinearLayout
         android:orientation="horizontal"

@@ -61,7 +61,7 @@
             android:layout_height="fill_parent"
             android:id="@+id/led_item_brightness_low"
             android:src="@drawable/ic_action_bightness_low"
-            android:background="?android:selectableItemBackground"
+            android:background="?android:selectableItemBackgroundBorderless"
             android:layout_gravity="center"
             android:layout_weight="1"/>
 
@@ -81,7 +81,7 @@
             android:id="@+id/led_item_brightness_high"
             android:src="@drawable/ic_action_brightness_high"
             android:layout_gravity="center"
-            android:background="?android:selectableItemBackground"
+            android:background="?android:selectableItemBackgroundBorderless"
             android:layout_weight="1"/>
 
 
