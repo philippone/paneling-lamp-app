@@ -16,7 +16,6 @@ import fragments.OnFragmentInteractionListener;
 import fragments.OnReceiverListener;
 import util.LedAllItemView;
 import util.LedItemView;
-import util.MyObservableScrollView;
 
 
 public class EditLEDFragment extends Fragment implements OnReceiverListener{
